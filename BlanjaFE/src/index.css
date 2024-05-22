@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Metropolis';
+        src: url(./fonts/Metropolis-Regular.woff) format('woff');
+    }
+}
