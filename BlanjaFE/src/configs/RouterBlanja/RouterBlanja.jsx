@@ -15,8 +15,8 @@ const RouterBlanja = () => {
             <Routes>
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />}>
-                    <Route path='registercustomer' element={<RegisterCustomer />} />
-                    <Route path='registerseller' element={<RegisterSeller />} />
+                    <Route path='customer' element={<RegisterCustomer />} />
+                    <Route path='seller' element={<RegisterSeller />} />
                 </Route>
                 <Route path='/' element={<Home />} />
                 <Route path='/products/:id' element={<DetailProduct />} />

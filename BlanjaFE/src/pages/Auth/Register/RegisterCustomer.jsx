@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import Container from "../../../components/base/Container";
 import InputField from "../../../components/base/InputField";
 import Button from "../../../components/base/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const RegisterCustomer = () => {
   const navigate = useNavigate();
+  const {pathname} = useLocation()
+  const pathnameArray = pathname.split("/")
+  const role = pathnameArray[2]
+  console.log(role);
   const [form, setForm] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    phone: ""
   });
   const handleChange = (e) => {
     setForm({
@@ -24,6 +28,8 @@ const RegisterCustomer = () => {
         name: form.name,
         email: form.email,
         password: form.password,
+        phone: form.phone,
+        role: role
       })
       .then((res) => {
         console.log(res);
@@ -61,6 +67,14 @@ const RegisterCustomer = () => {
           onChange={handleChange}
           value={form.email}
           placeholder="Email"
+          className={"w-full"}
+        />
+        <InputField
+          type="tel"
+          name="phone"
+          onChange={handleChange}
+          value={form.phone}
+          placeholder="Phone Number"
           className={"w-full"}
         />
         <InputField

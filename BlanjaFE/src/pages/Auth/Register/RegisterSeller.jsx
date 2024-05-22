@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import Container from "../../../components/base/Container";
 import InputField from "../../../components/base/InputField";
 import Button from "../../../components/base/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const RegisterSeller = () => {
   const navigate = useNavigate();
+  const {pathname} = useLocation()
+  const pathnameArray = pathname.split("/")
+  const role = pathnameArray[2]
+  console.log(role);
   const [form, setForm] = useState({
     name: "",
     email: "",
-    password: "",
-    phoneNumber: "",
-    storeName: "",
-    password: "",
+    phone: "",
+    password: ""
   });
   const handleChange = (e) => {
     setForm({
@@ -27,8 +28,8 @@ const RegisterSeller = () => {
         name: form.name,
         email: form.email,
         password: form.password,
-        phoneNumber: form.phoneNumber,
-        storeName: form.storeName
+        phone: form.phone,
+        role: role
       })
       .then((res) => {
         console.log(res);
@@ -37,27 +38,6 @@ const RegisterSeller = () => {
       })
       .catch((err) => {
         console.log(err.response);
-        for (const key in err.response.data ) {
-            if (err.response.data[key].failedField == "Customer.Password") {
-                alert(
-                  `Password should contain more than 8 digit and at least have an uppercase letter, a special character, and a number`
-                );
-              }
-              if (err.response.data[key].failedField == "Customer.Email") {
-                alert(`Should input a valid Email!!!`);
-              }
-              if (err.response.data[key].failedField == "Customer.Name") {
-                alert(`Name should be atleast more than 1 characters`);
-              }
-              if (err.response.data[key].failedField == "Customer.PhoneNumber") {
-                alert(
-                  `Phone number should be in valid format and more than 10 digits`
-                );
-              }
-              if (err.response.data[key].failedField == "Customer.StoreName") {
-                alert(`Store name should be more than 2 characters`);
-              }
-        }
         
         alert(`register failed`);
       });
@@ -70,7 +50,7 @@ const RegisterSeller = () => {
           name="name"
           onChange={handleChange}
           value={form.name}
-          placeholder="Name"
+          placeholder="Store Name"
           className={"w-full"}
         />
         <InputField
@@ -82,19 +62,11 @@ const RegisterSeller = () => {
           className={"w-full"}
         />
         <InputField
-          type="text"
-          name="phoneNumber"
+          type="tel"
+          name="phone"
           onChange={handleChange}
-          value={form.phoneNumber}
+          value={form.phone}
           placeholder="Phone Number"
-          className={"w-full"}
-        />
-        <InputField
-          type="text"
-          name="storeName"
-          onChange={handleChange}
-          value={form.storeName}
-          placeholder="Store Name"
           className={"w-full"}
         />
         <InputField

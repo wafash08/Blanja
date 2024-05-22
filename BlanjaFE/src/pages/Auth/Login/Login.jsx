@@ -81,7 +81,7 @@ const Login = () => {
         </div>
 
         <div className="w-[400px] h-auto">
-          <p className="text-[14px] text-[#222222] font-[400] text-center">Don't have an account yet?<Link to="/register/registercustomer" className="text-[14px] text-[#DB3022] font-[400] text-center"> Register here</Link></p>
+          <p className="text-[14px] text-[#222222] font-[400] text-center">Don't have an account yet?<Link to="/register/customer" className="text-[14px] text-[#DB3022] font-[400] text-center"> Register here</Link></p>
         </div>
 
       </Container>
