@@ -11,7 +11,6 @@ import CategoryProduct from '../../pages/main/CategoryProduct/CategoryProduct'
 
 const RouterBlanja = () => {
   return (
-    <div>
         <BrowserRouter>
             <Routes>
                 <Route path='/login' element={<Login />} />
@@ -25,7 +24,6 @@ const RouterBlanja = () => {
                 <Route path='/categories' element={<CategoryProduct />} />
             </Routes>
         </BrowserRouter>
-    </div>
   )
 }
 
