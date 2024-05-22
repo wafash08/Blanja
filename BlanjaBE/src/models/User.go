@@ -13,6 +13,29 @@ type User struct {
 	Role     string `json:"role" validate:"oneof=seller customer"`
 }
 
+type Register struct {
+	Name     string `json:"name" validate:"required,max=50"`
+	Email    string `json:"email" validate:"required,email"`
+	Phone    string `json:"phone" validate:"required,numeric,max=15"`
+	Password string `json:"password" validate:"required,min=8,max=20"`
+	Role     string `json:"role" validate:"oneof=seller customer"`
+}
+
+type RegisterSeller struct {
+	Name     string `json:"name" validate:"required,max=50"`
+	Email    string `json:"email" validate:"required,email"`
+	Phone    string `json:"phone" validate:"required,numeric,max=15"`
+	Password string `json:"password" validate:"required,min=8,max=20"`
+	Role     string `json:"role" validate:"oneof=seller customer"`
+}
+
+type RegisterCustomer struct {
+	Name     string `json:"name" validate:"required,max=50"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8,max=20"`
+	Role     string `json:"role" validate:"oneof=seller customer"`
+}
+
 func SelectAllUsers() []*User {
 	var users []*User
 	configs.DB.Find(&users)
@@ -38,6 +61,11 @@ func CreateUser(user *User) (uint, error) {
 
 func UpdateUser(id int, updatedUser *User) error {
 	result := configs.DB.Model(&User{}).Where("id = ?", id).Updates(updatedUser)
+	return result.Error
+}
+
+func UpdateUserbyEmail(email string, updatedUser *User) error {
+	result := configs.DB.Model(&User{}).Where("email = ?", email).Updates(updatedUser)
 	return result.Error
 }
 

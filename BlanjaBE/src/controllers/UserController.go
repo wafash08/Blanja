@@ -10,16 +10,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Register struct {
-	Name     string `json:"name" validate:"required,max=50"`
-	Email    string `json:"email" validate:"required,email"`
-	Phone    string `json:"phone" validate:"required,numeric,max=15"`
-	Password string `json:"password" validate:"required,min=8,max=20"`
-	Role     string `json:"role" validate:"oneof=seller customer"`
-}
-
 func RegisterUser(c *fiber.Ctx) error {
-	var register Register
+	var register models.Register
 	if err := c.BodyParser(&register); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":     "bad request",
@@ -28,7 +20,7 @@ func RegisterUser(c *fiber.Ctx) error {
 		})
 	}
 
-	user := middlewares.XSSMiddleware(&register).(*Register)
+	user := middlewares.XSSMiddleware(&register).(*models.Register)
 	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":     "unprocessable entity",
@@ -117,6 +109,16 @@ func LoginUser(c *fiber.Ctx) error {
 		})
 	}
 
+	existUser := models.SelectUserbyEmail(login.Email)
+	if existUser.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Email not found",
+		})
+	}
+	login.Role = existUser.Role
+
 	user := middlewares.XSSMiddleware(&login).(*models.User)
 	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
@@ -127,22 +129,13 @@ func LoginUser(c *fiber.Ctx) error {
 		})
 	}
 
-	existUser := models.SelectUserbyEmail(user.Email)
-	if existUser.ID == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
-			"message":    "Email not found",
-		})
-	}
-
-	if existUser.Role != user.Role {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Role not same",
-		})
-	}
+	// if existUser.Role != user.Role {
+	// 	return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+	// 		"status":     "forbidden",
+	// 		"statusCode": 403,
+	// 		"message":    "Role not same",
+	// 	})
+	// }
 
 	if err := bcrypt.CompareHashAndPassword([]byte(existUser.Password), []byte(login.Password)); err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -184,6 +177,59 @@ func LoginUser(c *fiber.Ctx) error {
 		"role":          existUser.Role,
 		"token":         token,
 		"refresh_token": refreshToken,
+	})
+}
+
+func ResetPassword(c *fiber.Ctx) error {
+	var updatedUser models.User
+	if err := c.BodyParser(&updatedUser); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Invalid request body",
+		})
+	}
+
+	user := middlewares.XSSMiddleware(&updatedUser).(*models.User)
+	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":     "unprocessable entity",
+			"statusCode": 422,
+			"message":    "Validation failed",
+			"errors":     authErrors,
+		})
+	}
+
+	if existUser := models.SelectUserbyEmail(user.Email); existUser.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Email not found",
+		})
+	}
+
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to hash password",
+		})
+	}
+	user.Password = string(hashPassword)
+
+	if err := models.UpdateUserbyEmail(user.Email, user); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to reset password",
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 201,
+		"message":    "Reset password successfully",
 	})
 }
 

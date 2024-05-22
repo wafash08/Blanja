@@ -17,6 +17,13 @@ type Seller struct {
 	Products    []Product `json:"products"`
 }
 
+type SellerProfile struct {
+	Name        string `json:"name" validate:"required,max=50"`
+	Email       string `json:"email" validate:"required,email"`
+	Phone       string `json:"phone" validate:"required,numeric,max=15"`
+	Description string `json:"description" validate:"required"`
+}
+
 func SelectAllSellers(keyword, sort string) []*Seller {
 	var sellers []*Seller
 	keyword = "%" + keyword + "%"

@@ -40,6 +40,7 @@ func Router(app *fiber.App) {
 	// User/Auth Routes
 	app.Post("/register", controllers.RegisterUser)
 	app.Post("/login", controllers.LoginUser)
+	app.Put("/resetPassword", controllers.ResetPassword)
 	app.Post("/refreshToken", controllers.CreateRefreshToken)
 
 	// Address Routes
@@ -49,6 +50,5 @@ func Router(app *fiber.App) {
 	app.Delete("/address/:id", middlewares.JWTMiddleware(), controllers.DeleteAddress)
 
 	// Upload Routes
-	app.Post("/upload", controllers.UploadFile)
 	app.Post("/uploadServer", controllers.UploadFileServer)
 }

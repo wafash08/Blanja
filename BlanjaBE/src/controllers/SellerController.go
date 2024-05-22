@@ -41,9 +41,6 @@ func GetSellers(c *fiber.Ctx) error {
 				"updated_at":    product.UpdatedAt,
 				"name":          product.Name,
 				"price":         product.Price,
-				"size":          product.Size,
-				"color":         product.Color,
-				"photo":         product.Image,
 				"rating":        product.Rating,
 				"category_name": categoryName,
 			}
@@ -56,7 +53,7 @@ func GetSellers(c *fiber.Ctx) error {
 			"name":       seller.Name,
 			"user_id":    seller.User.ID,
 			"email":      seller.User.Email,
-			"photo":      seller.Image,
+			"image":      seller.Image,
 			"phone":      seller.Phone,
 			"desc":       seller.Description,
 			"role":       seller.User.Role,
@@ -115,9 +112,6 @@ func GetDetailSeller(c *fiber.Ctx) error {
 			"updated_at":    product.UpdatedAt,
 			"name":          product.Name,
 			"price":         product.Price,
-			"size":          product.Size,
-			"color":         product.Color,
-			"photo":         product.Image,
 			"rating":        product.Rating,
 			"category_name": categoryName,
 		}
@@ -130,7 +124,7 @@ func GetDetailSeller(c *fiber.Ctx) error {
 		"name":       seller.Name,
 		"user_id":    seller.User.ID,
 		"email":      seller.User.Email,
-		"photo":      seller.Image,
+		"image":      seller.Image,
 		"phone":      seller.Phone,
 		"desc":       seller.Description,
 		"role":       seller.User.Role,
@@ -146,21 +140,20 @@ func GetDetailSeller(c *fiber.Ctx) error {
 }
 
 func GetSellerProfile(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -189,9 +182,6 @@ func GetSellerProfile(c *fiber.Ctx) error {
 			"updated_at":    product.UpdatedAt,
 			"name":          product.Name,
 			"price":         product.Price,
-			"size":          product.Size,
-			"color":         product.Color,
-			"photo":         product.Image,
 			"rating":        product.Rating,
 			"category_name": categoryName,
 		}
@@ -204,7 +194,7 @@ func GetSellerProfile(c *fiber.Ctx) error {
 		"name":       seller.Name,
 		"user_id":    seller.User.ID,
 		"email":      seller.User.Email,
-		"photo":      seller.Image,
+		"image":      seller.Image,
 		"phone":      seller.Phone,
 		"desc":       seller.Description,
 		"role":       seller.User.Role,
@@ -219,31 +209,23 @@ func GetSellerProfile(c *fiber.Ctx) error {
 	})
 }
 
-type SellerProfile struct {
-	Name        string `json:"name" validate:"required,max=50"`
-	Email       string `json:"email" validate:"required,email"`
-	Phone       string `json:"phone" validate:"required,numeric,max=15"`
-	Description string `json:"description" validate:"required"`
-}
-
 func UpdateSellerProfile(c *fiber.Ctx) error {
-	var profileData SellerProfile
+	var profileData models.SellerProfile
 
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -264,7 +246,7 @@ func UpdateSellerProfile(c *fiber.Ctx) error {
 		})
 	}
 
-	user := middlewares.XSSMiddleware(&profileData).(*SellerProfile)
+	user := middlewares.XSSMiddleware(&profileData).(*models.SellerProfile)
 	if errors := helpers.StructValidation(user); len(errors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":     "unprocessable entity",
@@ -317,21 +299,20 @@ func UpdateSellerProfile(c *fiber.Ctx) error {
 }
 
 func UpdateSellerProfilePhoto(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -353,39 +334,12 @@ func UpdateSellerProfilePhoto(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := helpers.SizeUploadValidation(file.Size, 2<<20); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "File is too large",
-		})
-	}
-
-	fileHeader, err := file.Open()
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":     "server error",
-			"statusCode": 500,
-			"message":    "Failed to open file",
-		})
-	}
-	defer fileHeader.Close()
-
-	buffer := make([]byte, 512)
-	if _, err := fileHeader.Read(buffer); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":     "server error",
-			"statusCode": 500,
-			"message":    "Failed to read file",
-		})
-	}
-
-	validFileTypes := []string{"image/png", "image/jpeg", "image/jpg"}
-	if err := helpers.TypeUploadValidation(buffer, validFileTypes); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Type of file is invalid",
+	if err := helpers.ImageValidation(file); len(err) > 0 {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":     "unprocessable entity",
+			"statusCode": 422,
+			"message":    "Validation failed",
+			"errors":     err,
 		})
 	}
 
@@ -419,21 +373,20 @@ func UpdateSellerProfilePhoto(c *fiber.Ctx) error {
 }
 
 func DeleteSeller(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
