@@ -20,10 +20,11 @@ func GetAllProduct(c *fiber.Ctx) error {
 
 	products := models.SelectAllProducts(keyword, sort, limit, offset)
 	if len(products) == 0 {
-		return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status":     "no content",
 			"statusCode": 202,
 			"message":    "Product is empty. You should create product",
+			"data":       products,
 		})
 	}
 
@@ -38,11 +39,8 @@ func GetAllProduct(c *fiber.Ctx) error {
 			"brand_id":      product.SellerID,
 			"brand_name":    product.Seller.Name,
 			"name":          product.Name,
-			"photo":         product.Image,
 			"rating":        product.Rating,
 			"price":         product.Price,
-			"size":          product.Size,
-			"color":         product.Color,
 			"stock":         product.Stock,
 			"condition":     product.Condition,
 			"desc":          product.Description,
@@ -89,11 +87,8 @@ func GetDetailProduct(c *fiber.Ctx) error {
 		"brand_id":      product.SellerID,
 		"brand_name":    product.Seller.Name,
 		"name":          product.Name,
-		"photo":         product.Image,
 		"rating":        product.Rating,
 		"price":         product.Price,
-		"size":          product.Size,
-		"color":         product.Color,
 		"stock":         product.Stock,
 		"condition":     product.Condition,
 		"desc":          product.Description,
@@ -108,12 +103,19 @@ func GetDetailProduct(c *fiber.Ctx) error {
 }
 
 func CreateProduct(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
+	if _, err := middlewares.JWTAuthorize(c, "seller"); err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -170,12 +172,19 @@ func CreateProduct(c *fiber.Ctx) error {
 }
 
 func UpdateProduct(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
+	if _, err := middlewares.JWTAuthorize(c, "seller"); err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -249,12 +258,19 @@ func UpdateProduct(c *fiber.Ctx) error {
 }
 
 func DeleteProduct(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "seller" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
+	if _, err := middlewares.JWTAuthorize(c, "seller"); err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 

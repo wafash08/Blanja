@@ -7,23 +7,24 @@ import (
 	"gorm.io/gorm"
 )
 
-type CustomerGender string
-
-const (
-	Male   CustomerGender = "male"
-	Female CustomerGender = "female"
-	Other  CustomerGender = "other"
-)
-
 type Customer struct {
 	gorm.Model
-	UserID      uint           `json:"user_id" validate:"required"`
-	User        User           `gorm:"foreignKey:UserID" validate:"-"`
-	Name        string         `json:"name" validate:"required,max=50"`
-	Image       string         `json:"image" validate:"required"`
-	Phone       string         `json:"phone" validate:"required,numeric,max=15"`
-	Gender      CustomerGender `gorm:"type:customer_gender;default:other" json:"gender" validate:"required,oneof=male female other"`
-	DateOfBirth time.Time      `json:"date_of_birth" validate:"required"`
+	UserID      uint      `json:"user_id" validate:"required"`
+	User        User      `gorm:"foreignKey:UserID" validate:"-"`
+	Name        string    `json:"name" validate:"required,max=50"`
+	Image       string    `json:"image" validate:"required"`
+	Phone       string    `json:"phone" validate:"required,numeric,max=15"`
+	Gender      string    `json:"gender" gorm:"default:other" validate:"required,oneof=male female other"`
+	DateOfBirth time.Time `json:"date_of_birth" validate:"required"`
+}
+
+type CustomerProfile struct {
+	Name        string `json:"name" validate:"required,max=50"`
+	Email       string `json:"email" validate:"required,email"`
+	Image       string `json:"image" validate:"required"`
+	Phone       string `json:"phone" validate:"required,numeric,max=15"`
+	Gender      string `json:"gender" gorm:"default:other" validate:"required,oneof=male female other"`
+	DateOfBirth string `json:"date_of_birth" validate:"required"`
 }
 
 func SelectAllCustomers() []*Customer {
