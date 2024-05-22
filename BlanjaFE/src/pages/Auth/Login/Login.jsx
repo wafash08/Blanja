@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Container from "../../../components/base/Container";
 import InputField from "../../../components/base/InputField";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../../../components/base/Button";
 
@@ -37,7 +37,6 @@ const Login = () => {
   };
 
   return (
-    <div>
       <Container
         className={
           "w-[1156px] flex flex-col justify-center items-center mt-20 font-metropolis"
@@ -86,7 +85,6 @@ const Login = () => {
         </div>
 
       </Container>
-    </div>
   );
 };
 

@@ -8,3 +8,8 @@
         src: url(./fonts/Metropolis-Regular.woff) format('woff');
     }
 }
+
+.active {
+    background-color: #DB3022;
+    color: #fff;
+  }
