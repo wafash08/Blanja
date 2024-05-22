@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 
-// props
+// keterangan props
 // children: html element atau react component yang ingin dibungkus Container
-// className: className tambahan seperti flex, dll
+// className (string): className tambahan seperti flex, dll
 
 export default function Container({ children, className }) {
 	return (
