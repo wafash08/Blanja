@@ -58,40 +58,27 @@ func JWTMiddleware() fiber.Handler {
 	}
 }
 
-// func Authorize(requiredRole string) fiber.Handler {
-// 	return func(c *fiber.Ctx) error {
-// 		user := c.Locals("user").(jwt.MapClaims)
-// 		role := user["role"].(string)
+func JWTAuthorize(c *fiber.Ctx, requiredRole string) (float64, error) {
+	user, ok := c.Locals("user").(jwt.MapClaims)
+	if !ok {
+		return 0, fiber.NewError(fiber.StatusUnauthorized, "Unauthorized")
+	}
 
-// 		if requiredRole != "" && role != requiredRole {
-// 			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-// 				"status":     "forbidden",
-// 				"statusCode": 403,
-// 				"message":    "Forbidden: incorrect role",
-// 			})
-// 		}
+	role, ok := user["role"].(string)
+	if !ok || role != requiredRole {
+		return 0, fiber.NewError(fiber.StatusForbidden, "Incorrect role")
+	}
 
-// 		return c.Next()
-// 	}
-// }
+	id, ok := user["id"].(float64)
+	if !ok {
+		return 0, fiber.NewError(fiber.StatusBadRequest, "Invalid ID format")
+	}
 
-func UserLocals(c *fiber.Ctx) jwt.MapClaims {
-	user := c.Locals("user").(jwt.MapClaims)
-
-	return user
+	return id, nil
 }
 
-// func JWTValidation(requiredRole string, c *fiber.Ctx) error {
+// func UserLocals(c *fiber.Ctx) jwt.MapClaims {
 // 	user := c.Locals("user").(jwt.MapClaims)
-// 	role := user["role"].(string)
 
-// 	if requiredRole != "" && role != requiredRole {
-// 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-// 			"status":     "forbidden",
-// 			"statusCode": 403,
-// 			"message":    "Forbidden: incorrect role",
-// 		})
-// 	}
-
-// 	return nil
+// 	return user
 // }
