@@ -24,7 +24,7 @@ const RegisterSeller = () => {
   };
   const handleSubmit = () => {
     axios
-      .post(`${import.meta.env.VITE_BE_URL}auth/customer`, {
+      .post(`${import.meta.env.VITE_BE_URL}register`, {
         name: form.name,
         email: form.email,
         password: form.password,
@@ -33,12 +33,14 @@ const RegisterSeller = () => {
       })
       .then((res) => {
         console.log(res);
-        alert(`Register Succeed`);
+        alert(`Register Succeed: ${res.data.message}`);
         navigate(`/login`);
       })
       .catch((err) => {
         console.log(err.response);
-        
+        for (const key in err.response.data.errors) {
+            alert(`${err.response.data.errors[key].error_message}`)
+        }
         alert(`register failed`);
       });
   };

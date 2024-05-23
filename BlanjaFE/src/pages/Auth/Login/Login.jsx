@@ -19,20 +19,26 @@ const Login = () => {
   };
   const handleSubmit = () => {
     axios
-      .post(`${import.meta.env.VITE_BE_URL}auth/login`, {
+      .post(`${import.meta.env.VITE_BE_URL}login`, {
         email: form.email,
         password: form.password,
       })
       .then((res) => {
         console.log(res);
-        const { token, refreshToken } = res.data
+        const { token, refresh_token } = res.data
         localStorage.setItem('token', token)
-        localStorage.setItem('refreshToken', refreshToken)
+        localStorage.setItem('refresh_token', refresh_token)
         alert(`${res.data.message}`)
         navigate(`/`)
       })
       .catch((err) => {
         console.log(err.response);
+        if (err.response.data.message == "Validation failed") {
+          alert(`Invalid password`)
+        } else{
+          alert(`${err.response.data.message}`)
+        }
+
       });
   };
 

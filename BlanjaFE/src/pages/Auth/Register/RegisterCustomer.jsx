@@ -24,7 +24,7 @@ const RegisterCustomer = () => {
   };
   const handleSubmit = () => {
     axios
-      .post(`${import.meta.env.VITE_BE_URL}auth/customer`, {
+      .post(`${import.meta.env.VITE_BE_URL}register`, {
         name: form.name,
         email: form.email,
         password: form.password,
@@ -33,19 +33,13 @@ const RegisterCustomer = () => {
       })
       .then((res) => {
         console.log(res);
-        alert(`Register Succeed`);
+        alert(`Register Succeed: ${res.data.message}`);
         navigate(`/login`);
       })
       .catch((err) => {
         console.log(err.response);
-        if (err.response.data[0].failedField == "Customer.Password") {
-          alert(
-            `Password should contain more than 8 digit and at least have an uppercase letter, a special character, and a number`
-          );
-        } else if (err.response.data[0].failedField == "Customer.Email") {
-          alert(`Should input a valid Email!!!`);
-        } else if (err.response.data[0].failedField == "Customer.Name") {
-          alert(`Name should be atleast more than 1 characters`);
+        for (const key in err.response.data.errors) {
+            alert(`${err.response.data.errors[key].error_message}`)
         }
         alert(`register failed`);
       });
