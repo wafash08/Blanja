@@ -109,16 +109,6 @@ func LoginUser(c *fiber.Ctx) error {
 		})
 	}
 
-	existUser := models.SelectUserbyEmail(login.Email)
-	if existUser.ID == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
-			"message":    "Email not found",
-		})
-	}
-	login.Role = existUser.Role
-
 	user := middlewares.XSSMiddleware(&login).(*models.User)
 	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
@@ -129,13 +119,14 @@ func LoginUser(c *fiber.Ctx) error {
 		})
 	}
 
-	// if existUser.Role != user.Role {
-	// 	return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-	// 		"status":     "forbidden",
-	// 		"statusCode": 403,
-	// 		"message":    "Role not same",
-	// 	})
-	// }
+	existUser := models.SelectUserbyEmail(user.Email)
+	if existUser.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Email not found",
+		})
+	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(existUser.Password), []byte(login.Password)); err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

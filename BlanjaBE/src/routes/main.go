@@ -17,13 +17,13 @@ func Router(app *fiber.App) {
 
 	// Category Routes
 	app.Get("/categories", controllers.GetAllCategories)
-	app.Get("/category/:id", controllers.GetCategoryById)
+	app.Get("/category/:slug", controllers.GetCategory)
 	app.Post("/category", middlewares.JWTMiddleware(), controllers.CreateCategory)
 	app.Put("/category/:id", middlewares.JWTMiddleware(), controllers.UpdateCategory)
 	app.Delete("/category/:id", middlewares.JWTMiddleware(), controllers.DeleteCategory)
 
 	// Seller Routes
-	app.Get("/sellers", middlewares.JWTMiddleware(), controllers.GetSellers)
+	app.Get("/sellers", controllers.GetSellers)
 	app.Get("/sellers/:id", middlewares.JWTMiddleware(), controllers.GetDetailSeller)
 	app.Get("/seller/profile", middlewares.JWTMiddleware(), controllers.GetSellerProfile)
 	app.Put("/seller/profile", middlewares.JWTMiddleware(), controllers.UpdateSellerProfile)
@@ -50,5 +50,12 @@ func Router(app *fiber.App) {
 	app.Delete("/address/:id", middlewares.JWTMiddleware(), controllers.DeleteAddress)
 
 	// Upload Routes
-	app.Post("/uploadServer", controllers.UploadFileServer)
+	app.Post("/uploadImage", controllers.UploadImage)
+	app.Post("/uploadImages", controllers.UploadImages)
+
+	// Color Routes
+	app.Get("/colorsFilter", controllers.GetColorsFilter)
+
+	// Size Routes
+	app.Get("/sizesFilter", controllers.GetSizesFilter)
 }
