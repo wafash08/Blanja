@@ -3,13 +3,17 @@ import InputField from "../../../components/base/InputField";
 import Button from "../../../components/base/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AlertCard from "../../../components/base/AlertCard";
 
 const RegisterCustomer = () => {
   const navigate = useNavigate();
   const {pathname} = useLocation()
   const pathnameArray = pathname.split("/")
   const role = pathnameArray[2]
-  console.log(role);
+  const [validation, setValidation] = useState([])
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [isSent, setIsSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -23,6 +27,7 @@ const RegisterCustomer = () => {
     });
   };
   const handleSubmit = () => {
+    console.log(role);
     axios
       .post(`${import.meta.env.VITE_BE_URL}register`, {
         name: form.name,
@@ -33,19 +38,37 @@ const RegisterCustomer = () => {
       })
       .then((res) => {
         console.log(res);
-        alert(`Register Succeed: ${res.data.message}`);
-        navigate(`/login`);
+        setAlertMessage(res.data.message);
+        setAlertType("SUCCESS");
+        setIsSent(true);
       })
       .catch((err) => {
         console.log(err.response);
-        for (const key in err.response.data.errors) {
-            alert(`${err.response.data.errors[key].error_message}`)
-        }
-        alert(`register failed`);
+        setValidation(err.response.data.errors)
+        setAlertMessage(err.response.data.message);
+        setAlertType("ERROR");
       });
+    };
+    
+    const afterSubmission = (e) => {
+      e.preventDefault();
+    };
+    const handleClickAlert = () => {
+      setAlertMessage("");
+      setAlertType("");
+      if (isSent === true) {
+      navigate(`/login`);
+    }
   };
   return (
-    <>
+    <form onSubmit={afterSubmission}>
+            {alertMessage && (
+        <AlertCard
+          alertMessage={alertMessage}
+          alertType={alertType}
+          onClick={handleClickAlert}
+        />
+      )}
       <div className="w-[400px] h-auto flex flex-col justify-start my-5 gap-6">
         <InputField
           type="text"
@@ -54,6 +77,7 @@ const RegisterCustomer = () => {
           value={form.name}
           placeholder="Name"
           className={"w-full"}
+          validation={validation}
         />
         <InputField
           type="email"
@@ -62,6 +86,7 @@ const RegisterCustomer = () => {
           value={form.email}
           placeholder="Email"
           className={"w-full"}
+          validation={validation}
         />
         <InputField
           type="tel"
@@ -70,6 +95,7 @@ const RegisterCustomer = () => {
           value={form.phone}
           placeholder="Phone Number"
           className={"w-full"}
+          validation={validation}
         />
         <InputField
           type="password"
@@ -78,6 +104,7 @@ const RegisterCustomer = () => {
           value={form.password}
           placeholder="Password"
           className={"w-full"}
+          validation={validation}
         />
       </div>
 
@@ -86,7 +113,7 @@ const RegisterCustomer = () => {
       </div>
 
       <div className="w-[400px] h-auto">
-        <p className="text-[14px] text-[#222222] font-[400] text-center">
+        <p className="text-[14px] text-[#222222] font-[400] text-center mb-8">
           Already have an account?
           <Link
             to="/login"
@@ -97,7 +124,7 @@ const RegisterCustomer = () => {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 };
 
