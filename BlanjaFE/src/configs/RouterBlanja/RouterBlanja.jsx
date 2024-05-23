@@ -21,7 +21,7 @@ const RouterBlanja = () => {
 				<Route path='/' element={<Home />} />
 				<Route path='/products/:id' element={<DetailProduct />} />
 				<Route path='/cart' element={<Cart />} />
-				<Route path='/categories' element={<CategoryProduct />} />
+				<Route path='/categories/:id' element={<CategoryProduct />} />
 			</Routes>
 		</BrowserRouter>
 	);
