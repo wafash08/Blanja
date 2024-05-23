@@ -1,9 +1,102 @@
+import clsx from 'clsx';
+import { useRef } from 'react';
+
+const COLOR_LIST = ['black', 'blue', 'green', 'brown'];
+const SIZE_LIST = ['xs', 's', 'm', 'l', 'xl'];
+const CATEGORY_LIST = ['all', 'women', 'men', 'boys', 'girls'];
+const BRAND_LIST = ['Zalora', 'Erigo', 'Nike', 'Eiger', 'Alisan'];
+
 export default function Filter() {
+	const refDialog = useRef(null);
+
+	const handleOpenDialog = () => {
+		refDialog.current?.showModal();
+	};
+
+	const handleCloseDialog = () => {
+		refDialog.current?.close();
+	};
+
+	const handleSubmitFilter = e => {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		for (const [key, value] of formData) {
+			console.log(key, value);
+		}
+		refDialog.current?.close();
+	};
+
 	return (
 		<>
+			<dialog
+				className='dialog font-metropolis backdrop:bg-black/40'
+				ref={refDialog}
+			>
+				<form className='relative' onSubmit={handleSubmitFilter}>
+					<div className='flex items-center gap-2 px-3 py-4 border-b-4 border-[#F4F4F4]'>
+						<button
+							type='button'
+							onClick={handleCloseDialog}
+							autoFocus
+							className='w-10 h-10 inline-flex items-center justify-center'
+						>
+							<span className='sr-only'>Tutup filter</span>
+							<svg
+								width='21'
+								height='21'
+								viewBox='0 0 21 21'
+								fill='none'
+								xmlns='http://www.w3.org/2000/svg'
+							>
+								<path
+									fillRule='evenodd'
+									clipRule='evenodd'
+									d='M18.0506 0.726135L10.626 8.15076L3.20136 0.726135L0.726482 3.20101L8.1511 10.6256L0.726482 18.0503L3.20136 20.5251L10.626 13.1005L18.0506 20.5251L20.5255 18.0503L13.1009 10.6256L20.5255 3.20101L18.0506 0.726135Z'
+									fill='#9B9B9B'
+								/>
+							</svg>
+						</button>
+						<span className='text-[22px] text-[#222222] font-medium'>
+							Filter
+						</span>
+					</div>
+
+					<FilterSection section='colors' title='Colors' filters={COLOR_LIST} />
+					<FilterSection section='sizes' title='Sizes' filters={SIZE_LIST} />
+					<FilterSection
+						section='categories'
+						title='Categories'
+						filters={CATEGORY_LIST}
+					/>
+					<FilterSection section='brands' title='Brands' filters={BRAND_LIST} />
+
+					<div className='h-20 bg-white shadow-[0_-8px_10px_0_#D9D9D940] mt-10 flex items-center justify-center gap-6'>
+						<button
+							type='button'
+							onClick={handleCloseDialog}
+							className={clsx(
+								'w-40 h-9 inline-flex items-center justify-center border border-[#222222] text-sm rounded-full',
+								'bg-white text-[#222222] hover:bg-[#222222] hover:text-white transition-colors'
+							)}
+						>
+							Discard
+						</button>
+						<button
+							type='submit'
+							className={clsx(
+								'w-40 h-9 inline-flex items-center justify-center border border-[#DB3022] text-sm rounded-full',
+								'bg-[#DB3022] text-white hover:bg-white hover:text-[#DB3022]'
+							)}
+						>
+							Apply
+						</button>
+					</div>
+				</form>
+			</dialog>
 			<button
 				type='button'
 				className='group w-10 h-10 flex items-center justify-center border border-[#8E8E93] rounded-xl'
+				onClick={handleOpenDialog}
 			>
 				<span className='sr-only'>Cari produk dengan filter</span>
 				<svg
@@ -24,8 +117,171 @@ export default function Filter() {
 					/>
 				</svg>
 			</button>
-			{/* modal filter */}
-			{/* <dialog>dialog filter</dialog> */}
 		</>
+	);
+}
+
+function FilterSection({ section, title, filters }) {
+	let filterList = null;
+
+	switch (section) {
+		case 'colors': {
+			filterList = <ColorFilters colors={filters} />;
+			break;
+		}
+		case 'sizes': {
+			filterList = <SizeFilters sizes={filters} />;
+			break;
+		}
+		case 'categories': {
+			filterList = <CategoryFilters categories={filters} />;
+			break;
+		}
+		case 'brands': {
+			filterList = <BrandFilters brands={filters} />;
+			break;
+		}
+		default: {
+			filterList = null;
+			break;
+		}
+	}
+
+	return (
+		<section className='px-5 py-4 border-b-4 border-[#F4F4F4]'>
+			<h3 className='text-[#222222] font-bold mb-8'>{title}</h3>
+			{filterList}
+		</section>
+	);
+}
+
+function ColorFilters({ colors }) {
+	return (
+		<ul className='flex items-center gap-5'>
+			{colors.map(color => {
+				return (
+					<li className='inline-flex' key={color}>
+						<label className='relative '>
+							<span className='sr-only'>{color}</span>
+							<input
+								type='radio'
+								name='colors'
+								id={color}
+								value={color}
+								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
+							/>
+							<div
+								className={clsx(
+									'w-9 h-9 rounded-full outline outline-1 outline-transparent peer-checked:outline-[#DB3022] outline-offset-2'
+								)}
+								style={{ backgroundColor: color }}
+							/>
+						</label>
+					</li>
+				);
+			})}
+		</ul>
+	);
+}
+
+function SizeFilters({ sizes }) {
+	return (
+		<ul className='flex items-center flex-wrap gap-5'>
+			{sizes.map(size => {
+				return (
+					<li className='inline-flex' key={size}>
+						<label className='relative '>
+							<span className='sr-only'>{size}</span>
+							<input
+								type='radio'
+								name='sizes'
+								id={size}
+								value={size}
+								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
+							/>
+							<button
+								type='button'
+								className={clsx(
+									'w-10 h-10 inline-flex items-center justify-center rounded-lg uppercase transition-colors text-sm',
+									'bg-white peer-checked:bg-[#DB3022]',
+									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
+									'text-[#222222] peer-checked:text-white'
+								)}
+							>
+								{size}
+							</button>
+						</label>
+					</li>
+				);
+			})}
+		</ul>
+	);
+}
+
+function CategoryFilters({ categories }) {
+	return (
+		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
+			{categories.map(category => {
+				return (
+					<li className='inline-flex' key={category}>
+						<label className='relative '>
+							<span className='sr-only'>{category}</span>
+							<input
+								type='radio'
+								name='categories'
+								id={category}
+								value={category}
+								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
+							/>
+							<button
+								type='button'
+								className={clsx(
+									'w-[100px] h-10 inline-flex items-center justify-center rounded-lg capitalize transition-colors text-sm',
+									'bg-white peer-checked:bg-[#DB3022]',
+									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
+									'text-[#222222] peer-checked:text-white'
+								)}
+							>
+								{category}
+							</button>
+						</label>
+					</li>
+				);
+			})}
+		</ul>
+	);
+}
+
+function BrandFilters({ brands }) {
+	return (
+		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
+			{brands.map(brand => {
+				return (
+					<li className='inline-flex' key={brand}>
+						<label className='relative '>
+							<span className='sr-only'>{brand}</span>
+							<input
+								type='radio'
+								name='brands'
+								id={brand}
+								value={brand}
+								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
+							/>
+							<button
+								type='button'
+								className={clsx(
+									'w-[100px] h-10 inline-flex items-center justify-center rounded-lg capitalize transition-colors text-sm',
+									'bg-white peer-checked:bg-[#DB3022]',
+									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
+									'text-[#222222] peer-checked:text-white'
+								)}
+							>
+								{brand}
+							</button>
+						</label>
+					</li>
+				);
+			})}
+		</ul>
 	);
 }

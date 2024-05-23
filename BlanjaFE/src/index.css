@@ -10,6 +10,11 @@
 }
 
 .active {
-    background-color: #DB3022;
-    color: #fff;
-  }
+	background-color: #db3022;
+	color: #fff;
+}
+
+.dialog {
+	width: 450px;
+	border-radius: 8px;
+}
