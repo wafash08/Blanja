@@ -51,4 +51,10 @@ func Router(app *fiber.App) {
 	// Upload Routes
 	app.Post("/upload", controllers.UploadFile)
 	app.Post("/uploadServer", controllers.UploadFileServer)
+
+	//Cart Routes
+	app.Get("/carts", controllers.GetCart)
+	app.Post("/cart/add", controllers.CreateCart)
+	app.Post("/cart/addProduct", controllers.AddProductToCart)
+	app.Post("/cart/removeProduct", controllers.RemoveProductFromCart)
 }
