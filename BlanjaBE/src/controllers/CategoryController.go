@@ -4,6 +4,7 @@ import (
 	"gofiber-marketplace/src/helpers"
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
+	"gofiber-marketplace/src/services"
 	"strconv"
 	"strings"
 
@@ -16,10 +17,11 @@ func GetAllCategories(c *fiber.Ctx) error {
 
 	categories := models.SelectAllCategories(keyword, sort)
 	if len(categories) == 0 {
-		return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status":     "no content",
 			"statusCode": 202,
-			"message":    "Category is empty. You should create product",
+			"message":    "Category is empty.",
+			"data":       categories,
 		})
 	}
 
@@ -56,17 +58,17 @@ func GetAllCategories(c *fiber.Ctx) error {
 	})
 }
 
-func GetCategoryById(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
-		})
-	}
+func GetCategory(c *fiber.Ctx) error {
+	slug := c.Params("slug")
+	// if err != nil {
+	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	// 		"status":     "bad request",
+	// 		"statusCode": 400,
+	// 		"message":    "Invalid ID format",
+	// 	})
+	// }
 
-	category := models.SelectCategoryById(id)
+	category := models.SelectCategoryBySlug(slug)
 	if category.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":     "not found",
@@ -115,6 +117,34 @@ func CreateCategory(c *fiber.Ctx) error {
 		})
 	}
 
+	image, err := c.FormFile("image")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Failed to upload image",
+		})
+	}
+
+	if err := helpers.ImageValidation(image); len(err) > 0 {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":     "unprocessable entity",
+			"statusCode": 422,
+			"message":    "Validation failed",
+			"errors":     err,
+		})
+	}
+
+	uploadResult, err := services.UploadCloudinary(c, image)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to save file",
+		})
+	}
+
+	newCategory.Image = uploadResult.URL
 	if newCategory.Slug == "" || newCategory.Slug != strings.ReplaceAll(strings.ToLower(newCategory.Name), " ", "") {
 		newCategory.Slug = strings.ReplaceAll(strings.ToLower(newCategory.Name), " ", "")
 	}
@@ -163,7 +193,8 @@ func UpdateCategory(c *fiber.Ctx) error {
 		})
 	}
 
-	if category := models.SelectCategoryById(id); category.ID == 0 {
+	category := models.SelectCategoryById(id)
+	if category.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":     "not found",
 			"statusCode": 404,
@@ -181,11 +212,36 @@ func UpdateCategory(c *fiber.Ctx) error {
 		})
 	}
 
+	image, _ := c.FormFile("image")
+	if image == nil {
+		updatedCategory.Image = category.Image
+	} else {
+		if err := helpers.ImageValidation(image); len(err) > 0 {
+			return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+				"status":     "unprocessable entity",
+				"statusCode": 422,
+				"message":    "Validation failed",
+				"errors":     err,
+			})
+		}
+
+		uploadResult, err := services.UploadCloudinary(c, image)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to save file",
+			})
+		}
+
+		updatedCategory.Image = uploadResult.URL
+	}
+
 	if updatedCategory.Slug == "" || updatedCategory.Slug != strings.ReplaceAll(strings.ToLower(updatedCategory.Name), " ", "") {
 		updatedCategory.Slug = strings.ReplaceAll(strings.ToLower(updatedCategory.Name), " ", "")
 	}
 
-	category := middlewares.XSSMiddleware(&updatedCategory).(*models.Category)
+	category = middlewares.XSSMiddleware(&updatedCategory).(*models.Category)
 
 	if errors := helpers.StructValidation(category); len(errors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
