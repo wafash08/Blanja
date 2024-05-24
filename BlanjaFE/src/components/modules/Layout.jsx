@@ -7,7 +7,8 @@ export default function Layout() {
 	const pathnames = pathname.split('/');
 	const inProductsPage = pathnames.includes('products');
 	const inCategoriesPage = pathnames.includes('categories');
-	const inHomePage = !inCategoriesPage && !inProductsPage;
+	const inCartPage = pathnames.includes('cart');
+	const inHomePage = !inCategoriesPage && !inProductsPage && !inCartPage;
 	return (
 		<>
 			<header className='fixed top-0 left-0 w-full h-[100px] z-50 flex items-center bg-white shadow-[0_6px_40px_0_#ADADAD40]'>
