@@ -4,8 +4,11 @@ import StoreImage from "../../../assets/store-image.svg";
 import Navbar from "../../../components/modules/Navbar";
 import clsx from "clsx";
 import Button from "../../../components/base/Button";
+import { useParams } from "react-router-dom";
+import BreadCrumb from "../../../components/base/BreadCrumb";
 
 const DetailProduct = () => {
+  const { id } = useParams();
   const imageList = [
     StoreImage,
     "https://www.svgrepo.com/show/393451/clothes-clothing-formal-wear.svg",
@@ -22,96 +25,98 @@ const DetailProduct = () => {
       name: "Ahmad",
       user_id: 1,
       product_id: 465,
-      rating: 5
+      rating: 5,
     },
     {
       name: "Barnabas",
       user_id: 2,
       product_id: 465,
-      rating: 5
+      rating: 5,
     },
     {
       name: "Cyrus",
       user_id: 3,
       product_id: 465,
-      rating: 5
+      rating: 5,
     },
     {
       name: "Darius",
       user_id: 4,
       product_id: 465,
-      rating: 5
+      rating: 5,
     },
     {
       name: "Ezekiel",
       user_id: 5,
       product_id: 465,
-      rating: 5
+      rating: 5,
     },
     {
       name: "Farroukh",
       user_id: 6,
       product_id: 465,
-      rating: 3
+      rating: 3,
     },
     {
       name: "Ghulam",
       user_id: 7,
       product_id: 465,
-      rating: 1
+      rating: 1,
     },
     {
       name: "Hasheem",
       user_id: 8,
       product_id: 465,
-      rating: 2
+      rating: 2,
     },
     {
       name: "Illyria",
       user_id: 9,
       product_id: 465,
-      rating: 4
+      rating: 4,
     },
     {
       name: "Jalut",
       user_id: 10,
       product_id: 465,
-      rating: 3
-    }
-  ]
+      rating: 3,
+    },
+  ];
   const sumRatings = {
     rating1: 0,
     rating2: 0,
     rating3: 0,
     rating4: 0,
-    rating5: 0
-  }
+    rating5: 0,
+  };
   const sumOfUsersWhoRates = {
     rating1: 0,
     rating2: 0,
     rating3: 0,
     rating4: 0,
-    rating5: 0
-  }
-  ratingCustomers.map( value => {
+    rating5: 0,
+  };
+  ratingCustomers.map((value) => {
     if (value.rating === 1) {
-      sumRatings.rating1 = sumRatings.rating1 + 1
-      sumOfUsersWhoRates.rating1 = sumOfUsersWhoRates.rating1 + 1
+      sumRatings.rating1 = sumRatings.rating1 + 1;
+      sumOfUsersWhoRates.rating1 = sumOfUsersWhoRates.rating1 + 1;
     } else if (value.rating === 2) {
-      sumRatings.rating2 = sumRatings.rating2 + 2
-      sumOfUsersWhoRates.rating2 = sumOfUsersWhoRates.rating2 + 1
+      sumRatings.rating2 = sumRatings.rating2 + 2;
+      sumOfUsersWhoRates.rating2 = sumOfUsersWhoRates.rating2 + 1;
     } else if (value.rating === 3) {
-      sumRatings.rating3 = sumRatings.rating3 + 3
-      sumOfUsersWhoRates.rating3 = sumOfUsersWhoRates.rating3 + 1
+      sumRatings.rating3 = sumRatings.rating3 + 3;
+      sumOfUsersWhoRates.rating3 = sumOfUsersWhoRates.rating3 + 1;
     } else if (value.rating === 4) {
-      sumRatings.rating4 = sumRatings.rating4 + 4
-      sumOfUsersWhoRates.rating4 = sumOfUsersWhoRates.rating4 + 1
+      sumRatings.rating4 = sumRatings.rating4 + 4;
+      sumOfUsersWhoRates.rating4 = sumOfUsersWhoRates.rating4 + 1;
     } else if (value.rating === 5) {
-      sumRatings.rating5 = sumRatings.rating5 + 5
-      sumOfUsersWhoRates.rating5 = sumOfUsersWhoRates.rating5 + 1
+      sumRatings.rating5 = sumRatings.rating5 + 5;
+      sumOfUsersWhoRates.rating5 = sumOfUsersWhoRates.rating5 + 1;
     }
-  })
-  const meanRatings = Object.values(sumRatings).reduce((a, b) => a+b, 0) / ratingCustomers.length;
+  });
+  const meanRatings =
+    Object.values(sumRatings).reduce((a, b) => a + b, 0) /
+    ratingCustomers.length;
   const meanDisplay = Math.round(meanRatings * 10) / 10;
   const ratings = Math.floor(meanRatings);
 
@@ -154,6 +159,23 @@ const DetailProduct = () => {
   };
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
+      <div>
+        <Container>
+          <BreadCrumb
+            items={[
+              {
+                name: "Products",
+                href: "/",
+              },
+              {
+                name: "Product Name",
+                href: `/products/${id}`,
+                current: true,
+              },
+            ]}
+          />
+        </Container>
+      </div>
       <header className="fixed top-0 left-0 w-full h-[100px] z-50 flex items-center bg-white shadow-[0_6px_40px_0_#ADADAD40]">
         <Container>
           <Navbar hasLoggedIn={true} inHomePage={true} />
@@ -327,7 +349,9 @@ const DetailProduct = () => {
             <button className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
               Add Bag
             </button>
-            <Button className={"w-[343px]"}>Buy Now</Button>
+            <div className="w-[343px]">
+              <Button>Buy Now</Button>
+            </div>
           </div>
         </div>
         {/* Detail Product section */}
@@ -391,11 +415,22 @@ const DetailProduct = () => {
               >
                 <path d="M8.00021 13.0788L3.72956 15.258C3.36189 15.4456 2.9381 15.1321 3.00993 14.7256L3.82164 10.1322L0.397075 6.89231C0.0928178 6.60446 0.256135 6.09249 0.670876 6.034L5.41771 5.36454L7.55452 1.16227C7.73986 0.79777 8.26056 0.79777 8.4459 1.16227L10.5827 5.36454L15.3295 6.034C15.7443 6.09249 15.9076 6.60446 15.6033 6.89231L12.1788 10.1322L12.9905 14.7256C13.0623 15.1321 12.6385 15.4456 12.2709 15.258L8.00021 13.0788Z" />
               </svg>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">5</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
+                5
+              </p>
               <div className="w-[120px] h-auto ml-7">
-                <div style={{ width: `calc(100% * ${sumOfUsersWhoRates.rating5/ratingCustomers.length})` }} className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"></div>
+                <div
+                  style={{
+                    width: `calc(100% * ${
+                      sumOfUsersWhoRates.rating5 / ratingCustomers.length
+                    })`,
+                  }}
+                  className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"
+                ></div>
               </div>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">{sumOfUsersWhoRates.rating5}</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">
+                {sumOfUsersWhoRates.rating5}
+              </p>
             </div>
             {/* Rating 5 */}
 
@@ -407,11 +442,22 @@ const DetailProduct = () => {
               >
                 <path d="M8.00021 13.0788L3.72956 15.258C3.36189 15.4456 2.9381 15.1321 3.00993 14.7256L3.82164 10.1322L0.397075 6.89231C0.0928178 6.60446 0.256135 6.09249 0.670876 6.034L5.41771 5.36454L7.55452 1.16227C7.73986 0.79777 8.26056 0.79777 8.4459 1.16227L10.5827 5.36454L15.3295 6.034C15.7443 6.09249 15.9076 6.60446 15.6033 6.89231L12.1788 10.1322L12.9905 14.7256C13.0623 15.1321 12.6385 15.4456 12.2709 15.258L8.00021 13.0788Z" />
               </svg>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">4</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
+                4
+              </p>
               <div className="w-[120px] h-auto ml-7">
-                <div style={{ width: `calc(100% * ${sumOfUsersWhoRates.rating4/ratingCustomers.length})` }} className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"></div>
+                <div
+                  style={{
+                    width: `calc(100% * ${
+                      sumOfUsersWhoRates.rating4 / ratingCustomers.length
+                    })`,
+                  }}
+                  className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"
+                ></div>
               </div>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">{sumOfUsersWhoRates.rating4}</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">
+                {sumOfUsersWhoRates.rating4}
+              </p>
             </div>
             {/* Rating 4 */}
 
@@ -423,11 +469,22 @@ const DetailProduct = () => {
               >
                 <path d="M8.00021 13.0788L3.72956 15.258C3.36189 15.4456 2.9381 15.1321 3.00993 14.7256L3.82164 10.1322L0.397075 6.89231C0.0928178 6.60446 0.256135 6.09249 0.670876 6.034L5.41771 5.36454L7.55452 1.16227C7.73986 0.79777 8.26056 0.79777 8.4459 1.16227L10.5827 5.36454L15.3295 6.034C15.7443 6.09249 15.9076 6.60446 15.6033 6.89231L12.1788 10.1322L12.9905 14.7256C13.0623 15.1321 12.6385 15.4456 12.2709 15.258L8.00021 13.0788Z" />
               </svg>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">3</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
+                3
+              </p>
               <div className="w-[120px] h-auto ml-7">
-                <div style={{ width: `calc(100% * ${sumOfUsersWhoRates.rating3/ratingCustomers.length})` }} className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"></div>
+                <div
+                  style={{
+                    width: `calc(100% * ${
+                      sumOfUsersWhoRates.rating3 / ratingCustomers.length
+                    })`,
+                  }}
+                  className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"
+                ></div>
               </div>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">{sumOfUsersWhoRates.rating3}</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">
+                {sumOfUsersWhoRates.rating3}
+              </p>
             </div>
             {/* Rating 3 */}
 
@@ -439,11 +496,22 @@ const DetailProduct = () => {
               >
                 <path d="M8.00021 13.0788L3.72956 15.258C3.36189 15.4456 2.9381 15.1321 3.00993 14.7256L3.82164 10.1322L0.397075 6.89231C0.0928178 6.60446 0.256135 6.09249 0.670876 6.034L5.41771 5.36454L7.55452 1.16227C7.73986 0.79777 8.26056 0.79777 8.4459 1.16227L10.5827 5.36454L15.3295 6.034C15.7443 6.09249 15.9076 6.60446 15.6033 6.89231L12.1788 10.1322L12.9905 14.7256C13.0623 15.1321 12.6385 15.4456 12.2709 15.258L8.00021 13.0788Z" />
               </svg>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">2</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
+                2
+              </p>
               <div className="w-[120px] h-auto ml-7">
-                <div style={{ width: `calc(100% * ${sumOfUsersWhoRates.rating2/ratingCustomers.length})` }} className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"></div>
+                <div
+                  style={{
+                    width: `calc(100% * ${
+                      sumOfUsersWhoRates.rating2 / ratingCustomers.length
+                    })`,
+                  }}
+                  className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"
+                ></div>
               </div>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">{sumOfUsersWhoRates.rating2}</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">
+                {sumOfUsersWhoRates.rating2}
+              </p>
             </div>
             {/* Rating 2 */}
 
@@ -455,11 +523,22 @@ const DetailProduct = () => {
               >
                 <path d="M8.00021 13.0788L3.72956 15.258C3.36189 15.4456 2.9381 15.1321 3.00993 14.7256L3.82164 10.1322L0.397075 6.89231C0.0928178 6.60446 0.256135 6.09249 0.670876 6.034L5.41771 5.36454L7.55452 1.16227C7.73986 0.79777 8.26056 0.79777 8.4459 1.16227L10.5827 5.36454L15.3295 6.034C15.7443 6.09249 15.9076 6.60446 15.6033 6.89231L12.1788 10.1322L12.9905 14.7256C13.0623 15.1321 12.6385 15.4456 12.2709 15.258L8.00021 13.0788Z" />
               </svg>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">1</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
+                1
+              </p>
               <div className="w-[120px] h-auto ml-7">
-                <div style={{ width: `calc(100% * ${sumOfUsersWhoRates.rating1/ratingCustomers.length})` }} className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"></div>
+                <div
+                  style={{
+                    width: `calc(100% * ${
+                      sumOfUsersWhoRates.rating1 / ratingCustomers.length
+                    })`,
+                  }}
+                  className="h-0 border-t-[6px] border-[#DB3022] rounded-lg"
+                ></div>
               </div>
-              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">{sumOfUsersWhoRates.rating1}</p>
+              <p className="font-medium text-[14px] text-[#9B9B9B] ml-5">
+                {sumOfUsersWhoRates.rating1}
+              </p>
             </div>
             {/* Rating 1 */}
           </div>
