@@ -164,7 +164,7 @@ function ColorFilters({ colors }) {
 						<label className='relative '>
 							<span className='sr-only'>{color}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='colors'
 								id={color}
 								value={color}
@@ -194,7 +194,7 @@ function SizeFilters({ sizes }) {
 						<label className='relative '>
 							<span className='sr-only'>{size}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='sizes'
 								id={size}
 								value={size}
@@ -229,7 +229,7 @@ function CategoryFilters({ categories }) {
 						<label className='relative '>
 							<span className='sr-only'>{category}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='categories'
 								id={category}
 								value={category}
@@ -264,7 +264,7 @@ function BrandFilters({ brands }) {
 						<label className='relative '>
 							<span className='sr-only'>{brand}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='brands'
 								id={brand}
 								value={brand}
