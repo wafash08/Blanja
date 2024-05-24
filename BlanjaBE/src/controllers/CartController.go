@@ -32,9 +32,9 @@ func GetCart(c *fiber.Ctx) error {
 				"updated_at": product.UpdatedAt,
 				"name":       product.Name,
 				"price":      product.Price,
-				"photo":      product.Image,
-				"size":       product.Size,
-				"color":      product.Color,
+				"photo":      product.Images,
+				"size":       product.Sizes,
+				"color":      product.Colors,
 				"quantity":   cartProduct.Quantity,
 				"rating":     product.Rating,
 			}
