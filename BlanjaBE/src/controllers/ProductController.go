@@ -12,13 +12,17 @@ import (
 )
 
 func GetAllProduct(c *fiber.Ctx) error {
-	keyword := c.Query("search")
-	sort := helpers.GetSortParams(c.Query("sorting"), c.Query("orderBy"))
-	page, limit, offset := helpers.GetPaginationParams(c.Query("limit"), c.Query("page"))
-	totalData := models.CountData(keyword)
+	params := c.Queries()
+	keyword := params["search"]
+	condition := params["condition"]
+	sort := helpers.GetSortParams(params["sorting"], params["orderBy"])
+	page, limit, offset := helpers.GetPaginationParams(params["limit"], params["page"])
+	filter := helpers.GetFilterParams(params["colors"], params["sizes"], params["category"], params["seller"])
+
+	totalData := models.CountDataWithFilter(keyword, filter, condition)
 	totalPage := math.Ceil(float64(totalData) / float64(limit))
 
-	products := models.SelectAllProducts(keyword, sort, limit, offset)
+	products := models.SelectAllProductsWithFilter(keyword, sort, limit, offset, filter, condition)
 	if len(products) == 0 {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status":     "no content",
@@ -42,7 +46,6 @@ func GetAllProduct(c *fiber.Ctx) error {
 			"image":         product.Images[0].URL,
 			"rating":        product.Rating,
 			"price":         product.Price,
-			"condition":     product.Condition,
 		}
 	}
 
@@ -78,8 +81,8 @@ func GetDetailProduct(c *fiber.Ctx) error {
 	}
 
 	images := make([]map[string]interface{}, len(product.Images))
-	for j, image := range product.Images {
-		images[j] = map[string]interface{}{
+	for i, image := range product.Images {
+		images[i] = map[string]interface{}{
 			"id":         image.ID,
 			"created_at": image.CreatedAt,
 			"updated_at": image.UpdatedAt,
@@ -88,8 +91,8 @@ func GetDetailProduct(c *fiber.Ctx) error {
 	}
 
 	sizes := make([]map[string]interface{}, len(product.Sizes))
-	for j, size := range product.Sizes {
-		sizes[j] = map[string]interface{}{
+	for i, size := range product.Sizes {
+		sizes[i] = map[string]interface{}{
 			"id":         size.ID,
 			"created_at": size.CreatedAt,
 			"updated_at": size.UpdatedAt,
@@ -98,8 +101,8 @@ func GetDetailProduct(c *fiber.Ctx) error {
 	}
 
 	colors := make([]map[string]interface{}, len(product.Colors))
-	for j, image := range product.Colors {
-		colors[j] = map[string]interface{}{
+	for i, image := range product.Colors {
+		colors[i] = map[string]interface{}{
 			"id":         image.ID,
 			"created_at": image.CreatedAt,
 			"updated_at": image.UpdatedAt,
