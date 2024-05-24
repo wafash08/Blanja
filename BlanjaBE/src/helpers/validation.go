@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
-	"reflect"
 	"regexp"
 	"strings"
 
@@ -15,23 +14,27 @@ type ErrorResponse struct {
 	ErrorMessage string `json:"error_message"`
 }
 
-func VariableRequiredValidation(param any) []*ErrorResponse {
-	var errors []*ErrorResponse
+func FieldRequiredValidation(fieldValue interface{}, require string) *ErrorResponse {
+	var errorResponse *ErrorResponse
 
-	err := validator.New().Var(param, "required")
+	v := validator.New()
+	err := v.Var(fieldValue, require)
 
 	if err != nil {
-		for _, err := range err.(validator.ValidationErrors) {
-			field, _ := reflect.TypeOf(param).Elem().FieldByName(err.Field())
-			fieldName, _ := field.Tag.Lookup("json")
+		validationErr, ok := err.(validator.ValidationErrors)
+		if !ok {
+			return &ErrorResponse{ErrorMessage: err.Error()}
+		}
 
-			errors = append(errors, &ErrorResponse{
-				ErrorMessage: fmt.Sprintf("%s must contain %s", fieldName, err.ActualTag()),
-			})
+		for _, err := range validationErr {
+			errorResponse = &ErrorResponse{
+				ErrorMessage: fmt.Sprintf("this field must contain %s", err.ActualTag()),
+			}
+			break
 		}
 	}
 
-	return errors
+	return errorResponse
 }
 
 func StructValidation(param any) []*ErrorResponse {
