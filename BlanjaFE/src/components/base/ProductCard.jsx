@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import productDummy from '../../assets/product-dummy.png';
 
 // keterangan props
 // image (string): alamat url gambar dari sebuah produk
@@ -8,11 +9,12 @@ import { Link } from 'react-router-dom';
 // rate (number): rating produk
 
 export default function ProductCard({ id, image, name, brand, price, rate }) {
+	console.log('image > ', image);
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
 			<div className='h-[136px] overflow-hidden'>
 				<img
-					src={image}
+					src={image ? image : productDummy}
 					alt={name}
 					height={136}
 					width={208}
