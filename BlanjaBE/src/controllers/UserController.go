@@ -171,9 +171,9 @@ func LoginUser(c *fiber.Ctx) error {
 	})
 }
 
-func ResetPassword(c *fiber.Ctx) error {
-	var updatedUser models.User
-	if err := c.BodyParser(&updatedUser); err != nil {
+func RequestResetPassword(c *fiber.Ctx) error {
+	var requestEmail models.User
+	if err := c.BodyParser(&requestEmail); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":     "bad request",
 			"statusCode": 400,
@@ -181,8 +181,8 @@ func ResetPassword(c *fiber.Ctx) error {
 		})
 	}
 
-	user := middlewares.XSSMiddleware(&updatedUser).(*models.User)
-	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
+	user := middlewares.XSSMiddleware(&requestEmail).(*models.User)
+	if authErrors := helpers.FieldRequiredValidation(user.Email, "required,email"); authErrors != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":     "unprocessable entity",
 			"statusCode": 422,
@@ -196,6 +196,73 @@ func ResetPassword(c *fiber.Ctx) error {
 			"status":     "not found",
 			"statusCode": 404,
 			"message":    "Email not found",
+		})
+	}
+
+	payload := map[string]interface{}{
+		"email": user.Email,
+	}
+
+	token, err := helpers.GenerateToken(os.Getenv("SECRETKEY"), payload)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to generate token",
+		})
+	}
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"status":     "accepted",
+		"statusCode": 202,
+		"message":    "Password reset email sent",
+		"token":      token,
+	})
+}
+
+func ResetPassword(c *fiber.Ctx) error {
+	email, err := middlewares.JWTResetPassword(c)
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
+		})
+	}
+
+	if existUser := models.SelectUserbyEmail(email); existUser.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Email not found",
+		})
+	}
+
+	var updatedUser models.User
+	if err := c.BodyParser(&updatedUser); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Invalid request body",
+		})
+	}
+	updatedUser.Email = email
+
+	user := middlewares.XSSMiddleware(&updatedUser).(*models.User)
+	if authErrors := helpers.PasswordValidation(user.Password, helpers.StructValidation(user)); len(authErrors) > 0 {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":     "unprocessable entity",
+			"statusCode": 422,
+			"message":    "Validation failed",
+			"errors":     authErrors,
 		})
 	}
 
