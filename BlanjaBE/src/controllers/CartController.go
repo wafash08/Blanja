@@ -7,6 +7,7 @@ import (
 	"gofiber-marketplace/src/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func GetCart(c *fiber.Ctx) error {
@@ -42,6 +43,7 @@ func GetCart(c *fiber.Ctx) error {
 
 		resultCarts[i] = map[string]interface{}{
 			"id":         cart.ID,
+			"user_id": cart.UserID,
 			"brand_id":   cart.SellerID,
 			"brand_name": cart.Seller.Name,
 			"created_at": cart.CreatedAt,
@@ -58,6 +60,7 @@ func GetCart(c *fiber.Ctx) error {
 
 func CreateCart(c *fiber.Ctx) error {
 	var newCart models.Cart
+	var user = c.Locals("user").(jwt.MapClaims)
 	if err := c.BodyParser(&newCart); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":     "bad request",
@@ -65,6 +68,9 @@ func CreateCart(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
+	userID := user["id"].(float64)
+	newCart.UserID = uint(userID)
+
 	cart := middlewares.XSSMiddleware(&newCart).(*models.Cart)
 
 	if errors := helpers.StructValidation(cart); len(errors) > 0 {
