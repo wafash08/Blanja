@@ -8,10 +8,10 @@ import (
 
 type Category struct {
 	gorm.Model
-	Name     string    `json:"name" validate:"required,max=50"`
-	Image    string    `json:"image" validate:"required"`
-	Slug     string    `json:"slug" validate:"required,lowercase"`
-	Products []Product `json:"products"`
+	Name     string    `form:"name" validate:"required,max=50"`
+	Image    string    `form:"image" validate:"required,url"`
+	Slug     string    `form:"slug" validate:"required,lowercase"`
+	Products []Product `form:"products"`
 }
 
 func SelectAllCategories(keyword, sort string) []*Category {

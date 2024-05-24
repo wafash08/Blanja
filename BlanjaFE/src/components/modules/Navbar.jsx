@@ -9,7 +9,7 @@ import Filter from '../base/Filter';
 
 export default function Navbar({ hasLoggedIn, inHomePage }) {
 	return (
-		<div className='w-full flex items-center justify-between'>
+		<div className='w-full flex items-center justify-between font-metropolis'>
 			<div className='flex items-center gap-[60px]'>
 				<Link to='/'>
 					<span className='sr-only'>Ke halaman home</span>

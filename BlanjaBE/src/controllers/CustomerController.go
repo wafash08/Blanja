@@ -29,7 +29,7 @@ func GetCustomers(c *fiber.Ctx) error {
 			"name":          customer.Name,
 			"user_id":       customer.User.ID,
 			"email":         customer.User.Email,
-			"photo":         customer.Image,
+			"image":         customer.Image,
 			"phone":         customer.Phone,
 			"gender":        customer.Gender,
 			"date_of_birth": customer.DateOfBirth,
@@ -78,7 +78,7 @@ func GetDetailCustomer(c *fiber.Ctx) error {
 		"name":          customer.Name,
 		"user_id":       customer.User.ID,
 		"email":         customer.User.Email,
-		"photo":         customer.Image,
+		"image":         customer.Image,
 		"phone":         customer.Phone,
 		"gender":        customer.Gender,
 		"date_of_birth": customer.DateOfBirth,
@@ -94,21 +94,20 @@ func GetDetailCustomer(c *fiber.Ctx) error {
 }
 
 func GetCustomerProfile(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "customer" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "customer")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -128,7 +127,7 @@ func GetCustomerProfile(c *fiber.Ctx) error {
 		"name":          customer.Name,
 		"user_id":       customer.User.ID,
 		"email":         customer.User.Email,
-		"photo":         customer.Image,
+		"image":         customer.Image,
 		"phone":         customer.Phone,
 		"gender":        customer.Gender,
 		"date_of_birth": customer.DateOfBirth,
@@ -143,33 +142,23 @@ func GetCustomerProfile(c *fiber.Ctx) error {
 	})
 }
 
-type CustomerProfile struct {
-	Name        string                `json:"name" validate:"required,max=50"`
-	Email       string                `json:"email" validate:"required,email"`
-	Image       string                `json:"image" validate:"required"`
-	Phone       string                `json:"phone" validate:"required,numeric,max=15"`
-	Gender      models.CustomerGender `gorm:"type:customer_gender" json:"gender" validate:"required,oneof=male female"`
-	DateOfBirth string                `json:"date_of_birth" validate:"required"`
-}
-
 func UpdateCustomerProfile(c *fiber.Ctx) error {
-	var profileData CustomerProfile
+	var profileData models.CustomerProfile
 
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "customer" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "customer")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 
@@ -190,7 +179,7 @@ func UpdateCustomerProfile(c *fiber.Ctx) error {
 		})
 	}
 
-	user := middlewares.XSSMiddleware(&profileData).(*CustomerProfile)
+	user := middlewares.XSSMiddleware(&profileData).(*models.CustomerProfile)
 	if errors := helpers.StructValidation(user); len(errors) > 0 {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":     "unprocessable entity",
@@ -253,21 +242,20 @@ func UpdateCustomerProfile(c *fiber.Ctx) error {
 }
 
 func DeleteCustomer(c *fiber.Ctx) error {
-	auth := middlewares.UserLocals(c)
-	if role := auth["role"].(string); role != "customer" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":     "forbidden",
-			"statusCode": 403,
-			"message":    "Incorrect role",
-		})
-	}
+	id, err := middlewares.JWTAuthorize(c, "customer")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
 
-	id, ok := auth["id"].(float64)
-	if !ok {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Invalid ID format",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
 		})
 	}
 

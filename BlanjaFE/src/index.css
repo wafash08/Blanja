@@ -3,8 +3,18 @@
 @tailwind utilities;
 
 @layer base {
-    @font-face {
-        font-family: 'Metropolis';
-        src: url(./fonts/Metropolis-Regular.woff) format('woff');
-    }
+	@font-face {
+		font-family: 'Metropolis';
+		src: url(../fonts/Metropolis-Regular.woff) format('woff');
+	}
+}
+
+.active {
+	background-color: #db3022;
+	color: #fff;
+}
+
+.dialog {
+	width: 450px;
+	border-radius: 8px;
 }
