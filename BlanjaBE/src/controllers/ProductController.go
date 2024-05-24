@@ -23,7 +23,7 @@ func GetAllProduct(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status":     "no content",
 			"statusCode": 202,
-			"message":    "Product is empty. You should create product",
+			"message":    "Product is empty.",
 			"data":       products,
 		})
 	}
@@ -36,14 +36,13 @@ func GetAllProduct(c *fiber.Ctx) error {
 			"updated_at":    product.UpdatedAt,
 			"category_id":   product.CategoryID,
 			"category_name": product.Category.Name,
-			"brand_id":      product.SellerID,
-			"brand_name":    product.Seller.Name,
+			"seller_id":     product.SellerID,
+			"seller_name":   product.Seller.Name,
 			"name":          product.Name,
+			"image":         product.Images[0].URL,
 			"rating":        product.Rating,
 			"price":         product.Price,
-			"stock":         product.Stock,
 			"condition":     product.Condition,
-			"desc":          product.Description,
 		}
 	}
 
@@ -78,15 +77,48 @@ func GetDetailProduct(c *fiber.Ctx) error {
 		})
 	}
 
+	images := make([]map[string]interface{}, len(product.Images))
+	for j, image := range product.Images {
+		images[j] = map[string]interface{}{
+			"id":         image.ID,
+			"created_at": image.CreatedAt,
+			"updated_at": image.UpdatedAt,
+			"url":        image.URL,
+		}
+	}
+
+	sizes := make([]map[string]interface{}, len(product.Sizes))
+	for j, size := range product.Sizes {
+		sizes[j] = map[string]interface{}{
+			"id":         size.ID,
+			"created_at": size.CreatedAt,
+			"updated_at": size.UpdatedAt,
+			"value":      size.Value,
+		}
+	}
+
+	colors := make([]map[string]interface{}, len(product.Colors))
+	for j, image := range product.Colors {
+		colors[j] = map[string]interface{}{
+			"id":         image.ID,
+			"created_at": image.CreatedAt,
+			"updated_at": image.UpdatedAt,
+			"value":      image.Value,
+		}
+	}
+
 	resultProduct := map[string]interface{}{
 		"id":            product.ID,
 		"created_at":    product.CreatedAt,
 		"updated_at":    product.UpdatedAt,
 		"category_id":   product.CategoryID,
 		"category_name": product.Category.Name,
-		"brand_id":      product.SellerID,
-		"brand_name":    product.Seller.Name,
+		"seller_id":     product.SellerID,
+		"seller_name":   product.Seller.Name,
 		"name":          product.Name,
+		"images":        images,
+		"sizes":         sizes,
+		"colors":        colors,
 		"rating":        product.Rating,
 		"price":         product.Price,
 		"stock":         product.Stock,
@@ -98,6 +130,7 @@ func GetDetailProduct(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status":     "success",
 		"statusCode": 200,
+		"message":    "Product not empty",
 		"data":       resultProduct,
 	})
 }
@@ -212,6 +245,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"status":     "bad request",
 			"statusCode": 400,
 			"message":    "Invalid request body",
+			"data":       updatedProduct,
 		})
 	}
 
@@ -292,7 +326,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.DeleteProduct(id); err != nil {
+	if err := models.DeleteProductAllData(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,

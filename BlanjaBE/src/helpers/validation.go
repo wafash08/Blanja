@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -42,13 +41,13 @@ func StructValidation(param any) []*ErrorResponse {
 
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
-			field, _ := reflect.TypeOf(param).Elem().FieldByName(err.Field())
-			fieldName, _ := field.Tag.Lookup("json")
+			// field, _ := reflect.TypeOf(param).Elem().FieldByName(err.Field())
+			// fieldName, _ := field.Tag.Lookup("json")
 			var message string
 			if err.Param() == "" {
-				message = fmt.Sprintf("%s must contain %s", fieldName, err.ActualTag())
+				message = fmt.Sprintf("%s must contain %s", err.StructNamespace(), err.ActualTag())
 			} else {
-				message = fmt.Sprintf("%s must contain %s=%s", fieldName, err.ActualTag(), err.Param())
+				message = fmt.Sprintf("%s must contain %s=%s", err.StructNamespace(), err.ActualTag(), err.Param())
 			}
 
 			errors = append(errors, &ErrorResponse{
@@ -125,21 +124,6 @@ func ImageValidation(file *multipart.FileHeader) []*ErrorResponse {
 	}
 
 	return errors
-}
-
-func SizeUploadValidation(fileSize int64, maxFileSize int64) error {
-	if fileSize > maxFileSize {
-		return errors.New("file too large")
-	}
-	return nil
-}
-
-func TypeUploadValidation(buffer []byte, validFileTypes []string) error {
-	fileType := http.DetectContentType(buffer)
-	if !isValidFileType(validFileTypes, fileType) {
-		return errors.New("type of file invalid; only png, jpg, jpeg, and pdf")
-	}
-	return nil
 }
 
 func isValidFileType(validFileTypes []string, fileType string) bool {

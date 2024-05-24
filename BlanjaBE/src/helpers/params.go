@@ -31,3 +31,7 @@ func GetPaginationParams(oldLimit, oldPage string) (int, int, int) {
 
 	return page, limit, offset
 }
+
+// func getFilterParams() {
+
+// }
