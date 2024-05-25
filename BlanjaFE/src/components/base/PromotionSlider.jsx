@@ -1,9 +1,9 @@
 import Slider from 'react-slick';
+import clsx from 'clsx';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import trends from '../../assets/trends.png';
 import black from '../../assets/black.png';
-import clsx from 'clsx';
 
 const PROMOTION_LIST = [
 	{
@@ -74,7 +74,7 @@ function NextArrow(props) {
 			type='button'
 			className={clsx(
 				'inline-flex items-center justify-center w-14 h-14 rounded-full bg-white shadow-[0_4px_10px_0_#B5B5B540]',
-				'z-10 absolute -right-3 top-1/2 -translate-y-1/2'
+				'z-10 absolute right-[58px] top-1/2 -translate-y-1/2'
 			)}
 			onClick={onClick}
 		>
@@ -103,7 +103,7 @@ function PrevArrow(props) {
 			type='button'
 			className={clsx(
 				'inline-flex items-center justify-center w-14 h-14 rounded-full bg-white shadow-[0_4px_10px_0_#B5B5B540]',
-				'z-10 absolute -left-7 top-1/2 -translate-y-1/2'
+				'z-10 absolute left-[58px] top-1/2 -translate-y-1/2'
 			)}
 			onClick={onClick}
 		>

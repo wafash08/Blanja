@@ -160,7 +160,7 @@ function ColorFilters({ colors }) {
 		<ul className='flex items-center gap-5'>
 			{colors.map(color => {
 				return (
-					<li className='inline-flex' key={color}>
+					<li className='group inline-flex' key={color}>
 						<label className='relative '>
 							<span className='sr-only'>{color}</span>
 							<input
@@ -172,7 +172,8 @@ function ColorFilters({ colors }) {
 							/>
 							<div
 								className={clsx(
-									'w-9 h-9 rounded-full outline outline-1 outline-transparent peer-checked:outline-[#DB3022] outline-offset-2'
+									'w-9 h-9 rounded-full outline outline-1 outline-transparent peer-checked:outline-[#DB3022] outline-offset-2 transition-colors',
+									'group-hover:outline-[#DB3022]'
 								)}
 								style={{ backgroundColor: color }}
 							/>
@@ -189,7 +190,7 @@ function SizeFilters({ sizes }) {
 		<ul className='flex items-center flex-wrap gap-5'>
 			{sizes.map(size => {
 				return (
-					<li className='inline-flex' key={size}>
+					<li className='group inline-flex' key={size}>
 						<label className='relative '>
 							<span className='sr-only'>{size}</span>
 							<input
@@ -205,7 +206,8 @@ function SizeFilters({ sizes }) {
 									'w-10 h-10 inline-flex items-center justify-center rounded-lg uppercase transition-colors text-sm',
 									'bg-white peer-checked:bg-[#DB3022]',
 									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
-									'text-[#222222] peer-checked:text-white'
+									'text-[#222222] peer-checked:text-white',
+									'group-hover:bg-[#DB3022] group-hover:text-white group-hover:border-[#DB3022]'
 								)}
 							>
 								{size}
@@ -223,7 +225,7 @@ function CategoryFilters({ categories }) {
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
 			{categories.map(category => {
 				return (
-					<li className='inline-flex' key={category}>
+					<li className='group inline-flex' key={category}>
 						<label className='relative '>
 							<span className='sr-only'>{category}</span>
 							<input
@@ -239,7 +241,8 @@ function CategoryFilters({ categories }) {
 									'w-[100px] h-10 inline-flex items-center justify-center rounded-lg capitalize transition-colors text-sm',
 									'bg-white peer-checked:bg-[#DB3022]',
 									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
-									'text-[#222222] peer-checked:text-white'
+									'text-[#222222] peer-checked:text-white',
+									'group-hover:bg-[#DB3022] group-hover:text-white group-hover:border-[#DB3022]'
 								)}
 							>
 								{category}
@@ -257,7 +260,7 @@ function BrandFilters({ brands }) {
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
 			{brands.map(brand => {
 				return (
-					<li className='inline-flex' key={brand}>
+					<li className='group inline-flex' key={brand}>
 						<label className='relative '>
 							<span className='sr-only'>{brand}</span>
 							<input
@@ -273,7 +276,8 @@ function BrandFilters({ brands }) {
 									'w-[100px] h-10 inline-flex items-center justify-center rounded-lg capitalize transition-colors text-sm',
 									'bg-white peer-checked:bg-[#DB3022]',
 									'border border-[#9B9B9B] peer-checked:border-[#DB3022]',
-									'text-[#222222] peer-checked:text-white'
+									'text-[#222222] peer-checked:text-white',
+									'group-hover:bg-[#DB3022] group-hover:text-white group-hover:border-[#DB3022]'
 								)}
 							>
 								{brand}

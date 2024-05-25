@@ -77,6 +77,20 @@ func JWTAuthorize(c *fiber.Ctx, requiredRole string) (float64, error) {
 	return id, nil
 }
 
+func JWTResetPassword(c *fiber.Ctx) (string, error) {
+	user, ok := c.Locals("user").(jwt.MapClaims)
+	if !ok {
+		return "", fiber.NewError(fiber.StatusUnauthorized, "Unauthorized")
+	}
+
+	email, ok := user["email"].(string)
+	if !ok {
+		return "", fiber.NewError(fiber.StatusBadRequest, "Invalid ID format")
+	}
+
+	return email, nil
+}
+
 // func UserLocals(c *fiber.Ctx) jwt.MapClaims {
 // 	user := c.Locals("user").(jwt.MapClaims)
 
