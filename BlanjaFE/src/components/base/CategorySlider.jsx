@@ -27,10 +27,13 @@ export default function CategorySlider({ categories }) {
 
 function Category({ slug, name, image }) {
 	return (
-		<div className='w-full max-w-48 h-56'>
+		<div className='group overflow-hidden w-full max-w-48 h-56'>
 			<Link
 				to={`/categories/${slug}`}
-				className='w-full max-w-52 h-full inline-flex items-center justify-center'
+				className={clsx(
+					'w-full max-w-52 h-full inline-flex items-center justify-center',
+					'group-hover:-translate-y-2 transition-transform'
+				)}
 			>
 				<img src={image} alt={name} />
 			</Link>

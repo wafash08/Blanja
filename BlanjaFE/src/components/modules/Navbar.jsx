@@ -16,12 +16,6 @@ import { useEffect } from 'react';
 export default function Navbar({ hasLoggedIn }) {
 	const { data: profile, status } = useProfile();
 
-	useEffect(() => {
-		if (status === 'failed') {
-			removeTokenFromLocalStorage();
-		}
-	}, []);
-
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>
 			<div className='flex items-center gap-[60px]'>
@@ -75,7 +69,7 @@ export default function Navbar({ hasLoggedIn }) {
 						</Link>
 					</li>
 
-					{hasLoggedIn ? (
+					{hasLoggedIn || status === 'failed' ? (
 						<>
 							<li className='group'>
 								<Link to='/notification'>

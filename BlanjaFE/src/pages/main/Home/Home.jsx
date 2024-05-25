@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ProductSection from '../../../components/modules/ProductSection';
 import Container from '../../../components/base/Container';
 import CategorySlider from '../../../components/base/CategorySlider';
@@ -13,22 +13,54 @@ const Home = () => {
 	const { data: categories, status } = useCategories();
 	const [searchParams] = useSearchParams();
 	const search = searchParams.get('search');
-	const { data: products, status: statusProducts } = useProducts(search);
+	const colors = searchParams.get('colors');
+	const sizes = searchParams.get('sizes');
+	let category = searchParams.get('category');
+	let seller = searchParams.get('seller');
+
+	category = category ? Number(category) : null;
+	seller = seller ? Number(seller) : null;
+
+	const { data: products, status: statusProducts } = useProducts(
+		search,
+		colors,
+		sizes,
+		category,
+		seller
+	);
 
 	let productList = null;
 
 	if (statusProducts === 'loading') {
 		productList = <ProductListSkeleton />;
 	} else if (statusProducts === 'success') {
-		productList = <ProductList products={products} />;
+		if (products.length > 0) {
+			productList = <ProductList products={products} />;
+		} else {
+			productList = (
+				<div>
+					<p>Produk tidak ditemukan</p>
+					<Link to='/' className='hover:underline'>
+						Kembali ke beranda
+					</Link>
+				</div>
+			);
+		}
 	}
 
-	if (search) {
+	if (search || colors || sizes || category || seller) {
 		return (
 			<section>
 				<Container>
 					<h2 className='text-3xl text-[#222222] mb-12'>
-						Hasil pencarian <span className='font-bold'>"{search}"</span>:
+						Hasil{' '}
+						{search && (
+							<span>
+								pencarian
+								<span className='font-bold'>"{search}"</span>
+							</span>
+						)}
+						:
 					</h2>
 
 					{productList}
