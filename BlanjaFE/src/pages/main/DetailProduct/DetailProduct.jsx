@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Container from "../../../components/base/Container";
 import StoreImage from "../../../assets/store-image.svg";
-import Navbar from "../../../components/modules/Navbar";
 import clsx from "clsx";
 import Button from "../../../components/base/Button";
 import { useParams } from "react-router-dom";
@@ -168,8 +167,16 @@ const DetailProduct = () => {
       .get(`${import.meta.env.VITE_BE_URL}product/${id}`)
       .then(async (res) => {
         console.log(res);
+        const imageURLS = []
+        for (const index in res.data.data.images) {
+          isImage = await outputCheckImage(res.data.data.images[index].url)
+          if (isImage === true) {
+             imageURLS.push(res.data.data.images[index].url)
+          }
+        }
+        console.log(imageURLS);
 
-        setImageList(res.data.data.images)
+        setImageList(imageURLS)
         setTitle(res.data.data.name)
         setSellerName(res.data.data.seller_name)
         setRatings(res.data.data.rating)
@@ -179,11 +186,9 @@ const DetailProduct = () => {
         setCondition(res.data.data.condition)
         setDescription(res.data.data.desc)
         setQuantity(res.data.data.stock)
-
-
-
-
         await outputCheckImage(res.data.data.images[0].url) === true && setImageURL(res.data.data.images[0].url)
+
+
 
         setLoading(false);
       })
@@ -243,7 +248,7 @@ const DetailProduct = () => {
                 <img
                   className="w-[65px] h-[65px] rounded-md hover:cursor-pointer"
                   key={index}
-                  src={value.url}
+                  src={value}
                   alt="product-image"
                   onClick={handleClickListImage}
                 />
@@ -296,8 +301,8 @@ const DetailProduct = () => {
           {/* Colors */}
           <p className="text-[16px] font-semibold text-[#222222] mt-8">Color</p>
           <ul className="flex items-center gap-5 mt-2">
-            {colorList.map((color) => (
-              <li className="inline-flex" key={color.value}>
+            {colorList.map((color, index) => (
+              <li className="inline-flex" key={index}>
                 <label className="relative">
                   <span className="sr-only">{color.value}</span>
                   <input
