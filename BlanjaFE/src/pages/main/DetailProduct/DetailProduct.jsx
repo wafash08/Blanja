@@ -159,7 +159,7 @@ const DetailProduct = () => {
   };
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
-      <div>
+      <div className="mt-32">
         <Container>
           <BreadCrumb
             items={[
@@ -181,7 +181,7 @@ const DetailProduct = () => {
           <Navbar hasLoggedIn={true} inHomePage={true} />
         </Container>
       </header>
-      <div className="w-full h-auto flex mt-32">
+      <div className="w-full h-auto flex mt-16">
         {/* Image Section */}
         <div className="h-[482px] w-auto">
           <div className="w-[367px] h-[460px]">
