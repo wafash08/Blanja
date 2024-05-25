@@ -5,6 +5,7 @@ import (
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
 	"gofiber-marketplace/src/services"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -35,6 +36,7 @@ func GetAllCategories(c *fiber.Ctx) error {
 				"updated_at": product.UpdatedAt,
 				"name":       product.Name,
 				"price":      product.Price,
+				"image":      product.Images[0].URL,
 				"rating":     product.Rating,
 			}
 		}
@@ -59,16 +61,7 @@ func GetAllCategories(c *fiber.Ctx) error {
 }
 
 func GetCategory(c *fiber.Ctx) error {
-	slug := c.Params("slug")
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"status":     "bad request",
-	// 		"statusCode": 400,
-	// 		"message":    "Invalid ID format",
-	// 	})
-	// }
-
-	category := models.SelectCategoryBySlug(slug)
+	category := models.SelectCategoryBySlug(c.Params("slug"))
 	if category.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":     "not found",
@@ -85,6 +78,7 @@ func GetCategory(c *fiber.Ctx) error {
 			"updated_at": product.UpdatedAt,
 			"name":       product.Name,
 			"price":      product.Price,
+			"image":      product.Images[0].URL,
 			"rating":     product.Rating,
 		}
 	}
@@ -107,6 +101,22 @@ func GetCategory(c *fiber.Ctx) error {
 	})
 }
 
+func GetCategoryFilter(c *fiber.Ctx) error {
+	categories := models.SelectAllCategories("", "name ASC")
+	var resultCategories []string
+
+	for _, category := range categories {
+		if !slices.Contains(resultCategories, category.Name) {
+			resultCategories = append(resultCategories, category.Name)
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"data":       resultCategories,
+	})
+}
 func CreateCategory(c *fiber.Ctx) error {
 	var newCategory models.Category
 	if err := c.BodyParser(&newCategory); err != nil {
