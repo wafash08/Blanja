@@ -58,6 +58,8 @@ func Router(app *fiber.App) {
 	app.Get("/colorsFilter", controllers.GetColorsFilter)
 	app.Get("/sizesFilter", controllers.GetSizesFilter)
 	app.Get("/categoriesFilter", controllers.GetCategoryFilter)
+
+	// Cart Routes
 	app.Get("/carts", middlewares.JWTMiddleware(), controllers.GetCart)
 	app.Post("/cart/add", middlewares.JWTMiddleware(), controllers.CreateCart)
 	app.Post("/cart/addProduct", middlewares.JWTMiddleware(), controllers.AddProductToCart)
