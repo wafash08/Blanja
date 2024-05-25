@@ -24,16 +24,18 @@ func GetCart(c *fiber.Ctx) error {
 		products := make([]map[string]interface{}, len(cart.Products))
 		for j, product := range cart.Products {
 			var cartProduct models.CartProduct
-            if err := configs.DB.Where("cart_id = ? AND product_id = ?", cart.ID, product.ID).First(&cartProduct).Error; err != nil {
-                return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve quantity"})
-            }
+			if err := configs.DB.Where("cart_id = ? AND product_id = ?", cart.ID, product.ID).First(&cartProduct).Error; err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve quantity"})
+			}
+			var image *models.Image
+			configs.DB.First(&image, "product_id = ?", product.ID)
 			products[j] = map[string]interface{}{
 				"id":         product.ID,
 				"created_at": product.CreatedAt,
 				"updated_at": product.UpdatedAt,
 				"name":       product.Name,
 				"price":      product.Price,
-				"photo":      product.Images,
+				"photo":      image.URL,
 				"size":       product.Sizes,
 				"color":      product.Colors,
 				"quantity":   cartProduct.Quantity,
@@ -43,7 +45,7 @@ func GetCart(c *fiber.Ctx) error {
 
 		resultCarts[i] = map[string]interface{}{
 			"id":         cart.ID,
-			"user_id": cart.UserID,
+			"user_id":    cart.UserID,
 			"brand_id":   cart.SellerID,
 			"brand_name": cart.Seller.Name,
 			"created_at": cart.CreatedAt,
