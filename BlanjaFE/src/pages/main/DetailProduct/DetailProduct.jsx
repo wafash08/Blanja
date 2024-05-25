@@ -174,7 +174,6 @@ const DetailProduct = () => {
              imageURLS.push(res.data.data.images[index].url)
           }
         }
-        console.log(imageURLS);
 
         setImageList(imageURLS)
         setTitle(res.data.data.name)

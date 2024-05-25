@@ -29,9 +29,10 @@ const Login = () => {
       })
       .then(async (res) => {
         console.log(res);
-        const { token, refresh_token } = res.data;
+        const { token, refresh_token, role } = res.data;
         localStorage.setItem("token", token);
         localStorage.setItem("refresh_token", refresh_token);
+        localStorage.setItem("role", role)
         setAlertMessage(res.data.message);
         setAlertType("SUCCESS");
         setIsSent(true);
