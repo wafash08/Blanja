@@ -1,0 +1,19 @@
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_BE_URL;
+const carts = `${BASE_URL}carts`;
+
+export async function getAllCarts() {
+  try {
+    const result = await axios.get(carts);
+    return {
+      cartsProducts: result.data.data,
+    };
+  } catch (error) {
+    // console.log('err >> ', error.response.data);
+    throw new Error({
+      message: error.response.data.message,
+      status: error.response.data.statusCode,
+    });
+  }
+}

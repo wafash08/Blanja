@@ -1,8 +1,10 @@
 import React from "react";
 
 const SelectAllItems = ({ products, onSelectAll, onDeleteSelected }) => {
+    let newProducts = Object.values(products)
   const allSelected =
-    products.length > 0 && products.every((product) => product.isSelected);
+    newProducts.length > 0 &&
+    newProducts.every((product) => product.isSelected);
 
   return (
     <div className="w-full flex items-center justify-between mb-4 rounded-md p-5 shadow-[0_0_14px_0_#ADADAD40]">
@@ -17,7 +19,7 @@ const SelectAllItems = ({ products, onSelectAll, onDeleteSelected }) => {
           Select all items
           <p className=" text-gray-300 ml-1">
             {" "}
-            ({products.length} items selected)
+            ({newProducts.length} items selected)
           </p>
         </label>
       </div>
