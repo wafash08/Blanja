@@ -6,8 +6,11 @@ import { Link } from 'react-router-dom';
 export default function BreadCrumb({ items }) {
 	return (
 		<nav>
-			<ul className='flex items-center space-x-3 font-metropolis text-sm text-[#9B9B9B] font-semibold'>
-				<li>
+			<ul
+				className='flex items-center space-x-3 font-metropolis text-sm text-[#9B9B9B] font-semibold'
+				key='breadcrumb'
+			>
+				<li key='home'>
 					<Link to='/' className='hover:underline'>
 						Home
 					</Link>
@@ -21,7 +24,7 @@ export default function BreadCrumb({ items }) {
 							<Link
 								to={href}
 								aria-current={current ? 'page' : undefined}
-								className='hover:underline'
+								className='hover:underline capitalize'
 							>
 								{name}
 							</Link>

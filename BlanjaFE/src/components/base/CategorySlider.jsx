@@ -3,60 +3,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import Tshirt from '../../assets/tshirt.png';
 
-const CATEGORY_LIST = [
-	{
-		id: 1,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 2,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 3,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 4,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 5,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 6,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 7,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-	{
-		id: 8,
-		name: 'T-shirt',
-		slug: 'tshirt',
-		image: Tshirt,
-	},
-];
-
-export default function CategorySlider() {
+export default function CategorySlider({ categories }) {
 	const settings = {
 		infinite: true,
 		speed: 500,
@@ -70,8 +18,8 @@ export default function CategorySlider() {
 	};
 	return (
 		<Slider {...settings} className='cursor-grab'>
-			{CATEGORY_LIST.map(({ id, name, slug, image }) => {
-				return <CategoryV2 key={id} name={name} image={image} slug={slug} />;
+			{categories.map(({ id, name, slug, image }) => {
+				return <Category key={id} image={image} name={name} slug={slug} />;
 			})}
 		</Slider>
 	);
@@ -79,7 +27,7 @@ export default function CategorySlider() {
 
 function Category({ slug, name, image }) {
 	return (
-		<div className='w-full max-w-52 h-56'>
+		<div className='w-full max-w-48 h-56'>
 			<Link
 				to={`/categories/${slug}`}
 				className='w-full max-w-52 h-full inline-flex items-center justify-center'
@@ -90,22 +38,11 @@ function Category({ slug, name, image }) {
 	);
 }
 
-function getRandomColor() {
-	let letters = '0123456789ABCDEF';
-	let color = '#';
-	for (let i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-}
-
-function CategoryV2({ slug, name, image }) {
-	const bgColor = getRandomColor();
+function CategoryWithName({ slug, name, image }) {
 	return (
 		<div
 			className='w-full max-w-48 h-56 rounded-lg overflow-hidden flex items-center justify-center'
 			style={{
-				backgroundColor: bgColor,
 				backgroundImage: `url(${image})`,
 				backgroundRepeat: 'no-repeat',
 				backgroundPosition: 'center',

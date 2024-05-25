@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getSellerProfile } from '../services/profile';
 import { getAllProducts } from '../services/products';
+import {
+	getAllCategories,
+	getProductsByCategory,
+} from '../services/categories';
 
 export function useProfile() {
 	const [data, setData] = useState(null);
@@ -64,4 +68,65 @@ export function useProducts() {
 	}, []);
 
 	return { data, pagination, status, error };
+}
+
+export function useCategories() {
+	const [data, setData] = useState([]);
+	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		let ignore = false;
+		async function getCategories() {
+			try {
+				setStatus('loading');
+				const result = await getAllCategories();
+				if (!ignore) {
+					setData(result.data);
+					setStatus('success');
+				}
+			} catch (error) {
+				setStatus('failed');
+				setError(error);
+			}
+		}
+
+		getCategories();
+
+		return () => {
+			ignore = true;
+		};
+	}, []);
+
+	return { data, status, error };
+}
+
+export function useProductByCategory(slug) {
+	const [data, setData] = useState({});
+	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		let ignore = false;
+		async function getCategories(slug) {
+			try {
+				setStatus('loading');
+				const result = await getProductsByCategory(slug);
+				if (!ignore) {
+					setData(result.data);
+					setStatus('success');
+				}
+			} catch (error) {
+				setStatus('failed');
+				setError(error);
+			}
+		}
+
+		getCategories(slug);
+		return () => {
+			ignore = true;
+		};
+	}, [slug]);
+
+	return { data, status, error };
 }

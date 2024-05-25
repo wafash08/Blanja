@@ -1,10 +1,21 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '../../../components/base/Container';
 import BreadCrumb from '../../../components/base/BreadCrumb';
+import { ProductListSkeleton } from '../../../components/base/Skeleton';
+import ProductList from '../../../components/modules/ProductList';
+import { useProductByCategory } from '../../../hooks';
 
 const CategoryProduct = () => {
 	const { id } = useParams();
+	const { data, status } = useProductByCategory(id);
+
+	let productList = null;
+	if (status === 'loading') {
+		productList = <ProductListSkeleton />;
+	} else if (status === 'success') {
+		productList = <ProductList products={data.products} />;
+	}
+
 	return (
 		<div>
 			<Container>
@@ -15,12 +26,20 @@ const CategoryProduct = () => {
 							href: '/',
 						},
 						{
-							name: 'Category Name',
+							name: id,
 							href: `/categories/${id}`,
 							current: true,
 						},
 					]}
 				/>
+
+				<section className='mt-12'>
+					<h2 className='mb-6 text-4xl text-[#222222] font-bold capitalize'>
+						{id}
+					</h2>
+
+					{productList}
+				</section>
 			</Container>
 		</div>
 	);

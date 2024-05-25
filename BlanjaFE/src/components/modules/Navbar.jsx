@@ -13,16 +13,14 @@ import { useEffect } from 'react';
 // hasLoggedIn (boolean): apakah user sudah berhasil login atau belum
 // inHomePage (boolean): apakah halaman yang sedang diakses adalah halaman home
 
-export default function Navbar({ hasLoggedIn, inHomePage }) {
+export default function Navbar({ hasLoggedIn }) {
 	const { data: profile, status } = useProfile();
-
-	console.log('status >> ', status);
 
 	useEffect(() => {
 		if (status === 'failed') {
 			removeTokenFromLocalStorage();
 		}
-	}, [status]);
+	}, []);
 
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>
@@ -32,13 +30,11 @@ export default function Navbar({ hasLoggedIn, inHomePage }) {
 					<img src={BlanjaLogo} alt='Blanja Logo' height={44} width={119} />
 				</Link>
 
-				{inHomePage ? (
-					<div className='flex items-center gap-3'>
-						{/* search bar */}
-						<SearchBar />
-						{hasLoggedIn ? <Filter /> : null}
-					</div>
-				) : null}
+				<div className='flex items-center gap-3'>
+					{/* search bar */}
+					<SearchBar />
+					{hasLoggedIn ? <Filter /> : null}
+				</div>
 			</div>
 			<nav>
 				<ul className='flex items-center gap-10'>

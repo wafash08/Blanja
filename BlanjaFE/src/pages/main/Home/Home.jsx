@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProductSection from '../../../components/modules/ProductSection';
 import Container from '../../../components/base/Container';
 import CategorySlider from '../../../components/base/CategorySlider';
 import PromotionSlider from '../../../components/base/PromotionSlider';
+import { useCategories } from '../../../hooks';
+import CategoryListSkeleton from '../../../components/base/Skeleton/CategoryListSkeleton';
 
 const Home = () => {
+	const { data: categories, status } = useCategories();
+
 	return (
 		<>
 			<section className='mt-40'>
@@ -24,7 +28,11 @@ const Home = () => {
 					</div>
 
 					<div>
-						<CategorySlider />
+						{status === 'loading' ? (
+							<CategoryListSkeleton />
+						) : (
+							<CategorySlider categories={categories} />
+						)}
 					</div>
 				</Container>
 			</section>

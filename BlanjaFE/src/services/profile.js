@@ -14,7 +14,7 @@ export async function getCustomerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		console.log('result >> ', result);
+		// console.log('result >> ', result);
 		return result.data.data;
 	} catch (error) {
 		// console.log('err >> ', error.response.data);
@@ -32,7 +32,7 @@ export async function getSellerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		console.log('result >> ', result);
+		// console.log('result >> ', result);
 		return result.data.data;
 	} catch (error) {
 		// console.log('err >> ', error.response.data);

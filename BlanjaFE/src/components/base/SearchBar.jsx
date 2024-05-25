@@ -1,6 +1,18 @@
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useProducts } from '../../hooks';
+
 export default function SearchBar() {
+	const navigate = useNavigate();
+	const [URLSearchParams, setURLSearchParams] = useSearchParams();
+	const { data } = useProducts();
+
+	const handleSearch = e => {
+		e.preventDefault();
+		navigate('/products');
+	};
+
 	return (
-		<form className='rounded-full overflow-hidden'>
+		<form className='rounded-full overflow-hidden' onSubmit={handleSearch}>
 			<div className='w-[507px] bg-white border border-[#8E8E93] flex items-center gap-2 overflow-hidden rounded-full'>
 				<input
 					type='text'
