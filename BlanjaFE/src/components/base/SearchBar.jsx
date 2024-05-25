@@ -1,14 +1,13 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useProducts } from '../../hooks';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export default function SearchBar() {
-	const navigate = useNavigate();
-	const [URLSearchParams, setURLSearchParams] = useSearchParams();
-	const { data } = useProducts();
+	const [query, setQuery] = useState('');
+	const [, setURLSearchParams] = useSearchParams();
 
 	const handleSearch = e => {
 		e.preventDefault();
-		navigate('/products');
+		setURLSearchParams({ search: query });
 	};
 
 	return (
@@ -19,6 +18,11 @@ export default function SearchBar() {
 					name='search'
 					className='w-full h-full py-3 pl-5 focus:outline-none placeholder:text-[#9B9B9B] rounded-full'
 					placeholder='Search'
+					value={query}
+					onChange={e => {
+						setQuery(e.target.value);
+						setURLSearchParams({ search: e.target.value });
+					}}
 				/>
 				<button
 					type='submit'

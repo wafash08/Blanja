@@ -1,13 +1,41 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ProductSection from '../../../components/modules/ProductSection';
 import Container from '../../../components/base/Container';
 import CategorySlider from '../../../components/base/CategorySlider';
 import PromotionSlider from '../../../components/base/PromotionSlider';
-import { useCategories } from '../../../hooks';
+import { useCategories, useProducts } from '../../../hooks';
 import CategoryListSkeleton from '../../../components/base/Skeleton/CategoryListSkeleton';
+import ProductList from '../../../components/modules/ProductList';
+import { ProductListSkeleton } from '../../../components/base/Skeleton';
 
 const Home = () => {
 	const { data: categories, status } = useCategories();
+	const [searchParams] = useSearchParams();
+	const search = searchParams.get('search');
+	const { data: products, status: statusProducts } = useProducts(search);
+
+	let productList = null;
+
+	if (statusProducts === 'loading') {
+		productList = <ProductListSkeleton />;
+	} else if (statusProducts === 'success') {
+		productList = <ProductList products={products} />;
+	}
+
+	if (search) {
+		return (
+			<section>
+				<Container>
+					<h2 className='text-3xl text-[#222222] mb-12'>
+						Hasil pencarian <span className='font-bold'>"{search}"</span>:
+					</h2>
+
+					{productList}
+				</Container>
+			</section>
+		);
+	}
 
 	return (
 		<>

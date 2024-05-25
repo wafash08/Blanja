@@ -37,7 +37,7 @@ export function useProfile() {
 	return { data, status, error };
 }
 
-export function useProducts() {
+export function useProducts(keyword) {
 	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
@@ -48,7 +48,7 @@ export function useProducts() {
 		async function getProducts() {
 			try {
 				setStatus('loading');
-				const { products, pagination } = await getAllProducts();
+				const { products, pagination } = await getAllProducts({ keyword });
 				if (!ignore) {
 					setData(products);
 					setPagination(pagination);
@@ -65,7 +65,7 @@ export function useProducts() {
 		return () => {
 			ignore = true;
 		};
-	}, []);
+	}, [keyword]);
 
 	return { data, pagination, status, error };
 }
