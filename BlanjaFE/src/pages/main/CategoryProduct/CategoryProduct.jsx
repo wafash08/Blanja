@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Container from '../../../components/base/Container';
 import BreadCrumb from '../../../components/base/BreadCrumb';
 import { ProductListSkeleton } from '../../../components/base/Skeleton';
@@ -13,7 +13,21 @@ const CategoryProduct = () => {
 	if (status === 'loading') {
 		productList = <ProductListSkeleton />;
 	} else if (status === 'success') {
-		productList = <ProductList products={data.products} />;
+		if (data.products.length > 0) {
+			productList = <ProductList products={data.products} />;
+		} else {
+			productList = (
+				<div>
+					<p>Kategori {id} belum mempunyai produk.</p>
+					<p>
+						<Link to='/' className='underline'>
+							Kembali ke halaman sebelumnya
+						</Link>
+						<span> untuk melihat produk lain</span>
+					</p>
+				</div>
+			);
+		}
 	}
 
 	return (
