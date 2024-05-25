@@ -36,7 +36,7 @@ func GetAllCategories(c *fiber.Ctx) error {
 				"updated_at": product.UpdatedAt,
 				"name":       product.Name,
 				"price":      product.Price,
-				"image":      product.Images[0].URL,
+				"image":      product.Images,
 				"rating":     product.Rating,
 			}
 		}
@@ -78,7 +78,7 @@ func GetCategory(c *fiber.Ctx) error {
 			"updated_at": product.UpdatedAt,
 			"name":       product.Name,
 			"price":      product.Price,
-			"image":      product.Images[0].URL,
+			"image":      product.Images,
 			"rating":     product.Rating,
 		}
 	}
