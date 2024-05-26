@@ -18,3 +18,24 @@
 	width: 450px;
 	border-radius: 8px;
 }
+
+.checkbox {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+  }
+  
+  .checkbox:checked {
+	background-color: #DB3022;
+	border: none;
+  }
+  
+  .checkbox:checked::before {
+	content: '✔';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-size: 12px; /* Sesuaikan ukuran font sesuai kebutuhan */
+  }

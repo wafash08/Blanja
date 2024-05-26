@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"gofiber-marketplace/src/configs"
 	"gofiber-marketplace/src/helpers"
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
@@ -30,13 +31,15 @@ func GetAllCategories(c *fiber.Ctx) error {
 	for i, category := range categories {
 		products := make([]map[string]interface{}, len(category.Products))
 		for j, product := range category.Products {
+			var image *models.Image
+			configs.DB.First(&image, "product_id = ?", product.ID)
 			products[j] = map[string]interface{}{
 				"id":         product.ID,
 				"created_at": product.CreatedAt,
 				"updated_at": product.UpdatedAt,
 				"name":       product.Name,
 				"price":      product.Price,
-				"image":      product.Images,
+				"image":      image.URL,
 				"rating":     product.Rating,
 			}
 		}
@@ -72,13 +75,15 @@ func GetCategory(c *fiber.Ctx) error {
 
 	products := make([]map[string]interface{}, len(category.Products))
 	for i, product := range category.Products {
+		var image *models.Image
+		configs.DB.First(&image, "product_id = ?", product.ID)
 		products[i] = map[string]interface{}{
 			"id":         product.ID,
 			"created_at": product.CreatedAt,
 			"updated_at": product.UpdatedAt,
 			"name":       product.Name,
 			"price":      product.Price,
-			"image":      product.Images,
+			"image":      image.URL,
 			"rating":     product.Rating,
 		}
 	}
