@@ -54,11 +54,10 @@ func Router(app *fiber.App) {
 	app.Post("/uploadImage", controllers.UploadImage)
 	app.Post("/uploadImages", controllers.UploadImages)
 
-	// Color Routes
+	// Filter Routes
 	app.Get("/colorsFilter", controllers.GetColorsFilter)
-
-	// Size Routes
 	app.Get("/sizesFilter", controllers.GetSizesFilter)
+	app.Get("/categoriesFilter", controllers.GetCategoryFilter)
 
 	// Cart Routes
 	app.Get("/carts",middlewares.JWTMiddleware(), controllers.GetCart)
