@@ -27,3 +27,8 @@ func SelectAllCart() []*Cart {
 	configs.DB.Preload("Seller").Preload("Products").Find(&cart)
 	return cart
 }
+func SelectCartById(id int) []*Cart {
+	var cart []*Cart
+	configs.DB.Preload("Seller").Preload("Products").Find(&cart, "user_id = ?", id)
+	return cart
+}
