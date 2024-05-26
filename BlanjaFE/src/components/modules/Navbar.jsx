@@ -6,6 +6,8 @@ import { useProfile } from '../../hooks';
 import { AvatarSkeleton } from '../base/Skeleton';
 import BlanjaLogo from '../../assets/blanja-logo.png';
 import EmptyProfile from '../../assets/empty-profile.jpg';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // keterangan props
 // hasLoggedIn (boolean): apakah user sudah berhasil login atau belum
@@ -13,6 +15,23 @@ import EmptyProfile from '../../assets/empty-profile.jpg';
 
 export default function Navbar({ hasLoggedIn }) {
 	const { data: profile, status } = useProfile();
+	const [navStatus, setNavStatus] = useState('failed')
+
+	useEffect(()=>{
+		axios.get(`${import.meta.env.VITE_BE_URL}${localStorage.getItem('role')}/profile`, {
+			headers: {
+				'Authorization': `Bearer ${localStorage.getItem('token')}`
+			}
+		})
+		.then((res) => {
+			setNavStatus('success')
+			console.log(res);
+		})
+		.catch((err) => {
+			setNavStatus('failed')
+			console.log(err);
+		})
+	}, [])
 
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>
@@ -67,7 +86,7 @@ export default function Navbar({ hasLoggedIn }) {
 						</Link>
 					</li>
 
-					{hasLoggedIn || status === 'failed' ? (
+					{navStatus === 'success' ? (
 						<>
 							<li className='group'>
 								<Link to='/notification'>
