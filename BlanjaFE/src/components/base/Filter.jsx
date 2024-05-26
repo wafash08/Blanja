@@ -6,7 +6,8 @@ import { useFilters } from '../../hooks';
 
 export default function Filter() {
 	const refDialog = useRef(null);
-	const [, setURLSearchParams] = useSearchParams();
+	const [searchParams, setURLSearchParams] = useSearchParams();
+	const search = searchParams.get('search'); // get the search query if there is one
 	const { colors, sellers, categories, sizes, status } = useFilters();
 
 	const handleOpenDialog = () => {
@@ -53,7 +54,7 @@ export default function Filter() {
 				values: seller,
 			},
 		];
-		const params = {};
+		const params = { search };
 		for (const filter of filters) {
 			const { name, values } = filter;
 			if (values && values.length > 0) {

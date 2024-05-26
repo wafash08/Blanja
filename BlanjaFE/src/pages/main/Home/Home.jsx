@@ -57,7 +57,7 @@ const Home = () => {
 						{search && (
 							<span>
 								pencarian
-								<span className='font-bold'>"{search}"</span>
+								<span className='font-bold'> "{search}"</span>
 							</span>
 						)}
 						:

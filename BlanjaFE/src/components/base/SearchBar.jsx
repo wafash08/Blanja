@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 export default function SearchBar() {
 	const [query, setQuery] = useState('');
-	const [, setURLSearchParams] = useSearchParams();
+	const [searchParams, setURLSearchParams] = useSearchParams();
+	const search = searchParams.get('search');
+
+	useEffect(() => {
+		const searchInput = document.getElementById('search');
+		searchInput.value = search;
+	}, [search]);
 
 	const handleSearch = e => {
 		e.preventDefault();
@@ -19,6 +25,7 @@ export default function SearchBar() {
 					className='w-full h-full py-3 pl-5 focus:outline-none placeholder:text-[#9B9B9B] rounded-full'
 					placeholder='Search'
 					value={query}
+					id='search'
 					onChange={e => {
 						setQuery(e.target.value);
 						setURLSearchParams({ search: e.target.value });
