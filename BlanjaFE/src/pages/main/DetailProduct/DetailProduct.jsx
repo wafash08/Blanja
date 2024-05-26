@@ -5,7 +5,6 @@ import clsx from "clsx";
 import Button from "../../../components/base/Button";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../../components/base/BreadCrumb";
-import ProductSection from "../../../components/modules/ProductSection";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
 import { NewProductSection } from "../Home/Home";
