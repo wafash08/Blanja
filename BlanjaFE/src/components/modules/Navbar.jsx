@@ -76,7 +76,7 @@ export default function Navbar({ hasLoggedIn }) {
 						</Link>
 					</li>
 
-					{hasLoggedIn || status !== 'failed' ? (
+					{hasLoggedIn && status !== 'failed' ? (
 						<>
 							<li className='group'>
 								<Link to='/notification'>
