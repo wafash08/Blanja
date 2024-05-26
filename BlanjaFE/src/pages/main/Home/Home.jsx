@@ -21,13 +21,11 @@ const Home = () => {
 	category = category ? Number(category) : null;
 	seller = seller ? Number(seller) : null;
 
-	const { data: products, status: statusProducts } = useProducts(
-		search,
-		colors,
-		sizes,
-		category,
-		seller
-	);
+	const {
+		data: products,
+		status: statusProducts,
+		pagination,
+	} = useProducts(search, colors, sizes, category, seller);
 
 	let productList = null;
 

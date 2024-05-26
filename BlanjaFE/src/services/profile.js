@@ -14,10 +14,8 @@ export async function getCustomerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		// console.log('result >> ', result);
 		return result.data.data;
 	} catch (error) {
-		// console.log('err >> ', error.response.data);
 		throw new Error({
 			message: error.response.data.message,
 			status: error.response.data.statusCode,
@@ -32,11 +30,8 @@ export async function getSellerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		// console.log('result >> ', result);
 		return result.data.data;
 	} catch (error) {
-		// console.log('err >> ', error.response.data);
-		console.log('error woi');
 		throw new Error(error);
 	}
 }

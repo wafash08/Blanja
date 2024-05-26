@@ -8,7 +8,6 @@ export async function getAllColors() {
 		const result = await axios.get(colorsUrl);
 		return result.data;
 	} catch (error) {
-		// console.log('err >> ', error.response.data);
 		throw new Error({
 			message: error.response.data.message,
 			status: error.response.data.statusCode,

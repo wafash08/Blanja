@@ -260,7 +260,6 @@ function SizeFilters({ sizes }) {
 }
 
 function CategoryFilters({ categories }) {
-	console.log('categories >> ', categories);
 	return (
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
 			{categories.map(({ id, name }) => {

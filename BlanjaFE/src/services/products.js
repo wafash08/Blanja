@@ -10,10 +10,6 @@ export async function getAllProducts({
 	category,
 	seller,
 }) {
-	console.log('colors >> ', colors);
-	console.log('sizes >> ', sizes);
-	console.log('category >> ', category);
-	console.log('seller >> ', seller);
 	try {
 		const result = await axios.get(productsUrl, {
 			params: {
@@ -34,7 +30,6 @@ export async function getAllProducts({
 			},
 		};
 	} catch (error) {
-		// console.log('err >> ', error.response.data);
 		throw new Error({
 			message: error.response.data.message,
 			status: error.response.data.statusCode,
