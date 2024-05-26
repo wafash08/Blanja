@@ -8,11 +8,14 @@ import {
 } from '../services/categories';
 import { getAllSellers } from '../services/sellers';
 import { getAllSizes } from '../services/sizes';
+import { getTokenFromLocalStorage } from '../utils';
 
 export function useProfile(role) {
 	const [data, setData] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
 	const [error, setError] = useState(null);
+
+	const token = getTokenFromLocalStorage();
 
 	useEffect(() => {
 		let ignore = false;
@@ -21,16 +24,17 @@ export function useProfile(role) {
 				setStatus('loading');
 				let profile = null;
 				if (role === 'seller') {
-					profile = await getSellerProfile();
+					profile = await getSellerProfile(token);
+					console.log('oiii seller');
 				} else if (role === 'customer') {
-					profile = await getCustomerProfile();
+					profile = await getCustomerProfile(token);
+					console.log('oiii customer');
 				}
+				console.log('profile >> ', profile);
 				if (!ignore) {
-					if (profile) {
+					if (profile !== null) {
 						setData(profile.data);
 						setStatus('success');
-					} else {
-						setStatus('failed');
 					}
 				}
 			} catch (error) {

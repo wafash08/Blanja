@@ -1,17 +1,14 @@
 import axios from 'axios';
-import { getTokenFromLocalStorage } from '../utils';
 
 const BASE_URL = import.meta.env.VITE_BE_URL;
 const customerProfileUrl = `${BASE_URL}customer/profile`;
 const sellerProfileUrl = `${BASE_URL}seller/profile`;
 
-const TOKEN = getTokenFromLocalStorage();
-
-export async function getCustomerProfile() {
+export async function getCustomerProfile(token) {
 	try {
 		const result = await axios.get(customerProfileUrl, {
 			headers: {
-				Authorization: `Bearer ${TOKEN}`,
+				Authorization: `Bearer ${token}`,
 			},
 		});
 		return result.data;
@@ -23,11 +20,11 @@ export async function getCustomerProfile() {
 	}
 }
 
-export async function getSellerProfile() {
+export async function getSellerProfile(token) {
 	try {
 		const result = await axios.get(sellerProfileUrl, {
 			headers: {
-				Authorization: `Bearer ${TOKEN}`,
+				Authorization: `Bearer ${token}`,
 			},
 		});
 		return result.data;
