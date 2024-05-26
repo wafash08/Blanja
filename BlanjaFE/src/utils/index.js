@@ -6,6 +6,8 @@ export function getTokenFromLocalStorage() {
 export function removeTokenFromLocalStorage() {
 	localStorage.removeItem('token');
 	localStorage.removeItem('refresh_token');
+	localStorage.removeItem('role');
+	localStorage.removeItem('id');
 }
 
 export function toCommaSeparatedValues(values) {

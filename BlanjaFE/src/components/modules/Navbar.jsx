@@ -6,7 +6,10 @@ import { useProfile } from '../../hooks';
 import { AvatarSkeleton } from '../base/Skeleton';
 import BlanjaLogo from '../../assets/blanja-logo.png';
 import EmptyProfile from '../../assets/empty-profile.jpg';
-import { getRoleFromLocalStorage } from '../../utils';
+import {
+	getRoleFromLocalStorage,
+	removeTokenFromLocalStorage,
+} from '../../utils';
 
 // keterangan props
 // hasLoggedIn (boolean): apakah user sudah berhasil login atau belum
@@ -15,6 +18,10 @@ import { getRoleFromLocalStorage } from '../../utils';
 export default function Navbar({ hasLoggedIn }) {
 	const role = getRoleFromLocalStorage();
 	const { data: profile, status } = useProfile(role);
+
+	if (status === 'failed') {
+		removeTokenFromLocalStorage();
+	}
 
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>
@@ -69,7 +76,7 @@ export default function Navbar({ hasLoggedIn }) {
 						</Link>
 					</li>
 
-					{hasLoggedIn || status === 'failed' ? (
+					{hasLoggedIn || status !== 'failed' ? (
 						<>
 							<li className='group'>
 								<Link to='/notification'>

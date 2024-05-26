@@ -35,6 +35,7 @@ export function useProfile(role) {
 				}
 			} catch (error) {
 				setStatus('failed');
+				console.log('err', error);
 				setError(error);
 			}
 		}
