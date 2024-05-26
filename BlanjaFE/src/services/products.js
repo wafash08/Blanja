@@ -9,11 +9,8 @@ export async function getAllProducts({
 	sizes,
 	category,
 	seller,
+	page = 1,
 }) {
-	console.log('colors >> ', colors);
-	console.log('sizes >> ', sizes);
-	console.log('category >> ', category);
-	console.log('seller >> ', seller);
 	try {
 		const result = await axios.get(productsUrl, {
 			params: {
@@ -22,6 +19,8 @@ export async function getAllProducts({
 				sizes,
 				category,
 				seller,
+				page,
+				limit: 10,
 			},
 		});
 		return {
@@ -34,7 +33,28 @@ export async function getAllProducts({
 			},
 		};
 	} catch (error) {
-		// console.log('err >> ', error.response.data);
+		throw new Error({
+			message: error.response.data.message,
+			status: error.response.data.statusCode,
+		});
+	}
+}
+
+export async function getProductsByCondition(condition) {
+	try {
+		const result = await axios.get(productsUrl, {
+			params: { condition },
+		});
+		return {
+			products: result.data.data,
+			pagination: {
+				currentPage: result.data.currentPage,
+				limit: result.data.limit,
+				totalData: result.data.totalData,
+				totalPage: result.data.totalPage,
+			},
+		};
+	} catch (error) {
 		throw new Error({
 			message: error.response.data.message,
 			status: error.response.data.statusCode,

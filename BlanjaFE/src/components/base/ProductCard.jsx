@@ -8,7 +8,7 @@ import productDummy from '../../assets/product-dummy.png';
 // price (number): harga produk
 // rate (number): rating produk
 
-export default function ProductCard({ id, image, name, brand, price, rate }) {
+export default function ProductCard({ id, image, name, brand, price, rating }) {
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
 			<div className='h-[136px] overflow-hidden'>
@@ -33,7 +33,7 @@ export default function ProductCard({ id, image, name, brand, price, rate }) {
 				<p className='text-xs text-[#9B9B9B] mb-2'>{brand}</p>
 				<div className='flex items-center gap-1'>
 					<ul className='flex items-center gap-[2px]'>
-						{Array.from(Array(rate).keys()).map(r => {
+						{Array.from(Array(rating).keys()).map(r => {
 							return <Rate key={r} />;
 						})}
 					</ul>

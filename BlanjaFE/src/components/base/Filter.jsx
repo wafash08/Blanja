@@ -6,7 +6,8 @@ import { useFilters } from '../../hooks';
 
 export default function Filter() {
 	const refDialog = useRef(null);
-	const [, setURLSearchParams] = useSearchParams();
+	const [searchParams, setURLSearchParams] = useSearchParams();
+	const search = searchParams.get('search'); // get the search query if there is one
 	const { colors, sellers, categories, sizes, status } = useFilters();
 
 	const handleOpenDialog = () => {
@@ -59,6 +60,9 @@ export default function Filter() {
 			if (values && values.length > 0) {
 				params[name] = toCommaSeparatedValues(values);
 			}
+		}
+		if (search) {
+			params['search'] = search;
 		}
 		setURLSearchParams(params);
 		refDialog.current?.close();
@@ -195,7 +199,7 @@ function FilterSection({ section, title, filters }) {
 
 function ColorFilters({ colors }) {
 	return (
-		<ul className='flex items-center gap-5'>
+		<ul className='flex items-center flex-wrap gap-5'>
 			{colors.map(color => {
 				return (
 					<li className='group inline-flex' key={color}>
@@ -260,7 +264,6 @@ function SizeFilters({ sizes }) {
 }
 
 function CategoryFilters({ categories }) {
-	console.log('categories >> ', categories);
 	return (
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
 			{categories.map(({ id, name }) => {

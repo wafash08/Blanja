@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getSellerProfile } from '../services/profile';
-import { getAllProducts } from '../services/products';
+import { getCustomerProfile, getSellerProfile } from '../services/profile';
+import { getAllProducts, getProductsByCondition } from '../services/products';
 import { getAllColors } from '../services/colors';
 import {
 	getAllCategories,
@@ -8,24 +8,38 @@ import {
 } from '../services/categories';
 import { getAllSellers } from '../services/sellers';
 import { getAllSizes } from '../services/sizes';
+import { getTokenFromLocalStorage } from '../utils';
 
-export function useProfile() {
+export function useProfile(role) {
 	const [data, setData] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
 	const [error, setError] = useState(null);
+
+	const token = getTokenFromLocalStorage();
 
 	useEffect(() => {
 		let ignore = false;
 		async function getProfile() {
 			try {
 				setStatus('loading');
-				const profile = await getSellerProfile();
+				let profile = null;
+				if (role === 'seller') {
+					profile = await getSellerProfile(token);
+					console.log('oiii seller');
+				} else if (role === 'customer') {
+					profile = await getCustomerProfile(token);
+					console.log('oiii customer');
+				}
+				console.log('profile >> ', profile);
 				if (!ignore) {
-					setData(profile.data);
-					setStatus('success');
+					if (profile !== null) {
+						setData(profile.data);
+						setStatus('success');
+					}
 				}
 			} catch (error) {
 				setStatus('failed');
+				console.log('err', error);
 				setError(error);
 			}
 		}
@@ -40,7 +54,7 @@ export function useProfile() {
 	return { data, status, error };
 }
 
-export function useProducts(keyword, colors, sizes, category, seller) {
+export function useProducts(keyword, colors, sizes, category, seller, page) {
 	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
@@ -57,6 +71,7 @@ export function useProducts(keyword, colors, sizes, category, seller) {
 					category,
 					seller,
 					sizes,
+					page,
 				});
 				if (!ignore) {
 					setData(products);
@@ -74,7 +89,7 @@ export function useProducts(keyword, colors, sizes, category, seller) {
 		return () => {
 			ignore = true;
 		};
-	}, [keyword, colors, sizes, category, seller]);
+	}, [keyword, colors, sizes, category, seller, page]);
 
 	return { data, pagination, status, error };
 }
@@ -179,4 +194,39 @@ export function useFilters() {
 	}, []);
 
 	return { colors, sellers, categories, sizes, status, error };
+}
+
+export function useProductsByCondition(condition) {
+	const [data, setData] = useState([]);
+	const [pagination, setPagination] = useState(null);
+	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		let ignore = false;
+		async function getProducts() {
+			try {
+				setStatus('loading');
+				const { products, pagination } = await getProductsByCondition(
+					condition
+				);
+				if (!ignore) {
+					setData(products);
+					setPagination(pagination);
+					setStatus('success');
+				}
+			} catch (error) {
+				setStatus('failed');
+				setError(error);
+			}
+		}
+
+		getProducts();
+
+		return () => {
+			ignore = true;
+		};
+	}, [condition]);
+
+	return { data, pagination, status, error };
 }
