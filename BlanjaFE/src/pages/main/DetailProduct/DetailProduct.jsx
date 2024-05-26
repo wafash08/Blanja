@@ -8,6 +8,7 @@ import BreadCrumb from "../../../components/base/BreadCrumb";
 import ProductSection from "../../../components/modules/ProductSection";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
+import { NewProductSection } from "../Home/Home";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -650,10 +651,7 @@ const DetailProduct = () => {
 
       <div className="w-full h-0 border-t border-[#D4D4D4] mt-20"></div>
 
-      <ProductSection
-        title="You can also like this"
-        description="You’ve never seen it before!"
-      />
+      <NewProductSection title="You can also like this" description='You’ve never seen it before!' />
     </Container>
   );
 };
