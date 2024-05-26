@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import BreadCrumb from "../../../components/base/BreadCrumb";
 import ProductSection from "../../../components/modules/ProductSection";
 import axios from "axios";
+import AlertCard from "../../../components/base/AlertCard";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -129,6 +130,13 @@ const DetailProduct = () => {
   const [description, setDescription] = useState("")
   const [indexSize, setIndexSize] = useState(0);
   const [amount, setAmount] = useState(1);
+
+  const [addCart, setAddCart] = useState({
+    product_id: null,
+    seller_id: null,
+    quantity: 1
+  })
+  
   for (let index = 5; index >= 1; index--) {
     if (index <= ratings) {
       starColors.push("yellow");
@@ -187,6 +195,12 @@ const DetailProduct = () => {
         setQuantity(res.data.data.stock)
         await outputCheckImage(res.data.data.images[0].url) === true && setImageURL(res.data.data.images[0].url)
 
+        setAddCart({
+          ...addCart,
+          product_id: res.data.data.id,
+          seller_id: res.data.data.seller_id
+        })
+
 
 
         setLoading(false);
@@ -208,12 +222,49 @@ const DetailProduct = () => {
   };
   const handleClickIncreaseAmount = () => {
     setAmount(amount + 1);
+    setAddCart({
+      ...addCart,
+      quantity: addCart.quantity + 1
+    })
   };
   const handleClickDecreaseAmount = () => {
     setAmount(amount - 1);
+    setAddCart({
+      ...addCart,
+      quantity: addCart.quantity - 1
+    })
   };
+  const handleClickAddBag = () => {
+    axios.post(`${import.meta.env.VITE_BE_URL}cart/add`, {
+      product_id: addCart.product_id,
+      seller_id: addCart.seller_id,
+      quantity: addCart.quantity
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then((res) => {
+      console.log(res.data.message);
+      setAlertMessage(res.data.message)
+      setAlertType("SUCCESS")
+    })
+    .catch((err) => {
+      console.log(err.response);
+      setAlertMessage("Failed adding to cart")
+      setAlertType("ERROR")
+    })
+  }
+
+  const [alertMessage, setAlertMessage] = useState("")
+  const [alertType, setAlertType] = useState("")
+  const handleClickAlert = () => {
+    setAlertMessage("");
+    setAlertType("")
+  }
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
+      {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)}
       <div>
         <Container>
           <BreadCrumb
@@ -396,7 +447,7 @@ const DetailProduct = () => {
             <button className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
               Chat
             </button>
-            <button className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
+            <button onClick={handleClickAddBag} className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
               Add Bag
             </button>
             <div className="w-[343px]">
