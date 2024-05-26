@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getSellerProfile } from '../services/profile';
+import { getCustomerProfile, getSellerProfile } from '../services/profile';
 import { getAllProducts } from '../services/products';
 import { getAllColors } from '../services/colors';
 import {
@@ -9,7 +9,7 @@ import {
 import { getAllSellers } from '../services/sellers';
 import { getAllSizes } from '../services/sizes';
 
-export function useProfile() {
+export function useProfile(role) {
 	const [data, setData] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
 	const [error, setError] = useState(null);
@@ -19,10 +19,19 @@ export function useProfile() {
 		async function getProfile() {
 			try {
 				setStatus('loading');
-				const profile = await getSellerProfile();
+				let profile = null;
+				if (role === 'seller') {
+					profile = await getSellerProfile();
+				} else if (role === 'customer') {
+					profile = await getCustomerProfile();
+				}
 				if (!ignore) {
-					setData(profile.data);
-					setStatus('success');
+					if (profile) {
+						setData(profile.data);
+						setStatus('success');
+					} else {
+						setStatus('failed');
+					}
 				}
 			} catch (error) {
 				setStatus('failed');

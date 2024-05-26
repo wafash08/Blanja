@@ -27,6 +27,9 @@ const Home = () => {
 		pagination,
 	} = useProducts(search, colors, sizes, category, seller);
 
+	console.log('products >> ', products);
+	console.log('pagination >> ', pagination);
+
 	let productList = null;
 
 	if (statusProducts === 'loading') {

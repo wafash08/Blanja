@@ -11,3 +11,8 @@ export function removeTokenFromLocalStorage() {
 export function toCommaSeparatedValues(values) {
 	return values.join(', ');
 }
+
+export function getRoleFromLocalStorage() {
+	const role = localStorage.getItem('role');
+	return role;
+}
