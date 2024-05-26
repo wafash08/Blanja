@@ -8,6 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"gorm.io/gorm"
 )
 
 func GetCart(c *fiber.Ctx) error {
@@ -44,13 +45,13 @@ func GetCart(c *fiber.Ctx) error {
 		}
 
 		resultCarts[i] = map[string]interface{}{
-			"id":         cart.ID,
-			"user_id":    cart.UserID,
-			"brand_id":   cart.SellerID,
-			"brand_name": cart.Seller.Name,
-			"created_at": cart.CreatedAt,
-			"updated_at": cart.UpdatedAt,
-			"products":   products,
+			"id":          cart.ID,
+			"user_id":     cart.UserID,
+			"seller_id":   cart.SellerID,
+			"seller_name": cart.Seller.Name,
+			"created_at":  cart.CreatedAt,
+			"updated_at":  cart.UpdatedAt,
+			"products":    products,
 		}
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -84,17 +85,55 @@ func CreateCart(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.CreateCart(cart); err != nil {
+	cartID, cartQuantity, cartProductID, err := models.CreateCart(cart)
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
 			"message":    "Failed to create cart",
 		})
-	} else {
-		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-			"status":     "success",
-			"statusCode": 200,
-			"message":    "Cart created successfully",
-		})
 	}
+	// else {
+	// 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	// 		"status":     "success",
+	// 		"statusCode": 200,
+	// 		"message":    "Cart created successfully",
+	// 	})
+	// }
+	var request struct {
+		CartID    uint `json:"cart_id" binding:"required"`
+		ProductID uint `json:"product_id" binding:"required"`
+		Quantity  uint `json:"quantity" binding:"required,min=1"`
+	}
+	request.CartID = cartID
+	request.Quantity = cartQuantity
+	request.ProductID = cartProductID
+
+	var newCartProduct models.CartProduct
+	cartProduct := middlewares.XSSMiddleware(&newCartProduct).(*models.CartProduct)
+
+	errCP := configs.DB.Where("cart_id = ? AND product_id = ?", cartID, cartProductID).First(&cartProduct).Error
+
+	if errCP != nil {
+		if errCP == gorm.ErrRecordNotFound {
+			// Create new entry
+			cartProduct = &models.CartProduct{
+				CartID:    request.CartID,
+				ProductID: request.ProductID,
+				Quantity:  request.Quantity,
+			}
+			configs.DB.Create(&cartProduct)
+		} else {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": errCP.Error()})
+		}
+	} else {
+		// Update existing entry
+		cartProduct.Quantity += request.Quantity
+		configs.DB.Save(&cartProduct)
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"message":    "Cart created successfully",
+	})
 }
