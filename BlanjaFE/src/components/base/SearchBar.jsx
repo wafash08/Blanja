@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function SearchBar() {
 	const [query, setQuery] = useState('');
 	const [searchParams, setURLSearchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const search = searchParams.get('search') ?? '';
 
 	useEffect(() => {
@@ -13,6 +14,7 @@ export default function SearchBar() {
 	const handleSearch = e => {
 		e.preventDefault();
 		setURLSearchParams({ search: query });
+		navigate(`/?search=${query}`);
 	};
 
 	return (
