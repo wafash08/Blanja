@@ -12,7 +12,7 @@ import { NewProductSection } from "../Home/Home";
 
 const DetailProduct = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("Title")
   const [sellerName, setSellerName] = useState("")
   const [imageList, setImageList] = useState([]);
   let isImage = false;
@@ -271,11 +271,7 @@ const DetailProduct = () => {
           <BreadCrumb
             items={[
               {
-                name: "Products",
-                href: "/",
-              },
-              {
-                name: "Product Name",
+                name: title,
                 href: `/products/${id}`,
                 current: true,
               },
