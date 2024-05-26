@@ -16,8 +16,6 @@ export default function Navbar({ hasLoggedIn }) {
 	const role = getRoleFromLocalStorage();
 	const { data: profile, status } = useProfile(role);
 
-	console.log('profile >> ', profile);
-
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>
 			<div className='flex items-center gap-[60px]'>

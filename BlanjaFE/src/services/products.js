@@ -36,3 +36,25 @@ export async function getAllProducts({
 		});
 	}
 }
+
+export async function getProductsByCondition(condition) {
+	try {
+		const result = await axios.get(productsUrl, {
+			params: { condition },
+		});
+		return {
+			products: result.data.data,
+			pagination: {
+				currentPage: result.data.currentPage,
+				limit: result.data.limit,
+				totalData: result.data.totalData,
+				totalPage: result.data.totalPage,
+			},
+		};
+	} catch (error) {
+		throw new Error({
+			message: error.response.data.message,
+			status: error.response.data.statusCode,
+		});
+	}
+}

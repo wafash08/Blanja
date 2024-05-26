@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getCustomerProfile, getSellerProfile } from '../services/profile';
-import { getAllProducts } from '../services/products';
+import { getAllProducts, getProductsByCondition } from '../services/products';
 import { getAllColors } from '../services/colors';
 import {
 	getAllCategories,
@@ -188,4 +188,39 @@ export function useFilters() {
 	}, []);
 
 	return { colors, sellers, categories, sizes, status, error };
+}
+
+export function useProductsByCondition(condition) {
+	const [data, setData] = useState([]);
+	const [pagination, setPagination] = useState(null);
+	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		let ignore = false;
+		async function getProducts() {
+			try {
+				setStatus('loading');
+				const { products, pagination } = await getProductsByCondition(
+					condition
+				);
+				if (!ignore) {
+					setData(products);
+					setPagination(pagination);
+					setStatus('success');
+				}
+			} catch (error) {
+				setStatus('failed');
+				setError(error);
+			}
+		}
+
+		getProducts();
+
+		return () => {
+			ignore = true;
+		};
+	}, [condition]);
+
+	return { data, pagination, status, error };
 }

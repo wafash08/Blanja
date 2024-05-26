@@ -4,13 +4,17 @@ import ProductSection from '../../../components/modules/ProductSection';
 import Container from '../../../components/base/Container';
 import CategorySlider from '../../../components/base/CategorySlider';
 import PromotionSlider from '../../../components/base/PromotionSlider';
-import { useCategories, useProducts } from '../../../hooks';
+import {
+	useCategories,
+	useProducts,
+	useProductsByCondition,
+} from '../../../hooks';
 import CategoryListSkeleton from '../../../components/base/Skeleton/CategoryListSkeleton';
 import ProductList from '../../../components/modules/ProductList';
 import { ProductListSkeleton } from '../../../components/base/Skeleton';
 
 const Home = () => {
-	const { data: categories, status } = useCategories();
+	// start of search and filter region
 	const [searchParams] = useSearchParams();
 	const search = searchParams.get('search');
 	const colors = searchParams.get('colors');
@@ -23,18 +27,13 @@ const Home = () => {
 
 	const {
 		data: products,
-		status: statusProducts,
+		status: productsStatus,
 		pagination,
 	} = useProducts(search, colors, sizes, category, seller);
-
-	console.log('products >> ', products);
-	console.log('pagination >> ', pagination);
-
 	let productList = null;
-
-	if (statusProducts === 'loading') {
+	if (productsStatus === 'loading') {
 		productList = <ProductListSkeleton />;
-	} else if (statusProducts === 'success') {
+	} else if (productsStatus === 'success') {
 		if (products.length > 0) {
 			productList = <ProductList products={products} />;
 		} else {
@@ -69,6 +68,7 @@ const Home = () => {
 			</section>
 		);
 	}
+	// end of search and filter region
 
 	return (
 		<>
@@ -89,26 +89,56 @@ const Home = () => {
 					</div>
 
 					<div>
-						{status === 'loading' ? (
-							<CategoryListSkeleton />
-						) : (
-							<CategorySlider categories={categories} />
-						)}
+						<CategorySection />
 					</div>
 				</Container>
 			</section>
 			<div className='mt-14'>
-				<ProductSection
-					title='New'
-					description='You’ve never seen it before!'
-				/>
-				<ProductSection
-					title='Popular'
-					description='Find clothes that are trending recently'
-				/>
+				<NewProductSection />
+				<AllProductsSection data={products} status={productsStatus} />
 			</div>
 		</>
 	);
 };
 
 export default Home;
+
+function CategorySection() {
+	const { data: categories, status } = useCategories();
+	if (status === 'loading') {
+		return <CategoryListSkeleton />;
+	}
+	return <CategorySlider categories={categories} />;
+}
+
+function NewProductSection() {
+	const { data, status } = useProductsByCondition('new'); // condition: 'new' and 'used'
+	let productList = null;
+	if (status === 'loading') {
+		productList = <ProductListSkeleton />;
+	} else if (status === 'success') {
+		productList = <ProductList products={data} />;
+	}
+	return (
+		<ProductSection title='New' description='You’ve never seen it before!'>
+			{productList}
+		</ProductSection>
+	);
+}
+
+function AllProductsSection({ data, status }) {
+	let productList = null;
+	if (status === 'loading') {
+		productList = <ProductListSkeleton />;
+	} else if (status === 'success') {
+		productList = <ProductList products={data} />;
+	}
+	return (
+		<ProductSection
+			title='All products'
+			description='Find all products that suit your desire!'
+		>
+			{productList}
+		</ProductSection>
+	);
+}
