@@ -6,8 +6,6 @@ import { useProfile } from '../../hooks';
 import { AvatarSkeleton } from '../base/Skeleton';
 import BlanjaLogo from '../../assets/blanja-logo.png';
 import EmptyProfile from '../../assets/empty-profile.jpg';
-import { removeTokenFromLocalStorage } from '../../utils';
-import { useEffect } from 'react';
 
 // keterangan props
 // hasLoggedIn (boolean): apakah user sudah berhasil login atau belum
