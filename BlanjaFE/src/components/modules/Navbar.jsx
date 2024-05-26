@@ -16,13 +16,13 @@ import { useEffect } from 'react';
 export default function Navbar({ hasLoggedIn, inHomePage }) {
 	const { data: profile, status } = useProfile();
 
-	console.log('status >> ', status);
+	// console.log('status >> ', status);
 
-	useEffect(() => {
-		if (status === 'failed') {
-			removeTokenFromLocalStorage();
-		}
-	}, [status]);
+	// useEffect(() => {
+	// 	if (status === 'failed') {
+	// 		removeTokenFromLocalStorage();
+	// 	}
+	// }, [status]);
 
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>

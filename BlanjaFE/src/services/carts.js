@@ -5,7 +5,11 @@ const carts = `${BASE_URL}carts`;
 
 export async function getAllCarts() {
   try {
-    const result = await axios.get(carts);
+    const result = await axios.get(carts, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    });
     return {
       cartsProducts: result.data.data,
     };

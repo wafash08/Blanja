@@ -12,7 +12,7 @@ const ShoppingSummary = ({ total }) => {
       <span className="text-lg font-bold text-gray-300">
           Total Price
         </span>
-        <span className="text-lg font-bold">${total.toFixed(1)}</span>
+        <span className="text-lg font-bold">Rp.{total}</span>
       </div>
       
       <button className="w-full bg-red-500 text-white px-4 py-2 rounded-full mt-8">Buy</button>
