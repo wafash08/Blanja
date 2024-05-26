@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
-
-const COLOR_LIST = ['black', 'blue', 'green', 'brown'];
-const SIZE_LIST = ['xs', 's', 'm', 'l', 'xl'];
-const CATEGORY_LIST = ['all', 'women', 'men', 'boys', 'girls'];
-const BRAND_LIST = ['Zalora', 'Erigo', 'Nike', 'Eiger', 'Alisan'];
+import { useSearchParams } from 'react-router-dom';
+import { toCommaSeparatedValues } from '../../utils';
+import { useFilters } from '../../hooks';
 
 export default function Filter() {
 	const refDialog = useRef(null);
+	const [, setURLSearchParams] = useSearchParams();
+	const { colors, sellers, categories, sizes, status } = useFilters();
 
 	const handleOpenDialog = () => {
 		refDialog.current?.showModal();
@@ -20,9 +20,47 @@ export default function Filter() {
 	const handleSubmitFilter = e => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
+		const colors = [];
+		const sizes = [];
+		const category = [];
+		const seller = [];
 		for (const [key, value] of formData) {
-			console.log(key, value);
+			if (key === 'colors') {
+				colors.push(value);
+			} else if (key === 'sizes') {
+				sizes.push(value);
+			} else if (key === 'category') {
+				category.push(value);
+			} else if (key === 'seller') {
+				seller.push(value);
+			}
 		}
+		const filters = [
+			{
+				name: 'colors',
+				values: colors,
+			},
+			{
+				name: 'sizes',
+				values: sizes,
+			},
+			{
+				name: 'category',
+				values: category,
+			},
+			{
+				name: 'seller',
+				values: seller,
+			},
+		];
+		const params = {};
+		for (const filter of filters) {
+			const { name, values } = filter;
+			if (values && values.length > 0) {
+				params[name] = toCommaSeparatedValues(values);
+			}
+		}
+		setURLSearchParams(params);
 		refDialog.current?.close();
 	};
 
@@ -61,14 +99,14 @@ export default function Filter() {
 						</span>
 					</div>
 
-					<FilterSection section='colors' title='Colors' filters={COLOR_LIST} />
-					<FilterSection section='sizes' title='Sizes' filters={SIZE_LIST} />
+					<FilterSection section='colors' title='Colors' filters={colors} />
+					<FilterSection section='sizes' title='Sizes' filters={sizes} />
 					<FilterSection
 						section='categories'
 						title='Categories'
-						filters={CATEGORY_LIST}
+						filters={categories}
 					/>
-					<FilterSection section='brands' title='Brands' filters={BRAND_LIST} />
+					<FilterSection section='brands' title='Brands' filters={sellers} />
 
 					<div className='h-20 bg-white shadow-[0_-8px_10px_0_#D9D9D940] mt-10 flex items-center justify-center gap-6'>
 						<button
@@ -164,7 +202,7 @@ function ColorFilters({ colors }) {
 						<label className='relative '>
 							<span className='sr-only'>{color}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='colors'
 								id={color}
 								value={color}
@@ -173,7 +211,8 @@ function ColorFilters({ colors }) {
 							<div
 								className={clsx(
 									'w-9 h-9 rounded-full outline outline-1 outline-transparent peer-checked:outline-[#DB3022] outline-offset-2 transition-colors',
-									'group-hover:outline-[#DB3022]'
+									'group-hover:outline-[#DB3022]',
+									color === '#ffffff' && 'shadow-[0_0_0px_2px_#B5B5B540]'
 								)}
 								style={{ backgroundColor: color }}
 							/>
@@ -194,7 +233,7 @@ function SizeFilters({ sizes }) {
 						<label className='relative '>
 							<span className='sr-only'>{size}</span>
 							<input
-								type='radio'
+								type='checkbox'
 								name='sizes'
 								id={size}
 								value={size}
@@ -221,18 +260,19 @@ function SizeFilters({ sizes }) {
 }
 
 function CategoryFilters({ categories }) {
+	console.log('categories >> ', categories);
 	return (
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
-			{categories.map(category => {
+			{categories.map(({ id, name }) => {
 				return (
-					<li className='group inline-flex' key={category}>
+					<li className='group inline-flex' key={id}>
 						<label className='relative '>
-							<span className='sr-only'>{category}</span>
+							<span className='sr-only'>{name}</span>
 							<input
-								type='radio'
-								name='categories'
-								id={category}
-								value={category}
+								type='checkbox'
+								name='category'
+								id={id}
+								value={id}
 								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
 							/>
 							<button
@@ -245,7 +285,7 @@ function CategoryFilters({ categories }) {
 									'group-hover:bg-[#DB3022] group-hover:text-white group-hover:border-[#DB3022]'
 								)}
 							>
-								{category}
+								{name}
 							</button>
 						</label>
 					</li>
@@ -260,14 +300,14 @@ function BrandFilters({ brands }) {
 		<ul className='flex items-center flex-wrap gap-x-5 gap-y-3'>
 			{brands.map(brand => {
 				return (
-					<li className='group inline-flex' key={brand}>
+					<li className='group inline-flex' key={brand.id}>
 						<label className='relative '>
-							<span className='sr-only'>{brand}</span>
+							<span className='sr-only'>{brand.name}</span>
 							<input
-								type='radio'
-								name='brands'
-								id={brand}
-								value={brand}
+								type='checkbox'
+								name='seller'
+								id={brand.id}
+								value={brand.id}
 								className='peer appearance-none absolute top-0 left-0 w-full h-full cursor-pointer'
 							/>
 							<button
@@ -280,7 +320,7 @@ function BrandFilters({ brands }) {
 									'group-hover:bg-[#DB3022] group-hover:text-white group-hover:border-[#DB3022]'
 								)}
 							>
-								{brand}
+								{brand.name}
 							</button>
 						</label>
 					</li>

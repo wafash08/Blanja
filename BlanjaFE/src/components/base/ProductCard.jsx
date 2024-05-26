@@ -9,7 +9,6 @@ import productDummy from '../../assets/product-dummy.png';
 // rate (number): rating produk
 
 export default function ProductCard({ id, image, name, brand, price, rate }) {
-	console.log('image > ', image);
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
 			<div className='h-[136px] overflow-hidden'>
@@ -23,7 +22,11 @@ export default function ProductCard({ id, image, name, brand, price, rate }) {
 			</div>
 
 			<div className='font-metropolis px-3 py-5'>
-				<Link to={`/products/${id}`} reloadDocument className='font-medium hover:underline'>
+				<Link
+					to={`/products/${id}`}
+					reloadDocument
+					className='font-medium hover:underline'
+				>
 					{name}
 				</Link>
 				<p className='text-[#DB3022] font-medium'>$ {price}</p>

@@ -9,6 +9,7 @@ import DetailProduct from '../../pages/main/DetailProduct/DetailProduct';
 import Cart from '../../pages/main/Cart/Cart';
 import CategoryProduct from '../../pages/main/CategoryProduct/CategoryProduct';
 import Layout from '../../components/modules/Layout';
+import ProductsPage from '../../pages/main/Products';
 
 const RouterBlanja = () => {
 	return (
@@ -21,6 +22,7 @@ const RouterBlanja = () => {
 				</Route>
 				<Route path='/' element={<Layout />}>
 					<Route index element={<Home />} />
+					<Route path='products' element={<ProductsPage />} />
 					<Route path='products/:id' element={<DetailProduct />} />
 					<Route path='cart' element={<Cart />} />
 					<Route path='categories/:id' element={<CategoryProduct />} />
