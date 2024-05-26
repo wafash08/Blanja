@@ -54,12 +54,15 @@ export default function Filter() {
 				values: seller,
 			},
 		];
-		const params = { search };
+		const params = {};
 		for (const filter of filters) {
 			const { name, values } = filter;
 			if (values && values.length > 0) {
 				params[name] = toCommaSeparatedValues(values);
 			}
+		}
+		if (search) {
+			params['search'] = search;
 		}
 		setURLSearchParams(params);
 		refDialog.current?.close();
@@ -196,7 +199,7 @@ function FilterSection({ section, title, filters }) {
 
 function ColorFilters({ colors }) {
 	return (
-		<ul className='flex items-center gap-5'>
+		<ul className='flex items-center flex-wrap gap-5'>
 			{colors.map(color => {
 				return (
 					<li className='group inline-flex' key={color}>

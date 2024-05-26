@@ -9,6 +9,7 @@ export async function getAllProducts({
 	sizes,
 	category,
 	seller,
+	page = 1,
 }) {
 	try {
 		const result = await axios.get(productsUrl, {
@@ -18,6 +19,8 @@ export async function getAllProducts({
 				sizes,
 				category,
 				seller,
+				page,
+				limit: 10,
 			},
 		});
 		return {

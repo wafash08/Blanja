@@ -50,7 +50,7 @@ export function useProfile(role) {
 	return { data, status, error };
 }
 
-export function useProducts(keyword, colors, sizes, category, seller) {
+export function useProducts(keyword, colors, sizes, category, seller, page) {
 	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState(null);
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
@@ -67,6 +67,7 @@ export function useProducts(keyword, colors, sizes, category, seller) {
 					category,
 					seller,
 					sizes,
+					page,
 				});
 				if (!ignore) {
 					setData(products);
@@ -84,7 +85,7 @@ export function useProducts(keyword, colors, sizes, category, seller) {
 		return () => {
 			ignore = true;
 		};
-	}, [keyword, colors, sizes, category, seller]);
+	}, [keyword, colors, sizes, category, seller, page]);
 
 	return { data, pagination, status, error };
 }

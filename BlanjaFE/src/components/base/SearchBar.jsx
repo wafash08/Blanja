@@ -4,11 +4,10 @@ import { useSearchParams } from 'react-router-dom';
 export default function SearchBar() {
 	const [query, setQuery] = useState('');
 	const [searchParams, setURLSearchParams] = useSearchParams();
-	const search = searchParams.get('search');
+	const search = searchParams.get('search') ?? '';
 
 	useEffect(() => {
-		const searchInput = document.getElementById('search');
-		searchInput.value = search;
+		setQuery(search);
 	}, [search]);
 
 	const handleSearch = e => {

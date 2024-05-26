@@ -12,7 +12,7 @@ export default function Layout() {
 					<Navbar hasLoggedIn={token !== null} />
 				</Container>
 			</header>
-			<main className='mt-32'>
+			<main className='mt-32 pb-32'>
 				<Outlet />
 			</main>
 		</>

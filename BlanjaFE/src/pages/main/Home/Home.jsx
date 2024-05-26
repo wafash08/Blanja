@@ -12,6 +12,7 @@ import {
 import CategoryListSkeleton from '../../../components/base/Skeleton/CategoryListSkeleton';
 import ProductList from '../../../components/modules/ProductList';
 import { ProductListSkeleton } from '../../../components/base/Skeleton';
+import Pagination from '../../../components/base/Pagination';
 
 const Home = () => {
 	// start of search and filter region
@@ -21,6 +22,7 @@ const Home = () => {
 	const sizes = searchParams.get('sizes');
 	let category = searchParams.get('category');
 	let seller = searchParams.get('seller');
+	const page = searchParams.get('page');
 
 	category = category ? Number(category) : null;
 	seller = seller ? Number(seller) : null;
@@ -29,13 +31,23 @@ const Home = () => {
 		data: products,
 		status: productsStatus,
 		pagination,
-	} = useProducts(search, colors, sizes, category, seller);
+	} = useProducts(search, colors, sizes, category, seller, Number(page));
+
 	let productList = null;
 	if (productsStatus === 'loading') {
 		productList = <ProductListSkeleton />;
 	} else if (productsStatus === 'success') {
 		if (products.length > 0) {
-			productList = <ProductList products={products} />;
+			productList = (
+				<>
+					<ProductList products={products} />
+					{pagination.totalPage > 1 ? (
+						<div className='mt-10'>
+							<Pagination pagination={pagination} />
+						</div>
+					) : null}
+				</>
+			);
 		} else {
 			productList = (
 				<div>
@@ -48,7 +60,7 @@ const Home = () => {
 		}
 	}
 
-	if (search || colors || sizes || category || seller) {
+	if (search || colors || sizes || category || seller || page) {
 		return (
 			<section>
 				<Container>
@@ -95,7 +107,11 @@ const Home = () => {
 			</section>
 			<div className='mt-14'>
 				<NewProductSection />
-				<AllProductsSection data={products} status={productsStatus} />
+				<AllProductsSection
+					data={products}
+					status={productsStatus}
+					pagination={pagination}
+				/>
 			</div>
 		</>
 	);
@@ -117,7 +133,11 @@ function NewProductSection() {
 	if (status === 'loading') {
 		productList = <ProductListSkeleton />;
 	} else if (status === 'success') {
-		productList = <ProductList products={data} />;
+		productList = (
+			<>
+				<ProductList products={data} />
+			</>
+		);
 	}
 	return (
 		<ProductSection title='New' description='You’ve never seen it before!'>
@@ -126,12 +146,21 @@ function NewProductSection() {
 	);
 }
 
-function AllProductsSection({ data, status }) {
+function AllProductsSection({ data, status, pagination }) {
 	let productList = null;
 	if (status === 'loading') {
 		productList = <ProductListSkeleton />;
 	} else if (status === 'success') {
-		productList = <ProductList products={data} />;
+		productList = (
+			<>
+				<ProductList products={data} />
+				{pagination.totalPage > 1 ? (
+					<div className='mt-10'>
+						<Pagination pagination={pagination} />
+					</div>
+				) : null}
+			</>
+		);
 	}
 	return (
 		<ProductSection
