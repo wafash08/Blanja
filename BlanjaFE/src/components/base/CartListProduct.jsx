@@ -5,9 +5,9 @@ import { getTokenFromLocalStorage } from "../../utils";
 const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
   return (
     <div className="w-full">
-      {cart.map((product) => (
+      {cart.map((product, index) => (
         <div
-          key={product.id}
+          key={index}
           className="flex items-center justify-between mb-4 rounded-md p-5 shadow-[0_0_14px_0_#ADADAD40]"
         >
           <input
