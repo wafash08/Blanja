@@ -7,3 +7,7 @@ export function removeTokenFromLocalStorage() {
 	localStorage.removeItem('token');
 	localStorage.removeItem('refresh_token');
 }
+
+export function toCommaSeparatedValues(values) {
+	return values.join(', ');
+}
