@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getTokenFromLocalStorage } from "../../utils";
 
-const ProductList = ({cart, onProductChange}) => {
+const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
   return (
     <div className="w-full">
       {cart.map((product) => (
@@ -14,16 +14,16 @@ const ProductList = ({cart, onProductChange}) => {
             type="checkbox"
             checked={product.isSelected}
             onChange={(e) =>
-              onProductChange(product.id, product.quantity, e.target.checked)
+              onIndividualSelect(product.id, e.target.checked)
             }
             className="checkbox mr-2 w-5 h-5 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
           />
           <div>
-            <img src={product.photo} />
+            <img className="w-24 h-24" src={product.photo} />
           </div>
           <div>
             <p>{product.name}</p>
-            <p>{product.price}</p>
+            <p>Rp.{product.price}</p>
           </div>
           <div className="flex items-center">
             <button

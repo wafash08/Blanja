@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllCarts } from "../services/carts";
+import { getCartsById } from "../services/carts";
 
 export function useCarts() {
   const [data, setData] = useState([]);
@@ -11,7 +11,7 @@ export function useCarts() {
     async function getCarts() {
       try {
         setStatus("loading");
-        const cartsProduct = await getAllCarts();
+        const cartsProduct = await getCartsById();
         console.log("data awal", cartsProduct);
         if (!ignore) {
           setData(cartsProduct);

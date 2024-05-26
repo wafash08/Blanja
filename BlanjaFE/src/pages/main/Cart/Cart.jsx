@@ -21,10 +21,11 @@ const Cart = () => {
       Array.isArray(cartsProduct.cartsProducts)
     ) {
       const extractedProducts = cartsProduct.cartsProducts.flatMap((cart) => {
-        setCartId(cart.id);
+        // setCartId(cart.id);
         return cart.products.map((product) => ({
           ...product,
           cartId: cart.id,
+          isSelected: false
         }));
       });
       setProducts(extractedProducts);
@@ -39,7 +40,7 @@ const Cart = () => {
     setProducts(updatedProducts);
   };
 
-  const handleProductChange = async (productId, quantityChange, isSelected) => {
+  const handleProductChange = async (productId, quantityChange) => {
     console.log("params",productId, quantityChange);
     const BASE_URL = import.meta.env.VITE_BE_URL;
     const addProduct = `${BASE_URL}cart/addProduct`;
