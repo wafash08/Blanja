@@ -6,13 +6,17 @@ import { useProfile } from '../../hooks';
 import { AvatarSkeleton } from '../base/Skeleton';
 import BlanjaLogo from '../../assets/blanja-logo.png';
 import EmptyProfile from '../../assets/empty-profile.jpg';
+import { getRoleFromLocalStorage } from '../../utils';
 
 // keterangan props
 // hasLoggedIn (boolean): apakah user sudah berhasil login atau belum
 // inHomePage (boolean): apakah halaman yang sedang diakses adalah halaman home
 
 export default function Navbar({ hasLoggedIn }) {
-	const { data: profile, status } = useProfile();
+	const role = getRoleFromLocalStorage();
+	const { data: profile, status } = useProfile(role);
+
+	console.log('profile >> ', profile);
 
 	return (
 		<div className='w-full flex items-center justify-between font-metropolis'>

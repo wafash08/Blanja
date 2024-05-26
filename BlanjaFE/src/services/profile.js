@@ -14,7 +14,7 @@ export async function getCustomerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		return result.data.data;
+		return result.data;
 	} catch (error) {
 		throw new Error({
 			message: error.response.data.message,
@@ -30,7 +30,7 @@ export async function getSellerProfile() {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		});
-		return result.data.data;
+		return result.data;
 	} catch (error) {
 		throw new Error(error);
 	}
