@@ -137,3 +137,58 @@ func CreateCart(c *fiber.Ctx) error {
 		"message":    "Cart created successfully",
 	})
 }
+
+func GetCartByUserID(c *fiber.Ctx) error {
+	// cartUser := models.Cart
+	var user = c.Locals("user").(jwt.MapClaims)
+	userID := user["id"].(float64)
+	cartUser := models.SelectCartById(int(userID))
+	// if cartUser.ID == 0 {
+	// 	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+	// 		"status":     "not found",
+	// 		"statusCode": 404,
+	// 		"message":    "Cart not found",
+	// 	})
+	// }
+	// resultCarts := make([]map[string]interface{}, len(cart))
+	resultCarts := make([]map[string]interface{}, len(cartUser))
+	for i, cart := range cartUser {
+		products := make([]map[string]interface{}, len(cart.Products))
+		for j, product := range cart.Products {
+			var cartProduct models.CartProduct
+			if err := configs.DB.Where("cart_id = ? AND product_id = ?", cart.ID, product.ID).First(&cartProduct).Error; err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve quantity"})
+			}
+			var image *models.Image
+			configs.DB.First(&image, "product_id = ?", product.ID)
+			products[j] = map[string]interface{}{
+				"id":         product.ID,
+				"created_at": product.CreatedAt,
+				"updated_at": product.UpdatedAt,
+				"name":       product.Name,
+				"price":      product.Price,
+				"photo":      image.URL,
+				"size":       product.Sizes,
+				"color":      product.Colors,
+				"quantity":   cartProduct.Quantity,
+				"rating":     product.Rating,
+			}
+		}
+
+		resultCarts[i] = map[string]interface{}{
+			"id":          cart.ID,
+			"user_id":     cart.UserID,
+			"seller_id":   cart.SellerID,
+			"seller_name": cart.Seller.Name,
+			"created_at":  cart.CreatedAt,
+			"updated_at":  cart.UpdatedAt,
+			"products":    products,
+		}
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"message":    "Show Cart successfully",
+		"data": resultCarts,
+	})
+}
