@@ -8,7 +8,7 @@ import { useProductByCategory } from '../../../hooks';
 const CategoryProduct = () => {
 	const { id } = useParams();
 	const { data, status } = useProductByCategory(id);
-
+	console.log(data.products);
 	let productList = null;
 	if (status === 'loading') {
 		productList = <ProductListSkeleton />;
