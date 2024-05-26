@@ -21,6 +21,7 @@ type Product struct {
 	Category    Category `gorm:"foreignKey:CategoryID" validate:"-"`
 	SellerID    uint     `json:"seller_id" validate:"required"`
 	Seller      Seller   `gorm:"foreignKey:SellerID" validate:"-"`
+	Carts       []Cart   `gorm:"many2many:cart_products;" json:"carts"`
 }
 
 func SelectAllProducts(keyword, sort string, limit, offset int) []*Product {

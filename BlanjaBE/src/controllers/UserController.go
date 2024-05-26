@@ -166,6 +166,7 @@ func LoginUser(c *fiber.Ctx) error {
 		"message":       "Login successfully",
 		"email":         existUser.Email,
 		"role":          existUser.Role,
+		"id":            existUser.ID,
 		"token":         token,
 		"refresh_token": refreshToken,
 	})

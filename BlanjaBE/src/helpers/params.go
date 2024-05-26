@@ -25,7 +25,7 @@ func GetPaginationParams(oldLimit, oldPage string) (int, int, int) {
 
 	limit, _ := strconv.Atoi(oldLimit)
 	if limit == 0 {
-		limit = 5
+		limit = 20
 	}
 
 	offset := (page - 1) * limit

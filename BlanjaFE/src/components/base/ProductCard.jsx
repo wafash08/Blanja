@@ -22,7 +22,11 @@ export default function ProductCard({ id, image, name, brand, price, rate }) {
 			</div>
 
 			<div className='font-metropolis px-3 py-5'>
-				<Link to={`/products/${id}`} className='font-medium hover:underline'>
+				<Link
+					to={`/products/${id}`}
+					reloadDocument
+					className='font-medium hover:underline'
+				>
 					{name}
 				</Link>
 				<p className='text-[#DB3022] font-medium'>$ {price}</p>

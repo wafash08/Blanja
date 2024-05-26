@@ -139,7 +139,8 @@ func GetDetailProduct(c *fiber.Ctx) error {
 }
 
 func CreateProduct(c *fiber.Ctx) error {
-	if _, err := middlewares.JWTAuthorize(c, "seller"); err != nil {
+	id, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
 		if fiberErr, ok := err.(*fiber.Error); ok {
 			return c.Status(fiberErr.Code).JSON(fiber.Map{
 				"status":     fiberErr.Message,
@@ -155,6 +156,15 @@ func CreateProduct(c *fiber.Ctx) error {
 		})
 	}
 
+	seller := models.SelectSellerByUserId(int(id))
+	if seller.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Seller not found",
+		})
+	}
+
 	var newProduct models.Product
 
 	if err := c.BodyParser(&newProduct); err != nil {
@@ -164,6 +174,7 @@ func CreateProduct(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
+	newProduct.SellerID = seller.ID
 
 	product := middlewares.XSSMiddleware(&newProduct).(*models.Product)
 
@@ -184,14 +195,6 @@ func CreateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	if seller := models.SelectSellerById(int(product.SellerID)); seller.ID == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
-			"message":    "Seller not found",
-		})
-	}
-
 	if err := models.CreateProduct(product); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
@@ -208,7 +211,8 @@ func CreateProduct(c *fiber.Ctx) error {
 }
 
 func UpdateProduct(c *fiber.Ctx) error {
-	if _, err := middlewares.JWTAuthorize(c, "seller"); err != nil {
+	userId, err := middlewares.JWTAuthorize(c, "seller")
+	if err != nil {
 		if fiberErr, ok := err.(*fiber.Error); ok {
 			return c.Status(fiberErr.Code).JSON(fiber.Map{
 				"status":     fiberErr.Message,
@@ -221,6 +225,15 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"status":     "Internal Server Error",
 			"statusCode": fiber.StatusInternalServerError,
 			"message":    err.Error(),
+		})
+	}
+
+	seller := models.SelectSellerByUserId(int(userId))
+	if seller.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Seller not found",
 		})
 	}
 
@@ -251,6 +264,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"data":       updatedProduct,
 		})
 	}
+	updatedProduct.SellerID = seller.ID
 
 	product := middlewares.XSSMiddleware(&updatedProduct).(*models.Product)
 
@@ -268,14 +282,6 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"status":     "not found",
 			"statusCode": 404,
 			"message":    "Category not found",
-		})
-	}
-
-	if seller := models.SelectSellerById(int(product.SellerID)); seller.ID == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
-			"message":    "Seller not found",
 		})
 	}
 

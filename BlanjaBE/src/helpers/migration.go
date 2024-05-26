@@ -18,6 +18,8 @@ func Migration() {
 		&models.Color{},
 		&models.Category{},
 		&models.Address{},
+		&models.Cart{},
+		&models.CartProduct{},
 	)
 
 	if err != nil {
