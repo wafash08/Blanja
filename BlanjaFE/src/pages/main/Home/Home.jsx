@@ -106,7 +106,7 @@ const Home = () => {
 				</Container>
 			</section>
 			<div className='mt-14'>
-				<NewProductSection />
+				<NewProductSection title="New" description='You’ve never seen it before!' />
 				<AllProductsSection
 					data={products}
 					status={productsStatus}
@@ -127,7 +127,7 @@ function CategorySection() {
 	return <CategorySlider categories={categories} />;
 }
 
-function NewProductSection() {
+export function NewProductSection({title, description}) {
 	const { data, status } = useProductsByCondition('new'); // condition: 'new' and 'used'
 	let productList = null;
 	if (status === 'loading') {
@@ -140,7 +140,7 @@ function NewProductSection() {
 		);
 	}
 	return (
-		<ProductSection title='New' description='You’ve never seen it before!'>
+		<ProductSection title={title} description={description}>
 			{productList}
 		</ProductSection>
 	);

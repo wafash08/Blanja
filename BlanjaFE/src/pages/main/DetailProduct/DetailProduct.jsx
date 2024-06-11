@@ -5,13 +5,13 @@ import clsx from "clsx";
 import Button from "../../../components/base/Button";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../../components/base/BreadCrumb";
-import ProductSection from "../../../components/modules/ProductSection";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
+import { NewProductSection } from "../Home/Home";
 
 const DetailProduct = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("Title")
   const [sellerName, setSellerName] = useState("")
   const [imageList, setImageList] = useState([]);
   let isImage = false;
@@ -270,11 +270,7 @@ const DetailProduct = () => {
           <BreadCrumb
             items={[
               {
-                name: "Products",
-                href: "/",
-              },
-              {
-                name: "Product Name",
+                name: title,
                 href: `/products/${id}`,
                 current: true,
               },
@@ -650,10 +646,7 @@ const DetailProduct = () => {
 
       <div className="w-full h-0 border-t border-[#D4D4D4] mt-20"></div>
 
-      <ProductSection
-        title="You can also like this"
-        description="You’ve never seen it before!"
-      />
+      <NewProductSection title="You can also like this" description='You’ve never seen it before!' />
     </Container>
   );
 };
