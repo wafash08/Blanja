@@ -6,7 +6,11 @@ import ProductList from "../../../components/base/CartListProduct";
 import ShoppingSummary from "../../../components/base/ShoppingSummary";
 import productDummy from "../../../assets/product-dummy.png";
 import { useCarts } from "../../../hooks/CartsHooks";
-import { ProductListSkeleton } from "../../../components/base/Skeleton";
+import {
+  AvatarSkeleton,
+  CartListSkeleton,
+  ProductListSkeleton,
+} from "../../../components/base/Skeleton";
 
 const Cart = () => {
   const { data: cartsProduct, status } = useCarts();
@@ -25,7 +29,7 @@ const Cart = () => {
         return cart.products.map((product) => ({
           ...product,
           cartId: cart.id,
-          isSelected: false
+          isSelected: false,
         }));
       });
       setProducts(extractedProducts);
@@ -33,6 +37,7 @@ const Cart = () => {
   }, [cartsProduct, status]);
 
   const handleSelectAll = (isSelected) => {
+    console.log("cek data", products);
     const updatedProducts = products.map((product) => ({
       ...product,
       isSelected,
@@ -41,7 +46,7 @@ const Cart = () => {
   };
 
   const handleProductChange = async (productId, quantityChange) => {
-    console.log("params",productId, quantityChange);
+    console.log("params", productId, quantityChange);
     const BASE_URL = import.meta.env.VITE_BE_URL;
     const addProduct = `${BASE_URL}cart/addProduct`;
     const removeProduct = `${BASE_URL}cart/removeProduct`;
@@ -49,9 +54,11 @@ const Cart = () => {
     if (!product) return;
 
     const newQuantity = product.quantity + quantityChange;
-    if (newQuantity < 1) return;
+    console.log("quantity: ", newQuantity);
+    // if (newQuantity < 1) return;
 
     const endpoint = quantityChange > 0 ? addProduct : removeProduct;
+    console.log("endpoint", endpoint);
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -67,15 +74,21 @@ const Cart = () => {
       });
 
       if (response.ok) {
-        const updatedProducts = products.map((product) =>
-          product.id === productId
-            ? {
-                ...product,
-                quantity: newQuantity,
-                // isSelected: isSelected ?? product.isSelected,
-              }
-            : product
-        );
+        let updatedProducts;
+        if (newQuantity === 0) {
+          updatedProducts = products.filter(
+            (product) => product.id !== productId
+          );
+        } else {
+          updatedProducts = products.map((product) =>
+            product.id === productId
+              ? {
+                  ...product,
+                  quantity: newQuantity,
+                }
+              : product
+          );
+        }
         setProducts(updatedProducts);
       } else {
         console.error(
@@ -88,7 +101,7 @@ const Cart = () => {
     }
   };
   const handleIndividualSelect = (productId, isSelected) => {
-    const updatedProducts = products.map(product =>
+    const updatedProducts = products.map((product) =>
       product.id === productId ? { ...product, isSelected } : product
     );
     setProducts(updatedProducts);
@@ -109,7 +122,7 @@ const Cart = () => {
   //   (acc, product) => acc + product.price * product.quantity,0
   // )
   if (status === "loading") {
-    cartList = <p>loading</p>;
+    cartList = <CartListSkeleton />;
   } else if (status === "success") {
     cartList = (
       <ProductList
@@ -130,8 +143,8 @@ const Cart = () => {
             My Bag
           </h2>
         </div>
-        <div className="p-4 flex justify-between gap-6">
-          <div className=" w-3/5">
+        <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
+          <div className=" w-3/5 max-md:w-full">
             <SelectAllItems
               products={products}
               onSelectAll={handleSelectAll}
@@ -140,7 +153,7 @@ const Cart = () => {
             {cartList}
           </div>
 
-          <div className=" w-2/5">
+          <div className=" w-2/5 max-md:w-full">
             <ShoppingSummary total={total} />
           </div>
         </div>

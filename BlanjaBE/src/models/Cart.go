@@ -17,9 +17,9 @@ type Cart struct {
 	User      User      `gorm:"foreignKey:UserID" validate:"-"`
 }
 
-func CreateCart(cart *Cart) (uint, uint, uint, error) {
+func CreateCart(cart *Cart) error {
 	result := configs.DB.Create(&cart)
-	return cart.ID, cart.Quantity, cart.ProductID, result.Error
+	return result.Error
 }
 
 func SelectAllCart() []*Cart {
@@ -31,4 +31,8 @@ func SelectCartById(id int) []*Cart {
 	var cart []*Cart
 	configs.DB.Preload("Seller").Preload("Products").Find(&cart, "user_id = ?", id)
 	return cart
+}
+func DeleteCart(id int) error {
+	result := configs.DB.Delete(&Cart{}, "id = ?", id)
+	return result.Error
 }
