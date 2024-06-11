@@ -10,6 +10,8 @@ import Cart from '../../pages/main/Cart/Cart';
 import CategoryProduct from '../../pages/main/CategoryProduct/CategoryProduct';
 import Layout from '../../components/modules/Layout';
 import ProductsPage from '../../pages/main/Products';
+import ProfilePage from '../../pages/main/Profile';
+import EditProfile from '../../pages/main/Profile/Edit';
 
 const RouterBlanja = () => {
 	return (
@@ -26,6 +28,10 @@ const RouterBlanja = () => {
 					<Route path='products/:id' element={<DetailProduct />} />
 					<Route path='cart' element={<Cart />} />
 					<Route path='categories/:id' element={<CategoryProduct />} />
+					<Route path='profile' element={<ProfilePage />}>
+						<Route index element={<EditProfile />} />
+						<Route path='edit' element={<EditProfile />} />
+					</Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>
