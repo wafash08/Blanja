@@ -29,9 +29,9 @@ export default function Sidebar() {
 	const paths = pathname.split('/');
 	const currentPath = paths[2] || 'edit';
 	return (
-		<aside className='w-full max-w-[245px] space-y-16 sticky top-0'>
-			<section className='flex items-center gap-4 space-y-1'>
-				<div className='w-[60px] aspect-square rounded-full overflow-hidden'>
+		<aside className='w-full max-w-64 space-y-16 sticky top-0 px-4'>
+			<section className='flex items-center gap-4'>
+				<div className='w-[60px] shrink-0 aspect-square rounded-full overflow-hidden'>
 					<img
 						src={avatarImage}
 						alt='Johanes Mikael'
@@ -40,8 +40,10 @@ export default function Sidebar() {
 						className='w-full h-full'
 					/>
 				</div>
-				<div>
-					<h3 className='text-[#222222] font-semibold'>Johanes Mikael</h3>
+				<div className='space-y-1'>
+					<h3 className='text-[#222222] font-semibold text-wrap'>
+						Johanes Mikael
+					</h3>
 					<Link
 						to='edit'
 						className='text-[#9B9B9B] text-sm flex items-center gap-2'

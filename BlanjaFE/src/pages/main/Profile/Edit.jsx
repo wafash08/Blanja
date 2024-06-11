@@ -1,12 +1,16 @@
 import clsx from 'clsx';
 import Select from 'react-select';
 import avatarImage from '../../../assets/empty-profile.jpg';
+import {
+	createOptionOfYears,
+	createOptionsOfDates,
+	createOptionsOfMonths,
+} from '../../../utils';
 
-const dates = [
-	{ value: '1', label: '1' },
-	{ value: '2', label: '2' },
-	{ value: '3', label: '3' },
-];
+const DATES = createOptionsOfDates();
+const MONTHS = createOptionsOfMonths();
+const YEARS = createOptionOfYears();
+
 export default function EditProfile() {
 	return (
 		<section className='bg-white border border-[#9B9B9B] rounded p-7 max-w-[850px]'>
@@ -52,9 +56,21 @@ export default function EditProfile() {
 							<FormControl>
 								<NonLabel>Date of Birth</NonLabel>
 								<div className='flex items-center gap-4'>
-									<CustomSelect defaultValue={dates[0]} options={dates} />
-									<CustomSelect defaultValue={dates[0]} options={dates} />
-									<CustomSelect defaultValue={dates[0]} options={dates} />
+									<CustomSelect
+										defaultValue={DATES[0]}
+										options={DATES}
+										name='date'
+									/>
+									<CustomSelect
+										defaultValue={MONTHS[0]}
+										options={MONTHS}
+										name='month'
+									/>
+									<CustomSelect
+										defaultValue={YEARS[0]}
+										options={YEARS}
+										name='year'
+									/>
 								</div>
 							</FormControl>
 						</div>
@@ -155,7 +171,7 @@ function Radio({ ...props }) {
 	return <input type='radio' {...props} />;
 }
 
-function CustomSelect({ options, defaultValue }) {
+function CustomSelect({ options, defaultValue, name }) {
 	return (
 		<Select
 			options={options}
@@ -169,6 +185,7 @@ function CustomSelect({ options, defaultValue }) {
 					width: '100px',
 				}),
 			}}
+			name={name}
 		/>
 	);
 }

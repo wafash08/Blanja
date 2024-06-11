@@ -12,6 +12,8 @@ import Layout from '../../components/modules/Layout';
 import ProductsPage from '../../pages/main/Products';
 import ProfilePage from '../../pages/main/Profile';
 import EditProfile from '../../pages/main/Profile/Edit';
+import AddressPage from '../../pages/main/Profile/Address';
+import OrderPage from '../../pages/main/Profile/Order';
 
 const RouterBlanja = () => {
 	return (
@@ -31,6 +33,8 @@ const RouterBlanja = () => {
 					<Route path='profile' element={<ProfilePage />}>
 						<Route index element={<EditProfile />} />
 						<Route path='edit' element={<EditProfile />} />
+						<Route path='address' element={<AddressPage />} />
+						<Route path='order' element={<OrderPage />} />
 					</Route>
 				</Route>
 			</Routes>
