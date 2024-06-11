@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import avatarImage from '../../assets/empty-profile.jpg';
 import { AccountIcon, AddressIcon, OrderIcon } from './Icons';
+import clsx from 'clsx';
 
 const links = [
 	{
@@ -24,6 +25,9 @@ const links = [
 ];
 
 export default function Sidebar() {
+	const { pathname } = useLocation();
+	const paths = pathname.split('/');
+	const currentPath = paths[2] || 'edit';
 	return (
 		<aside className='w-full max-w-[245px] space-y-16 sticky top-0'>
 			<section className='flex items-center gap-4 space-y-1'>
@@ -65,21 +69,29 @@ export default function Sidebar() {
 			</section>
 			<nav>
 				<ul className='space-y-5'>
-					{links.map(({ color, icon, label, to }) => (
-						<li key={label}>
-							<Link to={to} className='flex items-center gap-[14px]'>
-								<div
-									style={{ backgroundColor: color }}
-									className='w-8 aspect-square rounded-full flex items-center justify-center'
-								>
-									{icon}
-								</div>
-								<span className='text-[#9B9B9B] text-sm font-medium'>
-									{label}
-								</span>
-							</Link>
-						</li>
-					))}
+					{links.map(({ color, icon, label, to }) => {
+						const active = to === currentPath;
+						return (
+							<li key={label}>
+								<Link to={to} className='flex items-center gap-[14px]'>
+									<div
+										style={{ backgroundColor: color }}
+										className='w-8 aspect-square rounded-full flex items-center justify-center'
+									>
+										{icon}
+									</div>
+									<span
+										className={clsx(
+											'text-sm font-medium',
+											active ? 'text-[#222222]' : 'text-[#9B9B9B]'
+										)}
+									>
+										{label}
+									</span>
+								</Link>
+							</li>
+						);
+					})}
 				</ul>
 			</nav>
 		</aside>
