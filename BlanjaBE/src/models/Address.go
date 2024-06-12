@@ -31,6 +31,11 @@ func SelectAddressesbyUserID(user_id int) []*Address {
 	return addresses
 }
 
+func SetOtherAddressesPrimaryOff(userID uint, currentAddressID uint) error {
+	// Gunakan GORM untuk mengubah semua alamat milik user tersebut kecuali currentAddressID menjadi "off"
+	return configs.DB.Model(&Address{}).Where("user_id = ? AND id != ?", userID, currentAddressID).Update("primary", "off").Error
+}
+
 func SelectAddressbyId(id int) *Address {
 	var address Address
 	configs.DB.Preload("User").First(&address, "id = ?", id)
