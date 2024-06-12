@@ -64,9 +64,11 @@ func JWTAuthorize(c *fiber.Ctx, requiredRole string) (float64, error) {
 		return 0, fiber.NewError(fiber.StatusUnauthorized, "Unauthorized")
 	}
 
-	role, ok := user["role"].(string)
-	if !ok || role != requiredRole {
-		return 0, fiber.NewError(fiber.StatusForbidden, "Incorrect role")
+	if requiredRole != "" {
+		role, ok := user["role"].(string)
+		if !ok || role != requiredRole {
+			return 0, fiber.NewError(fiber.StatusForbidden, "Incorrect role")
+		}
 	}
 
 	id, ok := user["id"].(float64)
