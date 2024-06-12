@@ -272,10 +272,9 @@ const DetailProduct = () => {
     setAlertType("")
   }
   const [showChooseAddressModal, setShowChooseAddressModal] = useState(false)
-  const [defaultAddress, setDefaultAddress] = useState("")
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
-      {showChooseAddressModal && <ChooseAddressModal onClickX={()=>setShowChooseAddressModal(false)} defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} />}
+      {showChooseAddressModal && <ChooseAddressModal onClickX={()=>setShowChooseAddressModal(false)} />}
       {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)}
       <div>
         <Container>
