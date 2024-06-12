@@ -105,10 +105,14 @@ func CreateCart(c *fiber.Ctx) error {
 		CartID    uint `json:"cart_id" binding:"required"`
 		ProductID uint `json:"product_id" binding:"required"`
 		Quantity  uint `json:"quantity" binding:"required,min=1"`
+		// ColorID   uint      `json:"color_id" validate:"required"`
+		// SizeID    uint      `json:"size_id" validate:"required"`
 	}
 	request.CartID = cart.ID
 	request.Quantity = cart.Quantity
 	request.ProductID = cart.ProductID
+	// request.ColorID = cart.ColorID
+	// request.SizeID = cart.SizeID
 
 	var newCartProduct models.CartProduct
 	cartProduct := middlewares.XSSMiddleware(&newCartProduct).(*models.CartProduct)

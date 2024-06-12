@@ -23,7 +23,7 @@ const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
           </div>
           <div>
             <p className="max-md:text-sm">{product.name}</p>
-            <p className="max-md:text-sm">{product.colors}</p>
+            {/* <p className="max-md:text-sm">{product.colors}</p> */}
             <p className="max-md:text-sm">Rp.{product.price}</p>
           </div>
           <div className="flex items-center">

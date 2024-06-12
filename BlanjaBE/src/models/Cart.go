@@ -12,9 +12,13 @@ type Cart struct {
 	Quantity  uint      `json:"quantity"`
 	SellerID  uint      `json:"seller_id" validate:"required"`
 	UserID    uint      `json:"user_id" validate:"required"`
+	// ColorID   uint      `json:"color_id"`
+	// SizeID    uint      `json:"size_id"`
 	Seller    Seller    `gorm:"foreignKey:SellerID" validate:"-"`
 	Products  []Product `gorm:"many2many:cart_products;" json:"products"`
 	User      User      `gorm:"foreignKey:UserID" validate:"-"`
+	// Color     Color		`gorm:"foreignKey:ColorID" validate:"required"`
+	// Size      Size      `gorm:"foreignKey:SizeID" validate:"required"`
 }
 
 func CreateCart(cart *Cart) error {
@@ -32,7 +36,7 @@ func SelectCartById(id int) []*Cart {
 	configs.DB.Preload("Seller").Preload("Products").Find(&cart, "user_id = ?", id)
 	return cart
 }
-func DeleteCart(id int) error {
+func DeleteCart(id []int) error {
 	result := configs.DB.Delete(&Cart{}, "id = ?", id)
 	return result.Error
 }

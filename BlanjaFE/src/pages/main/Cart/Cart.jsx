@@ -11,6 +11,7 @@ import {
   CartListSkeleton,
   ProductListSkeleton,
 } from "../../../components/base/Skeleton";
+import axios from "axios";
 
 const Cart = () => {
   const { data: cartsProduct, status } = useCarts();
@@ -37,12 +38,12 @@ const Cart = () => {
   }, [cartsProduct, status]);
 
   const handleSelectAll = (isSelected) => {
-    console.log("cek data", products);
     const updatedProducts = products.map((product) => ({
       ...product,
       isSelected,
     }));
     setProducts(updatedProducts);
+    console.log("cek data", updatedProducts);
   };
 
   const handleProductChange = async (productId, quantityChange) => {
@@ -105,11 +106,39 @@ const Cart = () => {
       product.id === productId ? { ...product, isSelected } : product
     );
     setProducts(updatedProducts);
+    console.log("data individual", updatedProducts);
   };
 
-  const handleDeleteSelected = () => {
-    const updatedProducts = products.filter((product) => !product.isSelected);
-    setProducts(updatedProducts);
+  const handleDeleteSelected = async () => {
+    const BASE_URL = import.meta.env.VITE_BE_URL;
+    const product = products.filter((item) => item.isSelected === true);
+    const productID = product.map((item) => item.id);
+    const cartID = product.map((item) => item.cartId);
+    console.log(productID);
+    try {
+      const response = await fetch(`${BASE_URL}cart/deleteAllProduct`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          cart_id: cartID,
+          product_id: productID,
+        }),
+      });
+      if (response.ok) {
+        // Jika penghapusan berhasil, perbarui state products
+        const updatedProducts = products.filter((item) => !item.isSelected);
+        setProducts(updatedProducts);
+        console.log("Products successfully deleted and updated.");
+      } else {
+        console.error("Failed to delete products:", await response.text());
+      }
+      console.log("respon from delete", response);
+    } catch (error) {
+      console.error("Error updating product quantity:", error);
+    }
   };
   const total =
     products && products.length > 0
