@@ -38,11 +38,11 @@ export default function OrderPage() {
 				<h2 className='text-[#222] text-xl font-semibold'>My Order</h2>
 			</div>
 			<nav>
-				<ul className='flex items-center gap-12 border-b border-b-[#D4D4D4]'>
+				<ul className='flex items-center gap-6 lg:gap-12 border-b border-b-[#D4D4D4] overflow-x-auto'>
 					{ORDER_CATEGORIES.map(({ label, to }) => {
 						const activeCategory = to === category;
 						return (
-							<li key={to} className='relative'>
+							<li key={to} className='relative shrink-0'>
 								<Link
 									to={`?category=${to}`}
 									className={clsx(

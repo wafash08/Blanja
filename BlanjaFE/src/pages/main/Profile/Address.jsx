@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { CloseIcon } from '../../../components/base/Icons';
 
 export default function AddressPage() {
 	const refDialog = useRef(null);
@@ -26,7 +27,7 @@ export default function AddressPage() {
 				<div>
 					<button
 						type='button'
-						className='group text-[#9B9B9B] relative w-full max-w-[710px] mx-auto py-8 px-14 flex items-center justify-center'
+						className='group text-[#9B9B9B] relative w-full max-w-[710px] mx-auto py-4 lg:py-8 px-7 lg:px-14 flex items-center justify-center'
 						onClick={handleOpenDialog}
 					>
 						<span className='text-lg font-semibold transition-colors group-hover:text-[#222]'>
@@ -38,6 +39,7 @@ export default function AddressPage() {
 							xmlns='http://www.w3.org/2000/svg'
 							aria-hidden
 							className='absolute top-0 left-0 w-full h-full pointer-events-none'
+							preserveAspectRatio='none'
 						>
 							<rect
 								x='0.5'
@@ -53,7 +55,7 @@ export default function AddressPage() {
 					</button>
 
 					<dialog
-						className='font-metropolis backdrop:bg-black/40 w-full max-w-3xl border border-[#9B9B9B] bg-white rounded-lg relative p-10'
+						className='font-metropolis backdrop:bg-black/40 w-[90%] max-w-3xl border border-[#9B9B9B] bg-white rounded-lg relative p-5 lg:p-10'
 						ref={refDialog}
 					>
 						<div className='mb-10'>
@@ -72,7 +74,7 @@ export default function AddressPage() {
 										placeholder='Ex: Rumah'
 									/>
 								</FormControl>
-								<div className='flex items-center gap-8'>
+								<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
 									<div className='flex-1'>
 										<FormControl>
 											<Label id='name'>Recipient’s name</Label>
@@ -96,7 +98,7 @@ export default function AddressPage() {
 										</FormControl>
 									</div>
 								</div>
-								<div className='flex items-center gap-8'>
+								<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
 									<div className='flex-1'>
 										<FormControl>
 											<Label id='main_address'>Address</Label>
@@ -120,7 +122,7 @@ export default function AddressPage() {
 										</FormControl>
 									</div>
 								</div>
-								<div className='flex items-center gap-8'>
+								<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
 									<div className='flex-1'>
 										<FormControl>
 											<Label id='city'>City or Subdistrict</Label>
@@ -137,7 +139,11 @@ export default function AddressPage() {
 							</div>
 
 							<div className='flex justify-end'>
-								<button type='button' className='text-[#9B9B9B]'>
+								<button
+									type='button'
+									className='text-[#9B9B9B]'
+									onClick={handleCloseDialog}
+								>
 									Cancel
 								</button>
 								<button type='submit' className='text-[#9B9B9B]'>
@@ -148,9 +154,10 @@ export default function AddressPage() {
 						<button
 							type='button'
 							onClick={handleCloseDialog}
-							className='absolute top-4 right-4'
+							className='absolute top-5 right-5'
 						>
-							Tutup
+							<span className='sr-only'>Tutup</span>
+							<CloseIcon />
 						</button>
 					</dialog>
 				</div>

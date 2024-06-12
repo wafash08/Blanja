@@ -13,7 +13,7 @@ const YEARS = createOptionOfYears();
 
 export default function EditProfile() {
 	return (
-		<section className='bg-white border border-[#9B9B9B] rounded p-7 max-w-[850px]'>
+		<section className='bg-white border border-[#9B9B9B] rounded p-4 lg:p-7 max-w-[850px]'>
 			<div className='border-b border-b-[#D4D4D4] space-y-[6px] pb-4'>
 				<h2 className='text-[#222222] text-xl font-semibold'>My Profile</h2>
 				<p className='text-[#9B9B9B] text-sm font-medium'>
@@ -22,8 +22,8 @@ export default function EditProfile() {
 			</div>
 			<div>
 				<form className='space-y-12 py-8'>
-					<div className='flex gap-16 items-start'>
-						<div className='flex-1 space-y-5'>
+					<div className='flex flex-col lg:flex-row gap-8 lg:gap-16 lg:items-start'>
+						<div className='lg:flex-1 space-y-5'>
 							<FormControl>
 								<Label id='name'>Name</Label>
 								<Input type='text' id='name' name='name' placeholder='Name' />
@@ -55,7 +55,7 @@ export default function EditProfile() {
 							</FormControl>
 							<FormControl>
 								<NonLabel>Date of Birth</NonLabel>
-								<div className='flex items-center gap-4'>
+								<div className='flex items-center flex-wrap gap-4'>
 									<CustomSelect
 										defaultValue={DATES[0]}
 										options={DATES}
@@ -74,38 +74,12 @@ export default function EditProfile() {
 								</div>
 							</FormControl>
 						</div>
-						<div className='pl-16 border-l border-l-[#D4D4D4]'>
-							<div className='flex flex-col items-center gap-5'>
-								<div className='w-[110px] aspect-square rounded-full overflow-hidden'>
-									<img
-										src={avatarImage}
-										alt='Your Name'
-										width={110}
-										height={110}
-										className='w-full h-full'
-									/>
-								</div>
-								<div>
-									<input
-										className='peer w-[0.1px] h-[0.1px] opacity-0 overflow-hidden absolute -z-10'
-										type='file'
-										name='file'
-										id='file'
-										accept='image/*'
-										required
-									/>
-									<label
-										htmlFor='file'
-										className='text-[#9B9B9B] text-sm font-medium py-2 px-6 border border-[#9B9B9B] rounded-full cursor-pointer'
-									>
-										Select image
-									</label>
-								</div>
-							</div>
+						<div className='lg:pl-16 lg:order-l border-l-[#D4D4D4]'>
+							<UploadPhoto />
 						</div>
 					</div>
 
-					<div className='ml-40'>
+					<div className='lg:ml-40'>
 						<button
 							type='submit'
 							className='text-white text-sm font-medium py-2 px-8 bg-[#DB3022] leading-normal rounded-full'
@@ -121,7 +95,7 @@ export default function EditProfile() {
 
 function FormControl({ children }) {
 	return (
-		<div className='flex items-center gap-10 text-sm font-medium'>
+		<div className='flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-10 text-sm font-medium'>
 			{children}
 		</div>
 	);
@@ -132,7 +106,7 @@ function Label({ children, id, maxWidth = true }) {
 		<label
 			htmlFor={id}
 			className={clsx(
-				'cursor-pointer text-[#9B9B9B] w-full text-right',
+				'cursor-pointer text-[#9B9B9B] w-full lg:text-right',
 				maxWidth && 'max-w-28'
 			)}
 		>
@@ -143,14 +117,14 @@ function Label({ children, id, maxWidth = true }) {
 
 function NonLabel({ children }) {
 	return (
-		<p className='text-[#9B9B9B] w-full max-w-28 text-right'>{children}</p>
+		<p className='text-[#9B9B9B] w-full max-w-28 lg:text-right'>{children}</p>
 	);
 }
 
 function Input({ ...props }) {
 	return (
 		<input
-			className='text-[#222222] px-[18px] py-3 border border-[#9B9B9B] rounded w-full max-w-[348px]'
+			className='block text-[#222222] px-[18px] py-3 border border-[#9B9B9B] rounded w-full max-w-[348px]'
 			{...props}
 		/>
 	);
@@ -187,5 +161,37 @@ function CustomSelect({ options, defaultValue, name }) {
 			}}
 			name={name}
 		/>
+	);
+}
+
+function UploadPhoto() {
+	return (
+		<div className='flex flex-col items-start lg:items-center gap-5'>
+			<div className='w-[110px] aspect-square rounded-full overflow-hidden'>
+				<img
+					src={avatarImage}
+					alt='Your Name'
+					width={110}
+					height={110}
+					className='w-full h-full'
+				/>
+			</div>
+			<div>
+				<input
+					className='peer w-[0.1px] h-[0.1px] opacity-0 overflow-hidden absolute -z-10'
+					type='file'
+					name='file'
+					id='file'
+					accept='image/*'
+					required
+				/>
+				<label
+					htmlFor='file'
+					className='text-[#9B9B9B] text-sm font-medium py-2 px-6 border border-[#9B9B9B] rounded-full cursor-pointer'
+				>
+					Select image
+				</label>
+			</div>
+		</div>
 	);
 }
