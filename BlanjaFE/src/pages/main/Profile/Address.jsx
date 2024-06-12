@@ -56,14 +56,93 @@ export default function AddressPage() {
 						className='font-metropolis backdrop:bg-black/40 w-full max-w-3xl border border-[#9B9B9B] bg-white rounded-lg relative p-10'
 						ref={refDialog}
 					>
-						<div>
-							<h2>Add new address</h2>
+						<div className='mb-10'>
+							<h2 className='text-[#222222] text-[28px] text-center'>
+								Add new address
+							</h2>
 						</div>
-						<form>
-							<div>
-								<div>
-									<label htmlFor=''></label>
+						<form className='space-y-12'>
+							<div className='space-y-4'>
+								<FormControl>
+									<Label id='detail_address'>Save address as</Label>
+									<Input
+										type='text'
+										name='detail_address'
+										id='detail_address'
+										placeholder='Ex: Rumah'
+									/>
+								</FormControl>
+								<div className='flex items-center gap-8'>
+									<div className='flex-1'>
+										<FormControl>
+											<Label id='name'>Recipient’s name</Label>
+											<Input
+												type='text'
+												name='name'
+												id='name'
+												placeholder='Ex: Andri'
+											/>
+										</FormControl>
+									</div>
+									<div className='flex-1'>
+										<FormControl>
+											<Label id='phone'>Recipient's telephone number</Label>
+											<Input
+												type='tel'
+												name='phone'
+												id='phone'
+												placeholder='Ex: 0812xxxxxxxx'
+											/>
+										</FormControl>
+									</div>
 								</div>
+								<div className='flex items-center gap-8'>
+									<div className='flex-1'>
+										<FormControl>
+											<Label id='main_address'>Address</Label>
+											<Input
+												type='text'
+												name='main_address'
+												id='main_address'
+												placeholder='Ex: Jl. Imam Bonjol'
+											/>
+										</FormControl>
+									</div>
+									<div className='flex-1'>
+										<FormControl>
+											<Label id='postal_code'>Postal Code</Label>
+											<Input
+												type='text'
+												name='postal_code'
+												id='postal_code'
+												placeholder='Ex: 15890'
+											/>
+										</FormControl>
+									</div>
+								</div>
+								<div className='flex items-center gap-8'>
+									<div className='flex-1'>
+										<FormControl>
+											<Label id='city'>City or Subdistrict</Label>
+											<Input
+												type='text'
+												name='city'
+												id='city'
+												placeholder='Ex: Jakarta'
+											/>
+										</FormControl>
+									</div>
+									<div className='flex-1' />
+								</div>
+							</div>
+
+							<div className='flex justify-end'>
+								<button type='button' className='text-[#9B9B9B]'>
+									Cancel
+								</button>
+								<button type='submit' className='text-[#9B9B9B]'>
+									Save
+								</button>
 							</div>
 						</form>
 						<button
@@ -83,5 +162,26 @@ export default function AddressPage() {
 				</ul>
 			</div>
 		</section>
+	);
+}
+
+function FormControl({ children }) {
+	return <div className='flex flex-col gap-3'>{children}</div>;
+}
+
+function Label({ children, id }) {
+	return (
+		<label htmlFor={id} className='text-[#9B9B9B] text-sm font-medium'>
+			{children}
+		</label>
+	);
+}
+
+function Input({ ...props }) {
+	return (
+		<input
+			{...props}
+			className='py-3 px-5 w-full border border-[#9B9B9B] shadow-[0_1px_8px_0px_#0000000D] rounded'
+		/>
 	);
 }
