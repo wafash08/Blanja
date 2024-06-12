@@ -23,6 +23,7 @@ func GetAddresses(c *fiber.Ctx) error {
 			"user_id":        address.User.ID,
 			"email":          address.User.Email,
 			"phone":          address.Phone,
+			"primary":        address.Primary,
 			"city":           address.City,
 		}
 	}
@@ -65,6 +66,7 @@ func GetAddressesByUserID(c *fiber.Ctx) error {
 			"user_id":        address.User.ID,
 			"email":          address.User.Email,
 			"phone":          address.Phone,
+			"primary":        address.Primary,
 			"city":           address.City,
 		}
 	}
@@ -102,7 +104,6 @@ func CreateAddress(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
-
 	newAddress.UserID = uint(userId)
 
 	address := middlewares.XSSMiddleware(&newAddress).(*models.Address)
@@ -175,7 +176,6 @@ func UpdateAddress(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
-
 	updatedAddress.UserID = uint(userId)
 
 	address := middlewares.XSSMiddleware(&updatedAddress).(*models.Address)

@@ -254,6 +254,8 @@ func UpdateProduct(c *fiber.Ctx) error {
 		})
 	}
 
+	currentSizes := models.SelectSizesByProductId(id)
+
 	var updatedProduct models.Product
 
 	if err := c.BodyParser(&updatedProduct); err != nil {
@@ -285,19 +287,60 @@ func UpdateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.UpdateProduct(id, product); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":     "server error",
-			"statusCode": 500,
-			"message":    fmt.Sprintf("Failed to update product with ID %d", id),
-		})
-	} else {
-		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-			"status":     "success",
-			"statusCode": 200,
-			"message":    fmt.Sprintf("Product with ID %d updated successfully", id),
-		})
+	// Buat map dari currentSizes dan product.Sizes
+	currentSizeMap := make(map[string]bool)
+	productSizeMap := make(map[string]bool)
+
+	for _, currentSize := range currentSizes {
+		currentSizeMap[currentSize.Value] = true
 	}
+
+	for _, size := range product.Sizes {
+		productSizeMap[size.Value] = true
+	}
+
+	// Slice untuk hasil
+	var resultSizes []string
+	var resultSizesDeleted []string
+	var resultSizesAdded []string
+
+	// Cek nilai yang ada di currentSizes
+	for _, currentSize := range currentSizes {
+		if !productSizeMap[currentSize.Value] {
+			resultSizesDeleted = append(resultSizesDeleted, currentSize.Value)
+		} else {
+			resultSizes = append(resultSizes, currentSize.Value)
+		}
+	}
+
+	// Cek nilai yang ada di product.Sizes
+	for _, size := range product.Sizes {
+		if !currentSizeMap[size.Value] {
+			resultSizesAdded = append(resultSizesAdded, size.Value)
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":       "success",
+		"statusCode":   200,
+		"size_already": resultSizes,
+		"size_added":   resultSizesAdded,
+		"size_deleted": resultSizesDeleted,
+	})
+
+	// if err := models.UpdateProduct(id, product); err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"status":     "server error",
+	// 		"statusCode": 500,
+	// 		"message":    fmt.Sprintf("Failed to update product with ID %d", id),
+	// 	})
+	// } else {
+	// 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	// 		"status":     "success",
+	// 		"statusCode": 200,
+	// 		"message":    fmt.Sprintf("Product with ID %d updated successfully", id),
+	// 	})
+	// }
 }
 
 func DeleteProduct(c *fiber.Ctx) error {
