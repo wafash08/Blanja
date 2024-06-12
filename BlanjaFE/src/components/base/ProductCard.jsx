@@ -9,6 +9,13 @@ import productDummy from '../../assets/product-dummy.png';
 // rate (number): rating produk
 
 export default function ProductCard({ id, image, name, brand, price, rating }) {
+	  // Rupiah format for price
+	  const rupiah = (price) => {
+		return new Intl.NumberFormat("id-ID", {
+		  style: "currency",
+		  currency: "IDR"
+		}).format(price)
+	  }
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
 			<div className='h-[136px] overflow-hidden'>
@@ -29,7 +36,7 @@ export default function ProductCard({ id, image, name, brand, price, rating }) {
 				>
 					{name}
 				</Link>
-				<p className='text-[#DB3022] font-medium'>$ {price}</p>
+				<p className='text-[#DB3022] font-medium'>{rupiah(price)}</p>
 				<p className='text-xs text-[#9B9B9B] mb-2'>{brand}</p>
 				<div className='flex items-center gap-1'>
 					<ul className='flex items-center gap-[2px]'>

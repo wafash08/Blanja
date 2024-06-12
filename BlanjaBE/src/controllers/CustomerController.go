@@ -22,6 +22,7 @@ func GetCustomers(c *fiber.Ctx) error {
 
 	resultCustomers := make([]map[string]interface{}, len(customers))
 	for i, customer := range customers {
+
 		resultCustomers[i] = map[string]interface{}{
 			"id":            customer.ID,
 			"created_at":    customer.CreatedAt,
@@ -120,6 +121,22 @@ func GetCustomerProfile(c *fiber.Ctx) error {
 		})
 	}
 
+	resultAddresses := models.SelectAddressesbyUserID(int(id))
+	addresses := make([]map[string]interface{}, len(resultAddresses))
+	for i, address := range resultAddresses {
+		addresses[i] = map[string]interface{}{
+			"id":             address.ID,
+			"created_at":     address.CreatedAt,
+			"updated_at":     address.UpdatedAt,
+			"main_address":   address.MainAddress,
+			"detail_address": address.DetailAddress,
+			"postal_code":    address.PostalCode,
+			"name":           address.Name,
+			"phone":          address.Phone,
+			"city":           address.City,
+		}
+	}
+
 	resultCustomer := map[string]interface{}{
 		"id":            customer.ID,
 		"created_at":    customer.CreatedAt,
@@ -130,8 +147,9 @@ func GetCustomerProfile(c *fiber.Ctx) error {
 		"image":         customer.Image,
 		"phone":         customer.Phone,
 		"gender":        customer.Gender,
-		"date_of_birth": customer.DateOfBirth,
+		"date_of_birth": customer.DateOfBirth.Format("2006-01-02"),
 		"role":          customer.User.Role,
+		"addresses":     addresses,
 	}
 
 	// return c.JSON(product)
