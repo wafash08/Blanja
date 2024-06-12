@@ -18,7 +18,7 @@ func SelectAllSizes() []*Size {
 	return sizes
 }
 
-func SelectSizesByProductID(id int) []*Size {
+func SelectSizesByProductId(id int) []*Size {
 	var sizes []*Size
 	configs.DB.Where("product_id = ?", id).Find(&sizes)
 	return sizes

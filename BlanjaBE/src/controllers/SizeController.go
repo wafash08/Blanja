@@ -55,7 +55,7 @@ func GetSizesByProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	sizes := models.SelectSizesByProductID(id)
+	sizes := models.SelectSizesByProductId(id)
 	resultSizes := make([]map[string]interface{}, len(sizes))
 	for i, size := range sizes {
 		resultSizes[i] = map[string]interface{}{

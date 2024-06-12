@@ -8,6 +8,7 @@ import BreadCrumb from "../../../components/base/BreadCrumb";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
 import { NewProductSection } from "../Home/Home";
+import ChooseAddressModal from "../../../components/modules/ChooseAddressModal";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -170,6 +171,14 @@ const DetailProduct = () => {
     }
   };
 
+  // Rupiah format for price
+  const rupiah = (price) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR"
+    }).format(price)
+  }
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BE_URL}product/${id}`)
@@ -262,8 +271,11 @@ const DetailProduct = () => {
     setAlertMessage("");
     setAlertType("")
   }
+  const [showChooseAddressModal, setShowChooseAddressModal] = useState(false)
+  const [defaultAddress, setDefaultAddress] = useState("")
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
+      {showChooseAddressModal && <ChooseAddressModal onClickX={()=>setShowChooseAddressModal(false)} defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} />}
       {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)}
       <div>
         <Container>
@@ -341,7 +353,7 @@ const DetailProduct = () => {
 
           {/* Price */}
           <p className="text-[16px] font-medium text-[#9B9B9B] mt-4">Price</p>
-          <p className="font-bold text-[33px] text-[#222222]">$ {price}</p>
+          <p className="font-bold text-[33px] text-[#222222]">{rupiah(price)}</p>
           {/* Price */}
 
           {/* Colors */}
@@ -449,6 +461,7 @@ const DetailProduct = () => {
             <div className="w-[343px]">
               <Button>Buy Now</Button>
             </div>
+            <button onClick={()=>setShowChooseAddressModal(true)} className="border border-[#9B9B9B] rounded-[24px] text-[14px] font-metropolis font-medium text-[#9B9B9B] px-3">Choose another address</button>
           </div>
         </div>
         {/* Detail Product section */}

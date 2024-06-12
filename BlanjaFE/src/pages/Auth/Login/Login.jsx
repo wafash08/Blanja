@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../../../components/base/Button";
 import AlertCard from "../../../components/base/AlertCard";
+import BlanjaLogo from "../../../assets/blanja-logo.png"
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -76,7 +77,7 @@ const Login = () => {
       )}
       <div className="w-full flex justify-center mb-10">
         <img
-          src="./src/assets/blanja-logo.png"
+          src={BlanjaLogo}
           alt="blanja-image"
           className="w-[135px] h-[50px]"
         />

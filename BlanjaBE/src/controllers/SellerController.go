@@ -199,6 +199,7 @@ func GetSellerProfile(c *fiber.Ctx) error {
 			"postal_code":    address.PostalCode,
 			"name":           address.Name,
 			"phone":          address.Phone,
+			"primary":        address.Primary,
 			"city":           address.City,
 		}
 	}
