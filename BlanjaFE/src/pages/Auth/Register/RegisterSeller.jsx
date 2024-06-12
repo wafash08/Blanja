@@ -34,7 +34,7 @@ const RegisterSeller = () => {
         email: form.email,
         password: form.password,
         phone: form.phone,
-        role: role
+        role: "seller"
       })
       .then((res) => {
         console.log(res);

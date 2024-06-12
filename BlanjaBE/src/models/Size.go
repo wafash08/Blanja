@@ -18,6 +18,12 @@ func SelectAllSizes() []*Size {
 	return sizes
 }
 
+func SelectSizesByProductId(id int) []*Size {
+	var sizes []*Size
+	configs.DB.Where("product_id = ?", id).Find(&sizes)
+	return sizes
+}
+
 func CreateSizeProduct(size *Size) error {
 	result := configs.DB.Create(&size)
 	return result.Error

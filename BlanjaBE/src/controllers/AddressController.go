@@ -10,15 +10,6 @@ import (
 )
 
 func GetAddresses(c *fiber.Ctx) error {
-	// auth := helpers.UserLocals(c)
-	// if role := auth["role"].(string); role != "customer" {
-	// 	return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-	// 		"status":     "forbidden",
-	// 		"statusCode": 403,
-	// 		"message":    "Incorrect role",
-	// 	})
-	// }
-
 	addresses := models.SelectAllAddresses()
 	resultAddresses := make([]map[string]interface{}, len(addresses))
 	for i, address := range addresses {
@@ -32,6 +23,50 @@ func GetAddresses(c *fiber.Ctx) error {
 			"user_id":        address.User.ID,
 			"email":          address.User.Email,
 			"phone":          address.Phone,
+			"primary":        address.Primary,
+			"city":           address.City,
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"data":       resultAddresses,
+	})
+}
+
+func GetAddressesByUserID(c *fiber.Ctx) error {
+	userId, err := middlewares.JWTAuthorize(c, "")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
+		})
+	}
+
+	addresses := models.SelectAddressesbyUserID(int(userId))
+	resultAddresses := make([]map[string]interface{}, len(addresses))
+	for i, address := range addresses {
+		resultAddresses[i] = map[string]interface{}{
+			"id":             address.ID,
+			"created_at":     address.CreatedAt,
+			"updated_at":     address.UpdatedAt,
+			"main_address":   address.MainAddress,
+			"detail_address": address.DetailAddress,
+			"name":           address.Name,
+			"user_id":        address.User.ID,
+			"email":          address.User.Email,
+			"phone":          address.Phone,
+			"primary":        address.Primary,
 			"city":           address.City,
 		}
 	}
@@ -44,6 +79,23 @@ func GetAddresses(c *fiber.Ctx) error {
 }
 
 func CreateAddress(c *fiber.Ctx) error {
+	userId, err := middlewares.JWTAuthorize(c, "")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
+		})
+	}
+
 	var newAddress models.Address
 	if err := c.BodyParser(&newAddress); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -52,6 +104,7 @@ func CreateAddress(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
+	newAddress.UserID = uint(userId)
 
 	address := middlewares.XSSMiddleware(&newAddress).(*models.Address)
 
@@ -80,6 +133,23 @@ func CreateAddress(c *fiber.Ctx) error {
 }
 
 func UpdateAddress(c *fiber.Ctx) error {
+	userId, err := middlewares.JWTAuthorize(c, "")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
+		})
+	}
+
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -106,6 +176,7 @@ func UpdateAddress(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
+	updatedAddress.UserID = uint(userId)
 
 	address := middlewares.XSSMiddleware(&updatedAddress).(*models.Address)
 
@@ -116,6 +187,16 @@ func UpdateAddress(c *fiber.Ctx) error {
 			"message":    "There are bad request or validation",
 			"errors":     errors,
 		})
+	}
+
+	if address.Primary == "on" {
+		if err := models.SetOtherAddressesPrimaryOff(address.UserID, uint(id)); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to update other addresses",
+			})
+		}
 	}
 
 	if err := models.UpdateAddress(id, address); err != nil {
