@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import ChooseAddress from '../../../components/modules/ChooseAddress';
 
 export default function AddressPage() {
@@ -12,9 +12,7 @@ export default function AddressPage() {
 		refDialog.current?.close();
 	};
 
-	const [defaultAddress, setDefaultAddress] = useState("")
-
 	return (
-		<ChooseAddress defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} />
+		<ChooseAddress />
 	);
 }
