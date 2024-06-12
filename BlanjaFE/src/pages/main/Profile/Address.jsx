@@ -48,7 +48,7 @@ export default function AddressPage() {
 								height='85'
 								rx='7.5'
 								stroke='currentColor'
-								stroke-dasharray='6 6'
+								strokeDasharray='6 6'
 								className='transition-colors group-hover:text-[#222]'
 							/>
 						</svg>

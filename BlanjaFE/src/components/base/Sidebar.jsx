@@ -1,26 +1,84 @@
 import { Link, useLocation } from 'react-router-dom';
 import avatarImage from '../../assets/empty-profile.jpg';
-import { AccountIcon, AddressIcon, OrderIcon } from './Icons';
+import {
+	AccountIcon,
+	AddressIcon,
+	CartIcon,
+	HomeIcon,
+	OrderIcon,
+	PackageIcon,
+} from './Icons';
 import clsx from 'clsx';
+import { getRoleFromLocalStorage } from '../../utils';
 
-const links = [
+const LINKS_CUSTOMER = [
 	{
 		label: 'My account',
 		to: 'edit',
 		icon: <AccountIcon />,
 		color: '#456BF3',
+		withDropdown: false,
 	},
 	{
 		label: 'Shipping Address',
 		to: 'address',
 		icon: <AddressIcon />,
 		color: '#F36F45',
+		withDropdown: false,
 	},
 	{
 		label: 'My Order',
 		to: 'order',
 		icon: <OrderIcon />,
 		color: '#F3456F',
+		withDropdown: false,
+	},
+];
+
+const LINKS_SELLER = [
+	{
+		label: 'Store',
+		items: [
+			{
+				label: 'Store Profile',
+				to: 'edit',
+			},
+		],
+		icon: <HomeIcon />,
+		color: '#456BF3',
+		withDropdown: true,
+	},
+	{
+		label: 'Product',
+		items: [
+			{
+				label: 'My Products',
+				to: 'products',
+			},
+			{
+				label: 'Selling Products',
+				to: 'selling-products',
+			},
+		],
+		icon: <PackageIcon />,
+		color: '#456BF3',
+		withDropdown: true,
+	},
+	{
+		label: 'Order',
+		items: [
+			{
+				label: 'My Order',
+				to: 'order?category=all',
+			},
+			{
+				label: 'Order Cancel',
+				to: 'order?category=canceled',
+			},
+		],
+		icon: <CartIcon className='w-4 h-4' />,
+		color: '#F3456F',
+		withDropdown: true,
 	},
 ];
 
@@ -28,6 +86,13 @@ export default function Sidebar() {
 	const { pathname } = useLocation();
 	const paths = pathname.split('/');
 	const currentPath = paths[2] || 'edit';
+	const role = getRoleFromLocalStorage();
+	const links = role
+		? role === 'customer'
+			? LINKS_CUSTOMER
+			: LINKS_SELLER
+		: LINKS_CUSTOMER;
+
 	return (
 		<aside className='w-full max-w-64 space-y-16 sticky top-0 px-4'>
 			<section className='flex items-center gap-4'>
@@ -71,31 +136,115 @@ export default function Sidebar() {
 			</section>
 			<nav>
 				<ul className='space-y-5'>
-					{links.map(({ color, icon, label, to }) => {
+					{links.map(({ color, icon, label, to, withDropdown, items }) => {
 						const active = to === currentPath;
+						if (withDropdown) {
+							return (
+								<SidebarItemWithDropdown
+									key={label}
+									currentPath={currentPath}
+									color={color}
+									icon={icon}
+									items={items}
+									label={label}
+								/>
+							);
+						} else {
+							return (
+								<SidebarItem
+									key={label}
+									active={active}
+									color={color}
+									label={label}
+									to={to}
+									icon={icon}
+								/>
+							);
+						}
+					})}
+				</ul>
+			</nav>
+		</aside>
+	);
+}
+
+function SidebarItem({ label, to, color, active, icon }) {
+	return (
+		<li key={label}>
+			<Link to={to} className='flex items-center gap-[14px]'>
+				<div
+					style={{ backgroundColor: color }}
+					className='w-8 aspect-square rounded-full flex items-center justify-center'
+				>
+					{icon}
+				</div>
+				<span
+					className={clsx(
+						'text-sm font-medium',
+						active ? 'text-[#222222]' : 'text-[#9B9B9B]'
+					)}
+				>
+					{label}
+				</span>
+			</Link>
+		</li>
+	);
+}
+
+function SidebarItemWithDropdown({ label, color, icon, items, currentPath }) {
+	const active = false;
+	return (
+		<li className='cursor-pointer'>
+			<details name='link' className='dropdown'>
+				<summary className='flex items-center gap-[14px] list-none relative'>
+					<div
+						style={{ backgroundColor: color }}
+						className='w-8 aspect-square rounded-full flex items-center justify-center text-white'
+					>
+						{icon}
+					</div>
+					<span
+						className={clsx(
+							'text-sm',
+							active ? 'text-[#222222]' : 'text-[#9B9B9B]'
+						)}
+					>
+						{label}
+					</span>
+
+					<svg
+						width='10'
+						height='7'
+						viewBox='0 0 10 7'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'
+						aria-hidden
+						className='dropdown-arrow text-[#9B9B9B] transition-all duration-300 ml-auto mr-0 lg:mr-5'
+					>
+						<path
+							d='M1.175 0.158325L5 3.97499L8.825 0.158325L10 1.33333L5 6.33333L0 1.33333L1.175 0.158325Z'
+							fill='currentColor'
+						/>
+					</svg>
+				</summary>
+				<ul className='ml-[46px] mt-3 space-y-3'>
+					{items.map(({ label, to }) => {
 						return (
-							<li key={label}>
-								<Link to={to} className='flex items-center gap-[14px]'>
-									<div
-										style={{ backgroundColor: color }}
-										className='w-8 aspect-square rounded-full flex items-center justify-center'
-									>
-										{icon}
-									</div>
-									<span
-										className={clsx(
-											'text-sm font-medium',
-											active ? 'text-[#222222]' : 'text-[#9B9B9B]'
-										)}
-									>
-										{label}
-									</span>
+							<li key={to}>
+								<Link
+									to={to}
+									className={clsx(
+										'flex text-sm',
+										active ? 'text-[#222222]' : 'text-[#9B9B9B]'
+									)}
+								>
+									{label}
 								</Link>
 							</li>
 						);
 					})}
 				</ul>
-			</nav>
-		</aside>
+			</details>
+		</li>
 	);
 }

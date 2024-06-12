@@ -23,14 +23,14 @@
 	position: relative;
 	display: inline-block;
 	cursor: pointer;
-  }
-  
-  .checkbox:checked {
-	background-color: #DB3022;
+}
+
+.checkbox:checked {
+	background-color: #db3022;
 	border: none;
-  }
-  
-  .checkbox:checked::before {
+}
+
+.checkbox:checked::before {
 	content: '✔';
 	position: absolute;
 	top: 50%;
@@ -38,4 +38,9 @@
 	transform: translate(-50%, -50%);
 	color: white;
 	font-size: 12px; /* Sesuaikan ukuran font sesuai kebutuhan */
-  }
+}
+
+.dropdown[open] > summary > .dropdown-arrow {
+	transform: rotate(180deg);
+	color: #222;
+}
