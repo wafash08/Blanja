@@ -12,9 +12,12 @@ import {
   ProductListSkeleton,
 } from "../../../components/base/Skeleton";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import CartSummary from "../../../components/base/ShoppingSummary";
 
 const Cart = () => {
   const { data: cartsProduct, status } = useCarts();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [cartId, setCartId] = useState(null);
   let cartList = null;
@@ -140,6 +143,9 @@ const Cart = () => {
       console.error("Error updating product quantity:", error);
     }
   };
+  const handleClick = () => {
+    navigate('/checkout')
+  }
   const total =
     products && products.length > 0
       ? products.reduce(
@@ -183,7 +189,7 @@ const Cart = () => {
           </div>
 
           <div className=" w-2/5 max-md:w-full">
-            <ShoppingSummary total={total} />
+            <CartSummary total={total} handleClick={handleClick} />
           </div>
         </div>
       </section>

@@ -8,15 +8,16 @@ import (
 
 type Cart struct {
 	gorm.Model
-	ProductID uint      `json:"product_id" validate:"required"`
-	Quantity  uint      `json:"quantity"`
-	SellerID  uint      `json:"seller_id" validate:"required"`
-	UserID    uint      `json:"user_id" validate:"required"`
+	ProductID uint `json:"product_id" validate:"required"`
+	Quantity  uint `json:"quantity"`
+	SellerID  uint `json:"seller_id" validate:"required"`
+	UserID    uint `json:"user_id" validate:"required"`
 	// ColorID   uint      `json:"color_id"`
 	// SizeID    uint      `json:"size_id"`
-	Seller    Seller    `gorm:"foreignKey:SellerID" validate:"-"`
-	Products  []Product `gorm:"many2many:cart_products;" json:"products"`
-	User      User      `gorm:"foreignKey:UserID" validate:"-"`
+	Seller      Seller    `gorm:"foreignKey:SellerID" validate:"-"`
+	Products    []Product `gorm:"many2many:cart_products;" json:"products"`
+	User        User      `gorm:"foreignKey:UserID" validate:"-"`
+	Checkout_ID uint      `json:"checkout_id"`
 	// Color     Color		`gorm:"foreignKey:ColorID" validate:"required"`
 	// Size      Size      `gorm:"foreignKey:SizeID" validate:"required"`
 }
