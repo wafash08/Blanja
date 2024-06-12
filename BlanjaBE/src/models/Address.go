@@ -24,6 +24,12 @@ func SelectAllAddresses() []*Address {
 	return addresses
 }
 
+func SelectAddressesbyUserID(user_id int) []*Address {
+	var addresses []*Address
+	configs.DB.Preload("User").Where("user_id = ?", user_id).Find(&addresses)
+	return addresses
+}
+
 func SelectAddressbyId(id int) *Address {
 	var address Address
 	configs.DB.Preload("User").First(&address, "id = ?", id)

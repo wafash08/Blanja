@@ -46,6 +46,7 @@ func Router(app *fiber.App) {
 
 	// Address Routes
 	app.Get("/addresses", middlewares.JWTMiddleware(), controllers.GetAddresses)
+	app.Get("/addresses/profile", middlewares.JWTMiddleware(), controllers.GetAddressesByUserID)
 	app.Post("/address", middlewares.JWTMiddleware(), controllers.CreateAddress)
 	app.Put("/address/:id", middlewares.JWTMiddleware(), controllers.UpdateAddress)
 	app.Delete("/address/:id", middlewares.JWTMiddleware(), controllers.DeleteAddress)
