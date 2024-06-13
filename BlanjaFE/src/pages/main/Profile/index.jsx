@@ -41,7 +41,7 @@ export default function ProfilePage() {
 				<Sidebar />
 			</div>
 
-			<div className='bg-[#F5F5F5] col-span-full md:col-span-9 py-6 lg:py-12 px-4 md:px-6 lg:px-10'>
+			<div className='bg-[#F5F5F5] col-span-full md:col-span-9 py-6 lg:py-12 px-4 md:px-6 lg:px-10 font-metropolis'>
 				<Outlet />
 			</div>
 		</section>

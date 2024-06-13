@@ -7,7 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CloseMark from "@heroicons/react/24/solid/XMarkIcon";
 
-const SellingProducts = () => {
+const UpdateSellingProducts = ({id}) => {
     const [formProduct, setFormProduct] = useState({
         name: "",
         price: 0,
@@ -27,16 +27,37 @@ const SellingProducts = () => {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`${import.meta.env.VITE_BE_URL}categories`)
-        .then((res) => {
-            console.log(res.data.data);
-            setListCategories(res.data.data)
+
+        axios.all([
+            axios.get(`${import.meta.env.VITE_BE_URL}categories`),
+            axios.get(`${import.meta.env.VITE_BE_URL}product/${id}`)    
+        ])
+        .then(axios.spread(function (categories, product) {
+            console.log("Categories: \n", categories.data.data);
+            setListCategories(categories.data.data)
+            console.log("Product: \n", product.data.data);
+            setFormProduct({
+                ...product.data.data,
+                description: product.data.data.desc
+            })   
+
             setLoading(false)
-        })
+        }))
         .catch((err) => {
             console.log(err.response);
             setLoading(false)
         })
+
+        // axios.get(`${import.meta.env.VITE_BE_URL}categories`)
+        // .then((res) => {
+        //     console.log(res.data.data);
+        //     setListCategories(res.data.data)
+        //     setLoading(false)
+        // })
+        // .catch((err) => {
+        //     console.log(err.response);
+        //     setLoading(false)
+        // })
     }, [])
 
     const handleChangeInput = (e) => {
@@ -122,9 +143,9 @@ const SellingProducts = () => {
         })
     }
     
-    const handleAddProduct = () => {
+    const handleUpdateProduct = () => {
         console.log(formProduct);
-        axios.post(`${import.meta.env.VITE_BE_URL}product`, {
+        axios.put(`${import.meta.env.VITE_BE_URL}product/${id}`, {
             name: formProduct.name,
             price: parseInt(formProduct.price),
             stock: parseInt(formProduct.stock),
@@ -177,7 +198,7 @@ const SellingProducts = () => {
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
             <div className='w-[348px]'>
-                <InputField type='text' name="name" label="Name of goods" onChange={handleChangeInput} />
+                <InputField type='text' name="name" label="Name of goods" value={formProduct.name} onChange={handleChangeInput} />
             </div>
         </div>
         {/* Inventory */}
@@ -189,20 +210,20 @@ const SellingProducts = () => {
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
             <div className='w-[348px] mb-8'>
-                <InputField type='text' name="price" label="Unit price" onChange={handleChangeInput} />
+                <InputField type='text' name="price" label="Unit price" value={formProduct.price} onChange={handleChangeInput} />
             </div>
             <div className='w-[348px] mb-10'>
-                <InputField type='text' name="stock" label="Stock" placeholder="Ex: 12" onChange={handleChangeInput} />
+                <InputField type='text' name="stock" label="Stock" placeholder="Ex: 12" value={formProduct.stock} onChange={handleChangeInput} />
             </div>
             <div className='w-[348px] mb-10'>
                 <fieldset className='border-none flex'>
                     <legend className='font-metropolis font-medium text-[14px] text-[#9B9B9B] mb-5'>Condition</legend>
                     <label className='font-normal font-metropolis text-[14px] text-[#9B9B9B] flex gap-3 items-center mr-7'>
-                        <input type="radio" name="condition" onClick={handleChangeInput} id='new' value="new" />
+                        <input type="radio" name="condition" onClick={handleChangeInput} id='new' value="new" defaultChecked={formProduct.condition === "new" ? true : false} />
                         New
                     </label>
                     <label className='font-normal font-metropolis text-[14px] text-[#9B9B9B] flex gap-3 items-center'>
-                        <input type="radio" name="condition" onClick={handleChangeInput} id='used' value="used" />
+                        <input type="radio" name="condition" onClick={handleChangeInput} id='used' value="used" defaultChecked={formProduct.condition === "used" ? true : false } />
                         Used
                     </label>
                 </fieldset>
@@ -300,14 +321,14 @@ const SellingProducts = () => {
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px] flex justify-center'>
-            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' onChange={handleChangeInput}></textarea>
+            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' value={formProduct.description} onChange={handleChangeInput}></textarea>
         </div>
         {/* Description */}
 
         {/* Button submit */}
         <div className='w-full h-auto flex justify-end mt-10'>
             <div className='w-[128px]'>
-                <Button onClick={handleAddProduct}>Jual</Button>
+                <Button onClick={handleUpdateProduct}>Update</Button>
             </div>
         </div>
         {/* Button submit */}
@@ -315,4 +336,4 @@ const SellingProducts = () => {
   )
 }
 
-export default SellingProducts
+export default UpdateSellingProducts

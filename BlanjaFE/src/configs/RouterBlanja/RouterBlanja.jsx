@@ -14,8 +14,10 @@ import ProfilePage from '../../pages/main/Profile';
 import EditProfile from '../../pages/main/Profile/Edit';
 import AddressPage from '../../pages/main/Profile/Address';
 import OrderPage from '../../pages/main/Profile/Order';
+import SellingProductsPage from '../../pages/main/Profile/SellingProductsPage';
 import Checkout from '../../pages/main/Checkout/Checkout';
 import MyProducts from '../../pages/main/Profile/MyProduct';
+import UpdateSellingProductsPage from '../../pages/main/Profile/UpdateSellingProductsPage';
 
 const RouterBlanja = () => {
 	return (
@@ -39,10 +41,8 @@ const RouterBlanja = () => {
 						<Route path='address' element={<AddressPage />} />
 						<Route path='order' element={<OrderPage />} />
 						<Route path='products' element={<MyProducts />} />
-						<Route
-							path='selling-products'
-							element={<h1>Selling products page</h1>}
-						/>
+						<Route path='selling-products' element={<SellingProductsPage />} />
+						<Route path='editproducts/:id' element={<UpdateSellingProductsPage />} />
 					</Route>
 				</Route>
 			</Routes>

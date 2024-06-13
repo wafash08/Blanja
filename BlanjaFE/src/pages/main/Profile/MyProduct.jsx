@@ -120,8 +120,8 @@ export default function MyProducts() {
               <tbody>
                 {filteredProducts.map((product, index) => (
                   <tr key={index}>
-                    <td className="p-4 border-t border-gray-200 text-sm">
-                      {product.name}
+                    <td className="p-4 border-t border-gray-200 text-sm hover:underline">
+                      <Link to={`/profile/editproducts/${product.id}`}>{product.name}</Link>
                     </td>
                     <td className="p-4 border-t border-gray-200 text-sm text-center">
                       {formatRupiah(product.price)}

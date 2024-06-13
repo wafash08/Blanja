@@ -44,10 +44,25 @@ func CreateAddress(address *Address) error {
 }
 
 func SetOtherAddressesPrimaryOff(userID uint, currentAddressID uint) error {
-	result := configs.DB.Model(&Address{}).
-		Where("user_id = ? AND id != ?", userID, currentAddressID).
-		Update("primary", "off")
+	query := configs.DB.Model(&Address{}).Where("user_id = ?", userID)
+
+	if currentAddressID != 0 {
+		query = query.Where("id != ?", currentAddressID)
+	}
+
+	result := query.Update("primary", "off")
 	return result.Error
+}
+
+func SetPrimaryOnForFirstAddress(userID uint) error {
+	var address Address
+	result := configs.DB.Where("user_id = ?", userID).First(&address)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	address.Primary = "on"
+	return configs.DB.Save(&address).Error
 }
 
 func UpdateAddress(id int, updatedAddress *Address) error {

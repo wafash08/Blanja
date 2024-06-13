@@ -117,6 +117,16 @@ func CreateAddress(c *fiber.Ctx) error {
 		})
 	}
 
+	if address.Primary == "on" {
+		if err := models.SetOtherAddressesPrimaryOff(address.UserID, 0); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to update other addresses",
+			})
+		}
+	}
+
 	if err := models.CreateAddress(address); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
@@ -205,13 +215,34 @@ func UpdateAddress(c *fiber.Ctx) error {
 			"statusCode": 500,
 			"message":    "Failed to update address",
 		})
-	} else {
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"status":     "success",
-			"statusCode": 200,
-			"message":    "Address updated successfully",
-		})
 	}
+
+	addresses := models.SelectAddressesbyUserID(int(userId))
+	if len(addresses) > 0 {
+		primaryExists := false
+		for _, addr := range addresses {
+			if addr.Primary == "on" {
+				primaryExists = true
+				break
+			}
+		}
+
+		if !primaryExists {
+			if err := models.SetPrimaryOnForFirstAddress(address.UserID); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"status":     "server error",
+					"statusCode": 500,
+					"message":    "Failed to set a primary address",
+				})
+			}
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"message":    "Address updated successfully",
+	})
 }
 
 func DeleteAddress(c *fiber.Ctx) error {
@@ -233,17 +264,40 @@ func DeleteAddress(c *fiber.Ctx) error {
 		})
 	}
 
+	userId := address.UserID
+
 	if err := models.DeleteAddress(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
 			"message":    "Failed to delete address",
 		})
-	} else {
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"status":     "success",
-			"statusCode": 200,
-			"message":    "Address deleted successfully",
-		})
 	}
+
+	addresses := models.SelectAddressesbyUserID(int(userId))
+	if len(addresses) > 0 {
+		primaryExists := false
+		for _, addr := range addresses {
+			if addr.Primary == "on" {
+				primaryExists = true
+				break
+			}
+		}
+
+		if !primaryExists {
+			if err := models.SetPrimaryOnForFirstAddress(userId); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"status":     "server error",
+					"statusCode": 500,
+					"message":    "Failed to set a primary address",
+				})
+			}
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":     "success",
+		"statusCode": 200,
+		"message":    "Address deleted successfully",
+	})
 }
