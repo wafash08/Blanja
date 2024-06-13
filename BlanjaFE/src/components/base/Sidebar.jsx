@@ -10,6 +10,7 @@ import {
 } from './Icons';
 import clsx from 'clsx';
 import { getRoleFromLocalStorage } from '../../utils';
+import { useProfile } from '../../hooks';
 
 const LINKS_CUSTOMER = [
 	{
@@ -87,6 +88,7 @@ export default function Sidebar() {
 	const paths = pathname.split('/');
 	const currentPath = paths[2] || 'edit';
 	const role = getRoleFromLocalStorage();
+	const { data: profile, status } = useProfile(role);
 	const links = role
 		? role === 'customer'
 			? LINKS_CUSTOMER
@@ -95,19 +97,19 @@ export default function Sidebar() {
 
 	return (
 		<aside className='w-full max-w-64 space-y-16 sticky top-0 px-4'>
-			<section className='flex items-center gap-4'>
+			<section className='flex flex-col lg:flex-row items-center gap-4'>
 				<div className='w-[60px] shrink-0 aspect-square rounded-full overflow-hidden'>
 					<img
-						src={avatarImage}
-						alt='Johanes Mikael'
+						src={profile.image ? profile.image : avatarImage}
+						alt={profile.name}
 						width={60}
 						height={60}
 						className='w-full h-full'
 					/>
 				</div>
-				<div className='space-y-1'>
+				<div className='space-y-1 text-center md:text-left'>
 					<h3 className='text-[#222222] font-semibold text-wrap'>
-						Johanes Mikael
+						{profile.name}
 					</h3>
 					<Link
 						to='edit'

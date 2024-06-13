@@ -9,7 +9,7 @@ export default function Layout() {
 	console.log('token >> ', token);
 	return (
 		<>
-			<header className='fixed top-0 left-0 w-full h-[100px] z-50 flex items-center bg-white shadow-[0_6px_40px_0_#ADADAD40]'>
+			<header className='fixed top-0 left-0 w-full h-[100px] z-50 flex items-center bg-white shadow-[0_6px_40px_0_#ADADAD40] font-metropolis'>
 				<Container>
 					<Navbar hasLoggedIn={token !== null} />
 				</Container>
