@@ -32,3 +32,31 @@ export async function getSellerProfile(token) {
 		throw new Error(error);
 	}
 }
+
+export async function updateProfileCustomer(token, profile) {
+	try {
+		const result = await axios.put(customerProfileUrl, profile, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return result.data;
+	} catch (error) {
+		console.log('error while updating profile');
+		throw error;
+	}
+}
+
+export async function updateProfileSeller(token, profile) {
+	try {
+		const result = await axios.put(sellerProfileUrl, profile, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return result.data;
+	} catch (error) {
+		console.log('error while updating profile');
+		throw error;
+	}
+}

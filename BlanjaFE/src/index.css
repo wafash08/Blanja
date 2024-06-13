@@ -1,13 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
 	@font-face {
 		font-family: 'Metropolis';
 		src: url(../fonts/Metropolis-Regular.woff) format('woff');
 	}
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 .active {
 	background-color: #db3022;

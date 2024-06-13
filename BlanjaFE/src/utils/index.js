@@ -49,7 +49,7 @@ const MONTHS = [
 ];
 
 export function createOptionsOfMonths() {
-	return MONTHS.map((month, idx) => ({ label: month, value: idx }));
+	return MONTHS.map((month, idx) => ({ label: month, value: idx + 1 }));
 }
 
 function generateRangeOfYears() {

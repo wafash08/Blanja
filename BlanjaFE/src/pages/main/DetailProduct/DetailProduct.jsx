@@ -297,13 +297,13 @@ const DetailProduct = () => {
               <img
                 src={imageURL}
                 alt="product-image"
-                className="w-[367px] h-[378px] rounded-xl"
+                className="w-[367px] h-[378px] rounded-xl object-cover"
               />
             </div>
             <div className="flex gap-[10.5px] overflow-x-auto mt-4">
               {imageList.map((value, index) => (
                 <img
-                  className="w-[65px] h-[65px] rounded-md hover:cursor-pointer"
+                  className="w-[65px] h-[65px] rounded-md hover:cursor-pointer object-cover"
                   key={index}
                   src={value}
                   alt="product-image"
@@ -478,7 +478,7 @@ const DetailProduct = () => {
         <p className="text-[#222222] text-[20px] font-semibold mt-10">
           Description
         </p>
-        <p className="text-[#9B9B9B] text-[14px] font-medium mt-3 leading-6">
+        <p className="text-[#9B9B9B] text-[14px] font-medium mt-3 leading-6 whitespace-pre-wrap">
           {description}
         </p>
 
