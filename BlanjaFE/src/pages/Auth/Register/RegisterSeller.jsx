@@ -1,3 +1,4 @@
+// BlanjaWebsiteProject/BlanjaFE/src/pages/Auth/Register/RegisterSeller.jsx
 import React, { useState } from "react";
 import InputField from "../../../components/base/InputField";
 import Button from "../../../components/base/Button";
@@ -7,10 +8,10 @@ import AlertCard from "../../../components/base/AlertCard";
 
 const RegisterSeller = () => {
   const navigate = useNavigate();
-  const {pathname} = useLocation()
-  const pathnameArray = pathname.split("/")
-  const role = pathnameArray[2]
-  const [validation, setValidation] = useState([])
+  const { pathname } = useLocation();
+  const pathnameArray = pathname.split("/");
+  const role = pathnameArray[2];
+  const [validation, setValidation] = useState([]);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [isSent, setIsSent] = useState(false);
@@ -18,14 +19,16 @@ const RegisterSeller = () => {
     name: "",
     email: "",
     phone: "",
-    password: ""
+    password: "",
   });
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleSubmit = () => {
     console.log(role);
     axios
@@ -34,7 +37,7 @@ const RegisterSeller = () => {
         email: form.email,
         password: form.password,
         phone: form.phone,
-        role: "seller"
+        role: "seller",
       })
       .then((res) => {
         console.log(res);
@@ -44,40 +47,41 @@ const RegisterSeller = () => {
       })
       .catch((err) => {
         console.log(err.response);
-        setValidation(err.response.data.errors)
+        setValidation(err.response.data.errors);
         setAlertMessage(err.response.data.message);
         setAlertType("ERROR");
       });
-    };
-    
-    const afterSubmission = (e) => {
-      e.preventDefault();
-    };
-    const handleClickAlert = () => {
-      setAlertMessage("");
-      setAlertType("");
-      if (isSent === true) {
+  };
+
+  const afterSubmission = (e) => {
+    e.preventDefault();
+  };
+
+  const handleClickAlert = () => {
+    setAlertMessage("");
+    setAlertType("");
+    if (isSent === true) {
       navigate(`/login`);
     }
   };
 
   return (
-    <form onSubmit={afterSubmission}>
-            {alertMessage && (
+    <form onSubmit={afterSubmission} className="w-full max-w-md mx-auto p-4 sm:p-6 md:p-8">
+      {alertMessage && (
         <AlertCard
           alertMessage={alertMessage}
           alertType={alertType}
           onClick={handleClickAlert}
         />
       )}
-      <div className="w-[400px] h-auto flex flex-col justify-start my-5 gap-6">
+      <div className="flex flex-col justify-start my-5 gap-6">
         <InputField
           type="text"
           name="name"
           onChange={handleChange}
           value={form.name}
           placeholder="Store Name"
-          className={"w-full"}
+          className="w-full"
           validation={validation}
         />
         <InputField
@@ -86,7 +90,7 @@ const RegisterSeller = () => {
           onChange={handleChange}
           value={form.email}
           placeholder="Email"
-          className={"w-full"}
+          className="w-full"
           validation={validation}
         />
         <InputField
@@ -95,7 +99,7 @@ const RegisterSeller = () => {
           onChange={handleChange}
           value={form.phone}
           placeholder="Phone Number"
-          className={"w-full"}
+          className="w-full"
           validation={validation}
         />
         <InputField
@@ -104,23 +108,19 @@ const RegisterSeller = () => {
           onChange={handleChange}
           value={form.password}
           placeholder="Password"
-          className={"w-full"}
+          className="w-full"
           validation={validation}
         />
       </div>
 
-      <div className="w-[400px] h-auto mb-8 mt-8">
-        <Button onClick={handleSubmit}>Register</Button>
+      <div className="w-full mb-8 mt-8">
+        <Button onClick={handleSubmit} className="w-full">Register</Button>
       </div>
 
-      <div className="w-[400px] h-auto">
+      <div className="w-full">
         <p className="text-[14px] text-[#222222] font-[400] text-center mb-8">
-          Already have an account?
-          <Link
-            to="/login"
-            className="text-[14px] text-[#DB3022] font-[400] text-center"
-          >
-            {" "}
+          Already have an account?{" "}
+          <Link to="/login" className="text-[#DB3022]">
             Login here
           </Link>
         </p>
