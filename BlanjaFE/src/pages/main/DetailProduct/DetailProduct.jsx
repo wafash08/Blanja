@@ -478,7 +478,7 @@ const DetailProduct = () => {
         <p className="text-[#222222] text-[20px] font-semibold mt-10">
           Description
         </p>
-        <p className="text-[#9B9B9B] text-[14px] font-medium mt-3 leading-6">
+        <p className="text-[#9B9B9B] text-[14px] font-medium mt-3 leading-6 whitespace-pre-wrap">
           {description}
         </p>
 

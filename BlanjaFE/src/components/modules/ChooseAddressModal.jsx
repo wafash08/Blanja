@@ -57,7 +57,11 @@ const ChooseAddressModal = ({ onClickX }) => {
 		.then((res) => {
 			console.log(res.data.data);
 			setAddresses(res.data.data.addresses)
-			setDefaultAddress(res.data.data.addresses[0])
+      for (const key in res.data.data.addresses) {
+        if (res.data.data.addresses[key].primary === "on") {
+          setDefaultAddress(res.data.data.addresses[key])
+        }
+      }
 			setLoading(false)
 		})
 		.catch((err) => {
@@ -65,6 +69,25 @@ const ChooseAddressModal = ({ onClickX }) => {
 			setLoading(false)
 		})
 	}, [])
+
+  const onClickOk = (address) => {
+    axios.put(`${import.meta.env.VITE_BE_URL}address/${address.id}`, {
+      ...address,
+      primary: "on"
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data);
+      setChangeAddress(false)
+    })
+    .catch((err) => {
+      console.log(err.response);
+      setChangeAddress(false)
+    })
+  }
 
   if (loading === true) {
     return (
@@ -106,7 +129,7 @@ const ChooseAddressModal = ({ onClickX }) => {
           </p>
         </div>
         {changeAddress === true ? (
-          <ChangeDefaultAddress addresses={addresses} defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} setChangeAddress={setChangeAddress} />
+          <ChangeDefaultAddress addresses={addresses} defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} onClickOk={onClickOk} />
         ) : (
           <DefaultAddress address={defaultAddress} setChangeAddress={setChangeAddress} />
         )}
@@ -136,7 +159,7 @@ const DefaultAddress = ({address, setChangeAddress}) => {
   );
 };
 
-const ChangeDefaultAddress = ({addresses, defaultAddress, setDefaultAddress, setChangeAddress}) => {
+const ChangeDefaultAddress = ({addresses, defaultAddress, setDefaultAddress, onClickOk}) => {
   return (
     <div className="w-[100%]">
       <ul className="flex flex-col gap-4 w-[100%] items-center pb-10">
@@ -171,7 +194,7 @@ const ChangeDefaultAddress = ({addresses, defaultAddress, setDefaultAddress, set
       </ul>
 
       <div className="w-[100px] ml-auto mr-10 pb-10">
-        <Button onClick={() => setChangeAddress(false)}>Ok</Button>
+        <Button onClick={() => onClickOk(defaultAddress)}>Ok</Button>
       </div>
     </div>
   )

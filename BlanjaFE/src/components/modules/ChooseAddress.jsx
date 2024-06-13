@@ -20,7 +20,11 @@ const ChooseAddress = () => {
 		.then((res) => {
 			console.log(res.data.data);
 			setAddresses(res.data.data.addresses)
-			setDefaultAddress(res.data.data.addresses[0])
+      for (const key in res.data.data.addresses) {
+        if (res.data.data.addresses[key].primary === "on") {
+          setDefaultAddress(res.data.data.addresses[key])
+        }
+      }
 			setLoading(false)
 		})
 		.catch((err) => {
@@ -28,6 +32,25 @@ const ChooseAddress = () => {
 			setLoading(false)
 		})
 	}, [])
+
+  const onClickOk = (address) => {
+    axios.put(`${import.meta.env.VITE_BE_URL}address/${address.id}`, {
+      ...address,
+      primary: "on"
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then((res) => {
+      console.log(res.data.data);
+      setChangeAddress(false)
+    })
+    .catch((err) => {
+      console.log(err.response);
+      setChangeAddress(false)
+    })
+  }
   // const listAddresses = [
   //   {
   //     id: "4982952242",
@@ -91,7 +114,7 @@ const ChooseAddress = () => {
           addresses={addresses}
           defaultAddress={defaultAddress}
           setDefaultAddress={setDefaultAddress}
-          setChangeAddress={setChangeAddress}
+          onClickOk={onClickOk}
         />
       ) : (
         <DefaultAddress
@@ -128,7 +151,7 @@ const ChangeDefaultAddress = ({
   addresses,
   defaultAddress,
   setDefaultAddress,
-  setChangeAddress,
+  onClickOk
 }) => {
   console.log("Addresses: \n", addresses);
   return (
@@ -165,7 +188,7 @@ const ChangeDefaultAddress = ({
       </ul>
 
       <div className="w-[100px] ml-auto mr-10 pb-10">
-        <Button onClick={() => setChangeAddress(false)}>Ok</Button>
+        <Button onClick={() => onClickOk(defaultAddress)}>Ok</Button>
       </div>
     </div>
   );
