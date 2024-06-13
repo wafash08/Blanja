@@ -8,7 +8,6 @@ import BreadCrumb from "../../../components/base/BreadCrumb";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
 import { NewProductSection } from "../Home/Home";
-import ChooseAddressModal from "../../../components/modules/ChooseAddressModal";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -271,10 +270,8 @@ const DetailProduct = () => {
     setAlertMessage("");
     setAlertType("")
   }
-  const [showChooseAddressModal, setShowChooseAddressModal] = useState(false)
   return (
     <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
-      {showChooseAddressModal && <ChooseAddressModal onClickX={()=>setShowChooseAddressModal(false)} />}
       {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)}
       <div>
         <Container>
@@ -460,7 +457,6 @@ const DetailProduct = () => {
             <div className="w-[343px]">
               <Button>Buy Now</Button>
             </div>
-            <button onClick={()=>setShowChooseAddressModal(true)} className="border border-[#9B9B9B] rounded-[24px] text-[14px] font-metropolis font-medium text-[#9B9B9B] px-3">Choose another address</button>
           </div>
         </div>
         {/* Detail Product section */}
