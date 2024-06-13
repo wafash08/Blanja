@@ -17,6 +17,7 @@ type Address struct {
 	PostalCode    string `json:"postal_code" validate:"required,numeric,max=8"`
 	Primary       string `json:"primary" validate:"required,oneof=on off"`
 	City          string `json:"city" validate:"required"`
+	Checkout_ID   uint   `json:"checkout_id"`
 }
 
 func SelectAllAddresses() []*Address {

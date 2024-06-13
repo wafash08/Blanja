@@ -3,6 +3,14 @@ import React, { useEffect, useState } from "react";
 import { getTokenFromLocalStorage } from "../../utils";
 
 const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
+  const formatRupiah = (price) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
   return (
     <div className="w-full">
       {cart.map((product, index) => (
@@ -16,14 +24,15 @@ const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
             onChange={(e) =>
               onIndividualSelect(product.id, e.target.checked)
             }
-            className="checkbox mr-2 w-5 h-5 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
+            className="checkbox mr-2 w-5 h-5 max-md:w-4 max-md:h-4 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
           />
           <div>
-            <img className="w-24 h-24" src={product.photo} />
+            <img className="w-24 h-24 max-md:w-16 max-md:h-16" src={product.photo} />
           </div>
           <div>
-            <p>{product.name}</p>
-            <p>Rp.{product.price}</p>
+            <p className="max-md:text-sm">{product.name}</p>
+            {/* <p className="max-md:text-sm">{product.colors}</p> */}
+            <p className="max-md:text-sm">{formatRupiah(product.price)}</p>
           </div>
           <div className="flex items-center">
             <button
@@ -38,7 +47,7 @@ const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
               type="text"
               value={product.quantity}
               readOnly
-              className="w-12 text-center"
+              className="w-12 max-md:w-8 text-center max-md:text-sm"
             />
             <button
               onClick={() => onProductChange(product.id, 1)}
