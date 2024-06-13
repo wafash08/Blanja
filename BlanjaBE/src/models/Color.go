@@ -28,6 +28,34 @@ func UpdateColorProduct(id int, updatedColor *Color) error {
 	return result.Error
 }
 
+func UpdateColorsProduct(productId uint, updatedColors []Color) error {
+	var existingColors []Color
+	configs.DB.Where("product_id = ?", productId).Find(&existingColors)
+
+	existingColorsMap := make(map[string]Color)
+	for _, color := range existingColors {
+		existingColorsMap[color.Value] = color
+	}
+
+	for _, color := range updatedColors {
+		if _, exists := existingColorsMap[color.Value]; !exists {
+			color.ProductID = productId
+			if err := configs.DB.Create(&color).Error; err != nil {
+				return err
+			}
+		}
+		delete(existingColorsMap, color.Value)
+	}
+
+	for _, color := range existingColorsMap {
+		if err := configs.DB.Delete(&color).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func DeleteColorProduct(id int) error {
 	result := configs.DB.Delete(&Color{}, "id = ?", id)
 	return result.Error

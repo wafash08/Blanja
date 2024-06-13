@@ -120,6 +120,26 @@ func UpdateProduct(id int, updatedProduct *Product) error {
 	return result.Error
 }
 
+func UpdateProductWithDetails(currentProduct *Product, updatedProduct *Product) error {
+	if err := configs.DB.Model(&currentProduct).Updates(updatedProduct).Error; err != nil {
+		return err
+	}
+
+	if err := UpdateImagesProduct(currentProduct.ID, updatedProduct.Images); err != nil {
+		return err
+	}
+
+	if err := UpdateColorsProduct(currentProduct.ID, updatedProduct.Colors); err != nil {
+		return err
+	}
+
+	if err := UpdateSizesProduct(currentProduct.ID, updatedProduct.Sizes); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func DeleteProduct(id int) error {
 	result := configs.DB.Delete(&Product{}, "id = ?", id)
 	return result.Error

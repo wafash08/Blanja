@@ -18,7 +18,7 @@ export default function ProductCard({ id, image, name, brand, price, rating }) {
 	  }
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
-			<div className='h-[136px] overflow-hidden'>
+			<div className='h-52 md:h-48 lg:h-[136px] overflow-hidden'>
 				<img
 					src={image ? image : productDummy}
 					alt={name}
@@ -32,7 +32,7 @@ export default function ProductCard({ id, image, name, brand, price, rating }) {
 				<Link
 					to={`/products/${id}`}
 					reloadDocument
-					className='font-medium hover:underline'
+					className='text-xl md:text-lg font-medium hover:underline'
 				>
 					{name}
 				</Link>
