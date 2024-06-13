@@ -228,7 +228,7 @@ const SellingProducts = () => {
                 </div>
                 <div className='flex flex-wrap justify-start gap-4 mt-5'>
                     {formProduct.colors.length !== 0 && formProduct.colors.map((color, index) => (
-                        <button key={index} onClick={() => handleRemoveColor(index)} style={{ "--color-product": `${color.value}` }} className={`bg-[var(--color-product)] rounded-full w-[50px] h-[50px] shadow-lg`}></button>
+                        <button key={index} onClick={() => handleRemoveColor(index)} style={{ "--color-product": `${color.value}` }} className={`group bg-[var(--color-product)] rounded-full w-[50px] h-[50px] shadow-lg`}><CloseMark className='w-full h-full rounded-full outline-none border-none opacity-0 group-hover:text-black group-hover:opacity-100 group-hover:bg-gray-400 group-hover:bg-opacity-30' /></button>
                     ))}
                 </div>
             </div>
@@ -243,7 +243,7 @@ const SellingProducts = () => {
                 </div>
                 <div className='flex flex-wrap justify-start gap-4 mt-5'>
                     {formProduct.sizes.length !== 0 && formProduct.sizes.map((size, index) => (
-                        <button key={index} onClick={() => handleRemoveSize(index)} className={'h-[30px] w-[70px] outline outline-1 outline-[#9B9B9B] font-metropolis font-normal text-[14px] text-[#9B9B9B]'}>{size.value}</button>
+                        <button key={index} onClick={() => handleRemoveSize(index)} className={'group h-[30px] w-[70px] outline outline-1 outline-[#9B9B9B] font-metropolis font-normal text-[14px] text-[#9B9B9B] hover:flex hover:justify-start hover:items-center hover:pl-2 hover:pr-2 relative'}>{size.value}  <CloseMark className='w-[14px] h-[14px] text-black ml-auto rounded-full outline outline-1 outline-black opacity-0 absolute group-hover:static group-hover:opacity-100  shadow-md' /></button>
                     ))}
                 </div>
             </div>           

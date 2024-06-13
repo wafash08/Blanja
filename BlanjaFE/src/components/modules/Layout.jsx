@@ -14,7 +14,7 @@ export default function Layout() {
 					<Navbar hasLoggedIn={token !== null} />
 				</Container>
 			</header>
-			<main className='mt-32 pb-32'>
+			<main className='mt-32 font-metropolis'>
 				<Outlet />
 			</main>
 		</>
