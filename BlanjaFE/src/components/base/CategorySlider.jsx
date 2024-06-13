@@ -1,33 +1,63 @@
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import SliderWrapper from './Slider';
 
 export default function CategorySlider({ categories }) {
-	const settings = {
-		infinite: true,
-		speed: 500,
-		slidesToShow: 5,
-		slidesToScroll: 1,
-		nextArrow: <NextArrow />,
-		prevArrow: <PrevArrow />,
-		swipeToSlide: true,
-		accessibility: true,
-		centerMode: true,
-	};
+	const breakpoints = [
+		{
+			breakpoint: 1024,
+			settings: {
+				slidesToShow: 4,
+				slidesToScroll: 1,
+				centerMode: true,
+				centerPadding: '0px',
+			},
+		},
+		{
+			breakpoint: 768,
+			settings: {
+				slidesToShow: 3,
+				slidesToScroll: 1,
+				centerMode: true,
+				centerPadding: '0px',
+			},
+		},
+		{
+			breakpoint: 600,
+			settings: {
+				slidesToShow: 2,
+				slidesToScroll: 1,
+				centerMode: true,
+				centerPadding: '0px',
+			},
+		},
+		{
+			breakpoint: 480,
+			settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1,
+				centerPadding: '0px',
+			},
+		},
+	];
 	return (
-		<Slider {...settings} className='cursor-grab'>
+		<SliderWrapper
+			autoplaySpeed={3000}
+			breakpoints={breakpoints}
+			nextArrow={<NextArrow />}
+			prevArrow={<PrevArrow />}
+			slidesToShow={5}
+		>
 			{categories.map(({ id, name, slug, image }) => {
 				return <Category key={id} image={image} name={name} slug={slug} />;
 			})}
-		</Slider>
+		</SliderWrapper>
 	);
 }
 
 function Category({ slug, name, image }) {
 	return (
-		<div className='group overflow-hidden w-full max-w-48 h-56'>
+		<div className='group overflow-hidden w-[90%] lg:max-w-48 h-56'>
 			<Link
 				to={`/categories/${slug}`}
 				className={clsx(
