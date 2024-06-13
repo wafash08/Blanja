@@ -183,6 +183,7 @@ func GetSellerProfile(c *fiber.Ctx) error {
 			"name":          product.Name,
 			"price":         product.Price,
 			"rating":        product.Rating,
+			"stock":         product.Stock,
 			"category_name": categoryName,
 		}
 	}

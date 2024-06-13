@@ -65,6 +65,11 @@ func Router(app *fiber.App) {
 	app.Post("/cart/add", middlewares.JWTMiddleware(), controllers.CreateCart)
 	app.Post("/cart/addProduct", middlewares.JWTMiddleware(), controllers.AddProductToCart)
 	app.Post("/cart/removeProduct", middlewares.JWTMiddleware(), controllers.RemoveProductFromCart)
+	app.Post("/cart/deleteAllProduct", middlewares.JWTMiddleware(), controllers.DeleteProductFromCart)
 	// app.Get("/cart/userID", middlewares.JWTMiddleware(), controllers.GetUserID)
 	app.Get("/cart/user", middlewares.JWTMiddleware(), controllers.GetCartByUserID)
+
+	//Checkout Routes
+	app.Post("/checkout", middlewares.JWTMiddleware(), controllers.CreateCheckout)
+	app.Get("/checkout/user", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
 }

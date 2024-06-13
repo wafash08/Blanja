@@ -6,11 +6,21 @@ import ProductList from "../../../components/base/CartListProduct";
 import ShoppingSummary from "../../../components/base/ShoppingSummary";
 import productDummy from "../../../assets/product-dummy.png";
 import { useCarts } from "../../../hooks/CartsHooks";
-import { ProductListSkeleton } from "../../../components/base/Skeleton";
+import {
+  AvatarSkeleton,
+  CartListSkeleton,
+  ProductListSkeleton,
+} from "../../../components/base/Skeleton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import CartSummary from "../../../components/base/ShoppingSummary";
 
 const Cart = () => {
+  const BASE_URL = import.meta.env.VITE_BE_URL;
   const { data: cartsProduct, status } = useCarts();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [address, setAddress] = useState([]);
   const [cartId, setCartId] = useState(null);
   let cartList = null;
 
@@ -25,11 +35,23 @@ const Cart = () => {
         return cart.products.map((product) => ({
           ...product,
           cartId: cart.id,
-          isSelected: false
+          isSelected: false,
         }));
       });
       setProducts(extractedProducts);
     }
+    axios
+      .get(`${BASE_URL}addresses/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        setAddress(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [cartsProduct, status]);
 
   const handleSelectAll = (isSelected) => {
@@ -41,15 +63,13 @@ const Cart = () => {
   };
 
   const handleProductChange = async (productId, quantityChange) => {
-    console.log("params",productId, quantityChange);
-    const BASE_URL = import.meta.env.VITE_BE_URL;
     const addProduct = `${BASE_URL}cart/addProduct`;
     const removeProduct = `${BASE_URL}cart/removeProduct`;
     const product = products.find((product) => product.id === productId);
     if (!product) return;
 
     const newQuantity = product.quantity + quantityChange;
-    if (newQuantity < 1) return;
+    // if (newQuantity < 1) return;
 
     const endpoint = quantityChange > 0 ? addProduct : removeProduct;
     try {
@@ -67,15 +87,21 @@ const Cart = () => {
       });
 
       if (response.ok) {
-        const updatedProducts = products.map((product) =>
-          product.id === productId
-            ? {
-                ...product,
-                quantity: newQuantity,
-                // isSelected: isSelected ?? product.isSelected,
-              }
-            : product
-        );
+        let updatedProducts;
+        if (newQuantity === 0) {
+          updatedProducts = products.filter(
+            (product) => product.id !== productId
+          );
+        } else {
+          updatedProducts = products.map((product) =>
+            product.id === productId
+              ? {
+                  ...product,
+                  quantity: newQuantity,
+                }
+              : product
+          );
+        }
         setProducts(updatedProducts);
       } else {
         console.error(
@@ -88,15 +114,46 @@ const Cart = () => {
     }
   };
   const handleIndividualSelect = (productId, isSelected) => {
-    const updatedProducts = products.map(product =>
+    const updatedProducts = products.map((product) =>
       product.id === productId ? { ...product, isSelected } : product
     );
     setProducts(updatedProducts);
+    console.log("data individual", updatedProducts);
   };
 
-  const handleDeleteSelected = () => {
-    const updatedProducts = products.filter((product) => !product.isSelected);
-    setProducts(updatedProducts);
+  const handleDeleteSelected = async () => {
+    const BASE_URL = import.meta.env.VITE_BE_URL;
+    const product = products.filter((item) => item.isSelected === true);
+    const productID = product.map((item) => item.id);
+    const cartID = product.map((item) => item.cartId);
+    console.log(productID);
+    try {
+      const response = await fetch(`${BASE_URL}cart/deleteAllProduct`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          cart_id: cartID,
+          product_id: productID,
+        }),
+      });
+      if (response.ok) {
+        // Jika penghapusan berhasil, perbarui state products
+        const updatedProducts = products.filter((item) => !item.isSelected);
+        setProducts(updatedProducts);
+        console.log("Products successfully deleted and updated.");
+      } else {
+        console.error("Failed to delete products:", await response.text());
+      }
+      console.log("respon from delete", response);
+    } catch (error) {
+      console.error("Error updating product quantity:", error);
+    }
+  };
+  const handleClick = () => {
+    navigate("/checkout")
   };
   const total =
     products && products.length > 0
@@ -109,7 +166,7 @@ const Cart = () => {
   //   (acc, product) => acc + product.price * product.quantity,0
   // )
   if (status === "loading") {
-    cartList = <p>loading</p>;
+    cartList = <CartListSkeleton />;
   } else if (status === "success") {
     cartList = (
       <ProductList
@@ -130,8 +187,8 @@ const Cart = () => {
             My Bag
           </h2>
         </div>
-        <div className="p-4 flex justify-between gap-6">
-          <div className=" w-3/5">
+        <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
+          <div className=" w-3/5 max-md:w-full">
             <SelectAllItems
               products={products}
               onSelectAll={handleSelectAll}
@@ -140,8 +197,8 @@ const Cart = () => {
             {cartList}
           </div>
 
-          <div className=" w-2/5">
-            <ShoppingSummary total={total} />
+          <div className=" w-2/5 max-md:w-full">
+            <CartSummary total={total} handleClick={handleClick} />
           </div>
         </div>
       </section>

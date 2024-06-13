@@ -8,16 +8,16 @@ const SelectAllItems = ({ products, onSelectAll, onDeleteSelected }) => {
 
   return (
     <div className="w-full flex items-center justify-between mb-4 rounded-md p-5 shadow-[0_0_14px_0_#ADADAD40]">
-      <div className="flex">
+      <div className="flex max-md:items-center">
         <input
           type="checkbox"
           checked={allSelected}
           onChange={(e) => onSelectAll(e.target.checked)}
-          className="checkbox mr-2 w-5 h-5 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
+          className="checkbox mr-2 w-5 h-5 max-md:w-4 max-md:h-4 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
         />
-        <label className="flex font-medium">
+        <label className="flex font-medium max-md:text-sm">
           Select all items
-          <p className=" text-gray-300 ml-1">
+          <p className=" text-gray-300 ml-1 max-md:text-sm">
             {" "}
             ({products.length} items selected)
           </p>
@@ -25,7 +25,7 @@ const SelectAllItems = ({ products, onSelectAll, onDeleteSelected }) => {
       </div>
       <button
         onClick={onDeleteSelected}
-        className="bg-red-500 text-white px-4 py-2 rounded"
+        className="bg-red-500 text-white px-4 py-2 rounded max-md:text-sm"
       >
         Delete
       </button>
