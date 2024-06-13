@@ -39,7 +39,7 @@ const Checkout = () => {
   return (
     <Container>
       <section className="mt-32">
-        <div>
+        <div className="px-4">
           <h2 className="text-[34px] font-extrabold text-[#222222] leading-8">
             Checkout
           </h2>
