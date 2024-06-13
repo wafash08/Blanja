@@ -23,7 +23,7 @@ const CartSummary = ({ total, handleClick }) => {
         </div>
 
         <div className="max-md:h-1/2">
-          <button onClick={handleClick} className="w-full bg-red-500 text-white px-4 py-2 rounded-full mt-8 max-md:mt-0 max-md:h-full">
+          <button onClick={handleClick} className="w-full bg-red-500 text-white px-4 py-2 rounded-full mt-8 max-md:mt-0">
             Check Out
           </button>
         </div>
