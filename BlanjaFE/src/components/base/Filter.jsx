@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toCommaSeparatedValues } from '../../utils';
 import { useFilters } from '../../hooks';
 
@@ -9,6 +9,7 @@ export default function Filter() {
 	const [searchParams, setURLSearchParams] = useSearchParams();
 	const search = searchParams.get('search'); // get the search query if there is one
 	const { colors, sellers, categories, sizes, status } = useFilters();
+	const navigate = useNavigate();
 
 	const handleOpenDialog = () => {
 		refDialog.current?.showModal();
@@ -64,7 +65,12 @@ export default function Filter() {
 		if (search) {
 			params['search'] = search;
 		}
-		setURLSearchParams(params);
+		setURLSearchParams(prevParams => {
+			return new URLSearchParams({
+				...Object.fromEntries(prevParams.entries()),
+				...params,
+			});
+		});
 		refDialog.current?.close();
 	};
 

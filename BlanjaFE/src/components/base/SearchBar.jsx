@@ -14,7 +14,7 @@ export default function SearchBar() {
 	const handleSearch = e => {
 		e.preventDefault();
 		setURLSearchParams({ search: query });
-		navigate(`/?search=${query}`);
+		navigate(`/?search=${query}`, { relative: 'path' });
 	};
 
 	return (
@@ -29,7 +29,6 @@ export default function SearchBar() {
 					id='search'
 					onChange={e => {
 						setQuery(e.target.value);
-						setURLSearchParams({ search: e.target.value });
 					}}
 				/>
 				<button
