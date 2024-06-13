@@ -14,6 +14,7 @@ import ProfilePage from '../../pages/main/Profile';
 import EditProfile from '../../pages/main/Profile/Edit';
 import AddressPage from '../../pages/main/Profile/Address';
 import OrderPage from '../../pages/main/Profile/Order';
+import SellingProductsPage from '../../pages/main/Profile/SellingProductsPage';
 
 const RouterBlanja = () => {
 	return (
@@ -38,7 +39,7 @@ const RouterBlanja = () => {
 						<Route path='products' element={<h1>Products page</h1>} />
 						<Route
 							path='selling-products'
-							element={<h1>Selling products page</h1>}
+							element={<SellingProductsPage />}
 						/>
 					</Route>
 				</Route>
