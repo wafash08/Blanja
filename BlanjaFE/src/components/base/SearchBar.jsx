@@ -19,11 +19,11 @@ export default function SearchBar() {
 
 	return (
 		<form className='rounded-full overflow-hidden' onSubmit={handleSearch}>
-			<div className='w-[507px] bg-white border border-[#8E8E93] flex items-center gap-2 overflow-hidden rounded-full'>
+			<div className='lg:w-[507px] bg-white border border-[#8E8E93] flex items-center gap-2 overflow-hidden rounded-full'>
 				<input
 					type='text'
 					name='search'
-					className='w-full h-full py-3 pl-5 focus:outline-none placeholder:text-[#9B9B9B] rounded-full'
+					className='w-full h-full py-3 pl-5 pr-2 focus:outline-none placeholder:text-[#9B9B9B] rounded-full'
 					placeholder='Search'
 					value={query}
 					id='search'

@@ -30,6 +30,7 @@ export default function Navbar({ hasLoggedIn }) {
 	const { pathname } = useLocation();
 	const paths = pathname.split('/');
 	const inProfilePage = paths[1] === 'profile';
+	const inHomePage = paths.length === 2 && paths.every(path => path === '');
 
 	if (status === 'failed') {
 		removeTokenFromLocalStorage();
@@ -37,13 +38,21 @@ export default function Navbar({ hasLoggedIn }) {
 
 	return (
 		<div className='relative w-full flex items-center justify-between font-metropolis'>
-			<div className='flex items-center gap-[60px]'>
-				<Link to='/' className={clsx(inProfilePage && 'ml-16 md:ml-0')}>
+			<div className='flex items-center gap-4 md:gap-[60px]'>
+				<Link
+					to='/'
+					className={clsx(inProfilePage && 'ml-16 md:ml-0', 'shrink-0')}
+				>
 					<span className='sr-only'>Ke halaman home</span>
 					<img src={BlanjaLogo} alt='Blanja Logo' height={44} width={119} />
 				</Link>
 
-				<div className='hidden md:flex items-center gap-3'>
+				<div
+					className={clsx(
+						'md:flex items-center gap-3',
+						inHomePage ? 'flex' : 'hidden'
+					)}
+				>
 					{/* search bar */}
 					<SearchBar />
 					{hasLoggedIn ? <Filter /> : null}

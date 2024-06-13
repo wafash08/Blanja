@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { toCommaSeparatedValues } from '../../utils';
 import { useFilters } from '../../hooks';
 
@@ -9,7 +9,6 @@ export default function Filter() {
 	const [searchParams, setURLSearchParams] = useSearchParams();
 	const search = searchParams.get('search'); // get the search query if there is one
 	const { colors, sellers, categories, sizes, status } = useFilters();
-	const navigate = useNavigate();
 
 	const handleOpenDialog = () => {
 		refDialog.current?.showModal();
@@ -143,7 +142,7 @@ export default function Filter() {
 			</dialog>
 			<button
 				type='button'
-				className='group w-10 h-10 flex items-center justify-center border border-[#8E8E93] rounded-xl'
+				className='group w-10 h-10 p-2 flex items-center justify-center border border-[#8E8E93] rounded-xl'
 				onClick={handleOpenDialog}
 			>
 				<span className='sr-only'>Cari produk dengan filter</span>
