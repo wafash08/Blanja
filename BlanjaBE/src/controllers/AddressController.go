@@ -189,6 +189,16 @@ func UpdateAddress(c *fiber.Ctx) error {
 		})
 	}
 
+	if address.Primary == "on" {
+		if err := models.SetOtherAddressesPrimaryOff(address.UserID, uint(id)); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to update other addresses",
+			})
+		}
+	}
+
 	if err := models.UpdateAddress(id, address); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",

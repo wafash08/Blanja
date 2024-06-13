@@ -37,6 +37,11 @@ const RouterBlanja = () => {
 						<Route path='edit' element={<EditProfile />} />
 						<Route path='address' element={<AddressPage />} />
 						<Route path='order' element={<OrderPage />} />
+						<Route path='products' element={<h1>Products page</h1>} />
+						<Route
+							path='selling-products'
+							element={<h1>Selling products page</h1>}
+						/>
 					</Route>
 				</Route>
 			</Routes>
