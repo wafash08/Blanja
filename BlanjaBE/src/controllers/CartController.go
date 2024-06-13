@@ -5,6 +5,7 @@ import (
 	"gofiber-marketplace/src/helpers"
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
+	// "strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -85,7 +86,7 @@ func CreateCart(c *fiber.Ctx) error {
 		})
 	}
 
-	cartID, cartQuantity, cartProductID, err := models.CreateCart(cart)
+	err := models.CreateCart(cart)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
@@ -104,15 +105,19 @@ func CreateCart(c *fiber.Ctx) error {
 		CartID    uint `json:"cart_id" binding:"required"`
 		ProductID uint `json:"product_id" binding:"required"`
 		Quantity  uint `json:"quantity" binding:"required,min=1"`
+		// ColorID   uint      `json:"color_id" validate:"required"`
+		// SizeID    uint      `json:"size_id" validate:"required"`
 	}
-	request.CartID = cartID
-	request.Quantity = cartQuantity
-	request.ProductID = cartProductID
+	request.CartID = cart.ID
+	request.Quantity = cart.Quantity
+	request.ProductID = cart.ProductID
+	// request.ColorID = cart.ColorID
+	// request.SizeID = cart.SizeID
 
 	var newCartProduct models.CartProduct
 	cartProduct := middlewares.XSSMiddleware(&newCartProduct).(*models.CartProduct)
 
-	errCP := configs.DB.Where("cart_id = ? AND product_id = ?", cartID, cartProductID).First(&cartProduct).Error
+	errCP := configs.DB.Where("cart_id = ? AND product_id = ?", cart.ID, cart.ProductID).First(&cartProduct).Error
 
 	if errCP != nil {
 		if errCP == gorm.ErrRecordNotFound {
@@ -139,18 +144,9 @@ func CreateCart(c *fiber.Ctx) error {
 }
 
 func GetCartByUserID(c *fiber.Ctx) error {
-	// cartUser := models.Cart
 	var user = c.Locals("user").(jwt.MapClaims)
 	userID := user["id"].(float64)
 	cartUser := models.SelectCartById(int(userID))
-	// if cartUser.ID == 0 {
-	// 	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-	// 		"status":     "not found",
-	// 		"statusCode": 404,
-	// 		"message":    "Cart not found",
-	// 	})
-	// }
-	// resultCarts := make([]map[string]interface{}, len(cart))
 	resultCarts := make([]map[string]interface{}, len(cartUser))
 	for i, cart := range cartUser {
 		products := make([]map[string]interface{}, len(cart.Products))
@@ -192,3 +188,13 @@ func GetCartByUserID(c *fiber.Ctx) error {
 		"data": resultCarts,
 	})
 }
+// func DeleteProductFromCart (c *fiber.Ctx) error {
+// 	id, err := strconv.Atoi(c.Params("id"))
+// 	if err != nil {
+// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+// 			"status":     "bad request",
+// 			"statusCode": 400,
+// 			"message":    "Invalid ID format",
+// 		})
+// 	}
+// }

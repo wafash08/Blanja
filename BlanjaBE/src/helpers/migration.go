@@ -20,6 +20,7 @@ func Migration() {
 		&models.Address{},
 		&models.Cart{},
 		&models.CartProduct{},
+		&models.Checkout{},
 	)
 
 	if err != nil {
