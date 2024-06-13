@@ -17,7 +17,6 @@ type Cart struct {
 	Seller      Seller    `gorm:"foreignKey:SellerID" validate:"-"`
 	Products    []Product `gorm:"many2many:cart_products;" json:"products"`
 	User        User      `gorm:"foreignKey:UserID" validate:"-"`
-	Checkout_ID uint      `json:"checkout_id"`
 	// Color     Color		`gorm:"foreignKey:ColorID" validate:"required"`
 	// Size      Size      `gorm:"foreignKey:SizeID" validate:"required"`
 }

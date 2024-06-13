@@ -1,7 +1,7 @@
 import React from "react";
 
 const CheckoutProductList = ({ cart }) => {
-    console.log(cart);
+    console.log("tes cart checkout", cart);
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -20,15 +20,15 @@ const CheckoutProductList = ({ cart }) => {
           <div>
             <img
               className="w-24 h-24 max-md:w-16 max-md:h-16"
-              src={product.photo}
+              src={product.products[0].photo}
             />
           </div>
           <div>
-            <p className="max-md:text-sm font-semibold">{product.name}</p>
+            <p className="max-md:text-sm font-semibold">{product.products[0].name}</p>
           </div>
           <div className="ml-auto">
             {/* <p className="max-md:text-sm">{product.colors}</p> */}
-            <p className="max-md:text-sm font-semibold">{formatRupiah(product.price)}</p>
+            <p className="max-md:text-sm font-semibold">{formatRupiah(product.products[0].price)}</p>
           </div>
         </div>
       ))}

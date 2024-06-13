@@ -3,6 +3,14 @@ import React, { useEffect, useState } from "react";
 import { getTokenFromLocalStorage } from "../../utils";
 
 const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
+  const formatRupiah = (price) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
   return (
     <div className="w-full">
       {cart.map((product, index) => (
@@ -24,7 +32,7 @@ const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
           <div>
             <p className="max-md:text-sm">{product.name}</p>
             {/* <p className="max-md:text-sm">{product.colors}</p> */}
-            <p className="max-md:text-sm">Rp.{product.price}</p>
+            <p className="max-md:text-sm">{formatRupiah(product.price)}</p>
           </div>
           <div className="flex items-center">
             <button

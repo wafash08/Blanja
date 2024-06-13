@@ -16,9 +16,11 @@ import { useNavigate } from "react-router-dom";
 import CartSummary from "../../../components/base/ShoppingSummary";
 
 const Cart = () => {
+  const BASE_URL = import.meta.env.VITE_BE_URL;
   const { data: cartsProduct, status } = useCarts();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [address, setAddress] = useState([]);
   const [cartId, setCartId] = useState(null);
   let cartList = null;
 
@@ -38,6 +40,18 @@ const Cart = () => {
       });
       setProducts(extractedProducts);
     }
+    axios
+      .get(`${BASE_URL}addresses/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        setAddress(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [cartsProduct, status]);
 
   const handleSelectAll = (isSelected) => {
@@ -46,23 +60,18 @@ const Cart = () => {
       isSelected,
     }));
     setProducts(updatedProducts);
-    console.log("cek data", updatedProducts);
   };
 
   const handleProductChange = async (productId, quantityChange) => {
-    console.log("params", productId, quantityChange);
-    const BASE_URL = import.meta.env.VITE_BE_URL;
     const addProduct = `${BASE_URL}cart/addProduct`;
     const removeProduct = `${BASE_URL}cart/removeProduct`;
     const product = products.find((product) => product.id === productId);
     if (!product) return;
 
     const newQuantity = product.quantity + quantityChange;
-    console.log("quantity: ", newQuantity);
     // if (newQuantity < 1) return;
 
     const endpoint = quantityChange > 0 ? addProduct : removeProduct;
-    console.log("endpoint", endpoint);
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -144,8 +153,8 @@ const Cart = () => {
     }
   };
   const handleClick = () => {
-    navigate('/checkout')
-  }
+    navigate("/checkout")
+  };
   const total =
     products && products.length > 0
       ? products.reduce(

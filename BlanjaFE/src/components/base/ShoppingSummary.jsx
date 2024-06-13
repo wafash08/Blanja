@@ -19,7 +19,7 @@ const CartSummary = ({ total, handleClick }) => {
       <div className="mt-8 max-md:flex-col max-md:flex max-md:justify-between max-md:h-full max-md:mt-0">
         <div className="flex justify-between max-md:h-1/2">
           <span className="text-lg font-bold text-gray-300">Total Price</span>
-          <span className="text-lg font-bold">Rp.{formatRupiah(total)}</span>
+          <span className="text-lg font-bold">{formatRupiah(total)}</span>
         </div>
 
         <div className="max-md:h-1/2">
