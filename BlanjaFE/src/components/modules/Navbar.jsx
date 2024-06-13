@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SearchBar from '../base/SearchBar';
 import Filter from '../base/Filter';
 import { useProfile } from '../../hooks';
@@ -27,6 +27,9 @@ export default function Navbar({ hasLoggedIn }) {
 	const role = getRoleFromLocalStorage();
 	const { data: profile, status } = useProfile(role);
 	const [show, setShow] = useState(false);
+	const { pathname } = useLocation();
+	const paths = pathname.split('/');
+	const inProfilePage = paths[1] === 'profile';
 
 	if (status === 'failed') {
 		removeTokenFromLocalStorage();
@@ -35,7 +38,7 @@ export default function Navbar({ hasLoggedIn }) {
 	return (
 		<div className='relative w-full flex items-center justify-between font-metropolis'>
 			<div className='flex items-center gap-[60px]'>
-				<Link to='/' className='ml-16 md:ml-0'>
+				<Link to='/' className={clsx(inProfilePage && 'ml-16 md:ml-0')}>
 					<span className='sr-only'>Ke halaman home</span>
 					<img src={BlanjaLogo} alt='Blanja Logo' height={44} width={119} />
 				</Link>
@@ -95,7 +98,7 @@ function NavMobile({ hasLoggedIn, profile, status, onClose }) {
 							) : (
 								<Link to='/profile'>
 									<span className='sr-only'>Lihat profil</span>
-									<div className='w-10 aspect-square rounded-full overflow-hidden'>
+									<div className='w-16 aspect-square rounded-full overflow-hidden'>
 										<img
 											src={profile?.image ? profile.image : EmptyProfile}
 											alt={profile?.name}
@@ -108,21 +111,30 @@ function NavMobile({ hasLoggedIn, profile, status, onClose }) {
 							)}
 						</li>
 						<li className='group' onClick={onClose}>
-							<Link to='/cart' className='flex items-center gap-4'>
+							<Link
+								to='/cart'
+								className='flex items-center gap-4 text-[#9B9B9B]'
+							>
 								<CartIcon className='group-hover:fill-[#9B9B9B] transition-colors' />
-								<span>Lihat keranjang</span>
+								<span className='group-hover:text-[#222]'>Lihat keranjang</span>
 							</Link>
 						</li>
 						<li className='group' onClick={onClose}>
-							<Link to='/notification' className='flex items-center gap-4'>
+							<Link
+								to='/notification'
+								className='flex items-center gap-4 text-[#9B9B9B]'
+							>
 								<BellIcon className='group-hover:fill-[#9B9B9B] transition-colors' />
-								<span>Pemberitahuan</span>
+								<span className='group-hover:text-[#222]'>Pemberitahuan</span>
 							</Link>
 						</li>
 						<li className='group' onClick={onClose}>
-							<Link to='/message' className='flex items-center gap-4'>
+							<Link
+								to='/message'
+								className='flex items-center gap-4 text-[#9B9B9B]'
+							>
 								<MessageIcon className='group-hover:fill-[#9B9B9B] transition-colors' />
-								<span>Pesan</span>
+								<span className='group-hover:text-[#222]'>Pesan</span>
 							</Link>
 						</li>
 					</>

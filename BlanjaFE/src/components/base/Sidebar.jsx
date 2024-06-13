@@ -107,7 +107,7 @@ export default function Sidebar() {
 						className='w-full h-full'
 					/>
 				</div>
-				<div className='space-y-1'>
+				<div className='space-y-1 text-center md:text-left'>
 					<h3 className='text-[#222222] font-semibold text-wrap'>
 						{profile.name}
 					</h3>
