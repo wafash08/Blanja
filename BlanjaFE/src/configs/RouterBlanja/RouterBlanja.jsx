@@ -15,6 +15,7 @@ import EditProfile from '../../pages/main/Profile/Edit';
 import AddressPage from '../../pages/main/Profile/Address';
 import OrderPage from '../../pages/main/Profile/Order';
 import Checkout from '../../pages/main/Checkout/Checkout';
+import MyProducts from '../../pages/main/Profile/MyProduct';
 
 const RouterBlanja = () => {
 	return (
@@ -37,7 +38,7 @@ const RouterBlanja = () => {
 						<Route path='edit' element={<EditProfile />} />
 						<Route path='address' element={<AddressPage />} />
 						<Route path='order' element={<OrderPage />} />
-						<Route path='products' element={<h1>Products page</h1>} />
+						<Route path='products' element={<MyProducts />} />
 						<Route
 							path='selling-products'
 							element={<h1>Selling products page</h1>}

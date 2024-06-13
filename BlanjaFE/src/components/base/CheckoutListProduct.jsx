@@ -1,7 +1,7 @@
 import React from "react";
+import ProductDummy from "../../assets/product-dummy.png"
 
-const CheckoutProductList = ({ cart }) => {
-    console.log("tes cart checkout", cart);
+const CheckoutProductList = () => {
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -12,26 +12,23 @@ const CheckoutProductList = ({ cart }) => {
   };
   return (
     <div className="w-full">
-      {cart.map((product, index) => (
         <div
-          key={index}
           className="flex items-center justify-start gap-x-3 mb-4 rounded-md p-5 shadow-[0_0_14px_0_#ADADAD40]"
         >
           <div>
             <img
               className="w-24 h-24 max-md:w-16 max-md:h-16"
-              src={product.products[0].photo}
+              src={ProductDummy}
             />
           </div>
           <div>
-            <p className="max-md:text-sm font-semibold">{product.products[0].name}</p>
+            <p className="max-md:text-sm font-semibold">Dummy Jas</p>
           </div>
           <div className="ml-auto">
             {/* <p className="max-md:text-sm">{product.colors}</p> */}
-            <p className="max-md:text-sm font-semibold">{formatRupiah(product.products[0].price)}</p>
+            <p className="max-md:text-sm font-semibold">{formatRupiah(200000)}</p>
           </div>
         </div>
-      ))}
     </div>
   );
 };

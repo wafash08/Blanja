@@ -9,33 +9,33 @@ import ShoppingSummary from "../../../components/base/CheckoutSummary";
 import axios from "axios";
 
 const Checkout = () => {
-  //   const { id } = useParams();
-  const { data: cartsProduct, status } = useCarts();
-  const [checkouts, setCheckouts] = useState("");
-  const [address, setAddress] = useState("");
-  const [carts, setCarts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  let cartList = null;
+  // //   const { id } = useParams();
+  // const { data: cartsProduct, status } = useCarts();
+  // const [checkouts, setCheckouts] = useState("");
+  // const [address, setAddress] = useState("");
+  // const [carts, setCarts] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // let cartList = null;
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BE_URL}checkout/user`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        console.log("data checkout", res.data.data);
-        setCheckouts(res.data.data);
-        setAddress(res.data.data.address);
-        setCarts(res.data.data.carts);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${import.meta.env.VITE_BE_URL}checkout/user`, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("data checkout", res.data.data);
+  //       setCheckouts(res.data.data);
+  //       setAddress(res.data.data.address);
+  //       setCarts(res.data.data.carts);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //       setLoading(false);
+  //     });
+  // }, []);
   return (
     <Container>
       <section className="mt-32">
@@ -49,9 +49,8 @@ const Checkout = () => {
         </div>
         <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
           <div className=" w-3/5 max-md:w-full">
-            <CheckoutAdress address={address} />
-            <CheckoutProductList cart={carts} />
-            {cartList}
+            <CheckoutAdress  />
+            <CheckoutProductList  />
           </div>
 
           <div className=" w-2/5 max-md:w-full">
