@@ -17,6 +17,7 @@ import OrderPage from '../../pages/main/Profile/Order';
 import SellingProductsPage from '../../pages/main/Profile/SellingProductsPage';
 import Checkout from '../../pages/main/Checkout/Checkout';
 import MyProducts from '../../pages/main/Profile/MyProduct';
+import UpdateSellingProductsPage from '../../pages/main/Profile/UpdateSellingProductsPage';
 
 const RouterBlanja = () => {
 	return (
@@ -41,6 +42,7 @@ const RouterBlanja = () => {
 						<Route path='order' element={<OrderPage />} />
 						<Route path='products' element={<MyProducts />} />
 						<Route path='selling-products' element={<SellingProductsPage />} />
+						<Route path='editproducts/:id' element={<UpdateSellingProductsPage />} />
 					</Route>
 				</Route>
 			</Routes>
