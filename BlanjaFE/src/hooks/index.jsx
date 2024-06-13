@@ -11,44 +11,34 @@ import { getAllSizes } from '../services/sizes';
 import { getTokenFromLocalStorage } from '../utils';
 
 export function useProfile(role) {
-	const [data, setData] = useState(null);
+	const [data, setData] = useState({});
 	const [status, setStatus] = useState('idle'); // status: idle, loading, success, failed
 	const [error, setError] = useState(null);
 
 	const token = getTokenFromLocalStorage();
 
 	useEffect(() => {
-		let ignore = false;
 		async function getProfile() {
 			try {
 				setStatus('loading');
 				let profile = null;
 				if (role === 'seller') {
 					profile = await getSellerProfile(token);
-					console.log('oiii seller');
 				} else if (role === 'customer') {
 					profile = await getCustomerProfile(token);
-					console.log('oiii customer');
 				}
-				console.log('profile >> ', profile);
-				if (!ignore) {
-					if (profile !== null) {
-						setData(profile.data);
-						setStatus('success');
-					}
+				if (profile !== null) {
+					setData(profile.data);
+					setStatus('success');
 				}
 			} catch (error) {
 				setStatus('failed');
-				console.log('err', error);
+				console.log('error while retrieving profile >', error);
 				setError(error);
 			}
 		}
 
 		getProfile();
-
-		return () => {
-			ignore = true;
-		};
 	}, []);
 
 	return { data, status, error };

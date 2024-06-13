@@ -35,7 +35,7 @@ export default function Navbar({ hasLoggedIn }) {
 	return (
 		<div className='relative w-full flex items-center justify-between font-metropolis'>
 			<div className='flex items-center gap-[60px]'>
-				<Link to='/'>
+				<Link to='/' className='ml-16 md:ml-0'>
 					<span className='sr-only'>Ke halaman home</span>
 					<img src={BlanjaLogo} alt='Blanja Logo' height={44} width={119} />
 				</Link>
