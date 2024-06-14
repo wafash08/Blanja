@@ -4,6 +4,9 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import axios from 'axios';
 import { CloseIcon } from '../base/Icons';
+import { addAddress } from '../../services/profile';
+import { getTokenFromLocalStorage } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 const ChooseAddress = () => {
 	const [addresses, setAddresses] = useState('');
@@ -21,119 +24,129 @@ const ChooseAddress = () => {
 	};
 
 	useEffect(() => {
-		setLoading(true)
-		axios.get(`${import.meta.env.VITE_BE_URL}customer/profile`, {
-			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('token')}`
-			}
-		})
-		.then((res) => {
-			console.log(res.data.data);
-			setAddresses(res.data.data.addresses)
-      for (const key in res.data.data.addresses) {
-        if (res.data.data.addresses[key].primary === "on") {
-          setDefaultAddress(res.data.data.addresses[key])
-        }
-      }
-			setLoading(false)
-		})
-		.catch((err) => {
-			console.log(err.response);
-			setLoading(false)
-		})
-	}, [])
+		setLoading(true);
+		axios
+			.get(`${import.meta.env.VITE_BE_URL}customer/profile`, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			})
+			.then(res => {
+				console.log(res.data.data);
+				setAddresses(res.data.data.addresses);
+				for (const key in res.data.data.addresses) {
+					if (res.data.data.addresses[key].primary === 'on') {
+						setDefaultAddress(res.data.data.addresses[key]);
+					}
+				}
+				setLoading(false);
+			})
+			.catch(err => {
+				console.log(err.response);
+				setLoading(false);
+			});
+	}, []);
 
-  const onClickOk = (address) => {
-    axios.put(`${import.meta.env.VITE_BE_URL}address/${address.id}`, {
-      ...address,
-      primary: "on"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then((res) => {
-      console.log(res.data.data);
-      setChangeAddress(false)
-    })
-    .catch((err) => {
-      console.log(err.response);
-      setChangeAddress(false)
-    })
-  }
-  // const listAddresses = [
-  //   {
-  //     id: "4982952242",
-  //     detail_address: "Home",
-  //     name: "Adam",
-  //     phone: "089786756434",
-  //     main_address:
-  //       "Perumahan Emas, Jl. Xyz No 19 A, Kelurahan Perak, Kecamatan Tawang, Kota Bandung, Jawa Barat",
-  //     postal_code: "456578",
-  //     city: "Kota Bandung",
-  //   },
-  //   {
-  //     id: "55996274772",
-  //     detail_address: "Office",
-  //     name: "Noah",
-  //     phone: "08987879898",
-  //     main_address:
-  //       "Blok Jaya, Jl. Karuhun No 132 C, Kelurahan Menak, Kecamatan Harran, Kota Petang, Jawa Barat",
-  //     postal_code: "556779",
-  //     city: "Kota Petang",
-  //   },
-  //   {
-  //     id: "5296335534",
-  //     detail_address: `Wife's House`,
-  //     name: "Mary",
-  //     phone: "08137534563",
-  //     main_address:
-  //       "Perumahan Diamond, Jl. Nazareth No 11 B, Kelurahan Magna, Kecamatan Antam, Kota Bandung, Jawa Barat",
-  //     postal_code: "333435",
-  //     city: "Kota Bandung",
-  //   }
-  // ];
-  // const [defaultAddress, setDefaultAddress] = useState(listAddresses[0])
+	const onClickOk = address => {
+		axios
+			.put(
+				`${import.meta.env.VITE_BE_URL}address/${address.id}`,
+				{
+					...address,
+					primary: 'on',
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				}
+			)
+			.then(res => {
+				console.log(res.data.data);
+				setChangeAddress(false);
+			})
+			.catch(err => {
+				console.log(err.response);
+				setChangeAddress(false);
+			});
+	};
+	// const listAddresses = [
+	//   {
+	//     id: "4982952242",
+	//     detail_address: "Home",
+	//     name: "Adam",
+	//     phone: "089786756434",
+	//     main_address:
+	//       "Perumahan Emas, Jl. Xyz No 19 A, Kelurahan Perak, Kecamatan Tawang, Kota Bandung, Jawa Barat",
+	//     postal_code: "456578",
+	//     city: "Kota Bandung",
+	//   },
+	//   {
+	//     id: "55996274772",
+	//     detail_address: "Office",
+	//     name: "Noah",
+	//     phone: "08987879898",
+	//     main_address:
+	//       "Blok Jaya, Jl. Karuhun No 132 C, Kelurahan Menak, Kecamatan Harran, Kota Petang, Jawa Barat",
+	//     postal_code: "556779",
+	//     city: "Kota Petang",
+	//   },
+	//   {
+	//     id: "5296335534",
+	//     detail_address: `Wife's House`,
+	//     name: "Mary",
+	//     phone: "08137534563",
+	//     main_address:
+	//       "Perumahan Diamond, Jl. Nazareth No 11 B, Kelurahan Magna, Kecamatan Antam, Kota Bandung, Jawa Barat",
+	//     postal_code: "333435",
+	//     city: "Kota Bandung",
+	//   }
+	// ];
+	// const [defaultAddress, setDefaultAddress] = useState(listAddresses[0])
 
-  if (loading === true) {
-    return (
-      <div className="w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
-        <Skeleton className="w-[90%] h-[300px]" containerClassName="flex-1" />
-        <div className="w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10">
-          <Skeleton
-            className="w-[100%] h-[300px]"
-            containerClassName="flex-1"
-          />
-        </div>
-        <Skeleton className="w-[90%] h-[300px]" containerClassName="flex-1" />
-      </div>
-    );
-  }
-  return (
-    <div className="w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
-      <p className="font-metropolis font-semibold text-[28px] text-[#222222] text-center mt-14">
-        Choose another address
-      </p>
-      <div className="w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10">
-        <p className="font-metropolis font-semibold text-[18px] text-[#9B9B9B]">
-          Add new address
-        </p>
-      </div>
-      {changeAddress === true ? (
-        <ChangeDefaultAddress
-          addresses={addresses}
-          defaultAddress={defaultAddress}
-          setDefaultAddress={setDefaultAddress}
-          onClickOk={onClickOk}
-        />
-      ) : (
-        <DefaultAddress
-          address={defaultAddress}
-          setChangeAddress={setChangeAddress}
-        />
-      )}
-    </div>
-  );
+	if (loading === true) {
+		return (
+			<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
+				<Skeleton className='w-[90%] h-[300px]' containerClassName='flex-1' />
+				<div className='w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10'>
+					<Skeleton
+						className='w-[100%] h-[300px]'
+						containerClassName='flex-1'
+					/>
+				</div>
+				<Skeleton className='w-[90%] h-[300px]' containerClassName='flex-1' />
+			</div>
+		);
+	}
+	return (
+		<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
+			<p className='font-metropolis font-semibold text-[28px] text-[#222222] text-center mt-14'>
+				Choose another address
+			</p>
+			<div
+				className='w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10'
+				onClick={handleOpenNewAddress}
+			>
+				<p className='font-metropolis font-semibold text-[18px] text-[#9B9B9B]'>
+					Add new address
+				</p>
+			</div>
+			<NewAddress ref={newAddressRef} onClose={handleCloseNewAddress} />
+			{changeAddress === true ? (
+				<ChangeDefaultAddress
+					addresses={addresses}
+					defaultAddress={defaultAddress}
+					setDefaultAddress={setDefaultAddress}
+					onClickOk={onClickOk}
+				/>
+			) : (
+				<DefaultAddress
+					address={defaultAddress}
+					setChangeAddress={setChangeAddress}
+				/>
+			)}
+		</div>
+	);
 };
 
 export default ChooseAddress;
@@ -158,10 +171,10 @@ const DefaultAddress = ({ address, setChangeAddress }) => {
 };
 
 const ChangeDefaultAddress = ({
-  addresses,
-  defaultAddress,
-  setDefaultAddress,
-  onClickOk
+	addresses,
+	defaultAddress,
+	setDefaultAddress,
+	onClickOk,
 }) => {
 	console.log('Addresses: \n', addresses);
 	return (
@@ -200,14 +213,43 @@ const ChangeDefaultAddress = ({
 				))}
 			</ul>
 
-      <div className="w-[100px] ml-auto mr-10 pb-10">
-        <Button onClick={() => onClickOk(defaultAddress)}>Ok</Button>
-      </div>
-    </div>
-  );
+			<div className='w-[100px] ml-auto mr-10 pb-10'>
+				<Button onClick={() => onClickOk(defaultAddress)}>Ok</Button>
+			</div>
+		</div>
+	);
 };
 
-const NewAddress = forwardRef((props, ref) => {
+const NewAddress = forwardRef(({ onClose }, ref) => {
+	const token = getTokenFromLocalStorage();
+	const navigate = useNavigate();
+	const handleAddAddress = async e => {
+		try {
+			e.preventDefault();
+			const formData = new FormData(e.target);
+			const main_address = formData.get('main_address');
+			const detail_address = formData.get('detail_address');
+			const name = formData.get('name');
+			const phone = formData.get('phone');
+			const postal_code = formData.get('postal_code');
+			const city = formData.get('city');
+			const primary = formData.get('primary') ?? 'off';
+			const address = {
+				main_address,
+				detail_address,
+				name,
+				phone,
+				postal_code,
+				city,
+				primary,
+			};
+			const response = await addAddress(token, address);
+			console.log('response > ', response);
+			navigate(0);
+		} catch (error) {
+			console.log('error while submitting new address', error);
+		}
+	};
 	return (
 		<dialog
 			ref={ref}
@@ -218,7 +260,7 @@ const NewAddress = forwardRef((props, ref) => {
 					Add new address
 				</h2>
 			</div>
-			<form className='space-y-12'>
+			<form className='space-y-12' onSubmit={handleAddAddress}>
 				<div className='space-y-4'>
 					<FormControl>
 						<Label id='detail_address'>Save address as</Label>
@@ -291,17 +333,24 @@ const NewAddress = forwardRef((props, ref) => {
 						</div>
 						<div className='flex-1' />
 					</div>
+					<div className='flex items-center gap-3'>
+						<input type='checkbox' name='primary' id='primary' />
+						<Label id='primary'>Make it the primary address</Label>
+					</div>
 				</div>
 
-				<div className='flex justify-end'>
+				<div className='flex justify-end gap-5'>
 					<button
 						type='button'
-						className='text-[#9B9B9B]'
-						onClick={props.onClose}
+						className='text-[#9B9B9B] bg-white border border-[#9B9B9B] py-2 px-4 w-full max-w-40 rounded-full'
+						onClick={onClose}
 					>
 						Cancel
 					</button>
-					<button type='submit' className='text-[#9B9B9B]'>
+					<button
+						type='submit'
+						className='text-white bg-[#DB3022] border border-[#DB3022] py-2 px-4 w-full max-w-40 rounded-full'
+					>
 						Save
 					</button>
 				</div>
@@ -309,7 +358,7 @@ const NewAddress = forwardRef((props, ref) => {
 			<button
 				type='button'
 				className='absolute top-5 right-5'
-				onClick={props.onClose}
+				onClick={onClose}
 			>
 				<span className='sr-only'>Tutup</span>
 				<CloseIcon />
