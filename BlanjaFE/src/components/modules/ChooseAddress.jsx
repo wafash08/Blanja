@@ -120,9 +120,15 @@ const ChooseAddress = () => {
 	}
 	return (
 		<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
-			<p className='font-metropolis font-semibold text-[28px] text-[#222222] text-center mt-14'>
-				Choose another address
-			</p>
+      <div className='w-[90%] flex flex-col items-start mt-14'>
+        <p className='font-metropolis font-semibold text-[28px] text-[#222222] text-center'>
+          Choose another address
+        </p>
+        <p className='font-normal text-[#9B9B9B] text-[14px]'>
+          Manage your shipping address
+        </p>
+      </div>
+      <div className='w-[90%] h-0 border-t border-[#D4D4D4] mt-7 mb-4'></div>
 			<div
 				className='w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10'
 				onClick={handleOpenNewAddress}

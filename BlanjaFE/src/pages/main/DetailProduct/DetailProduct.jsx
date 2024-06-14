@@ -8,6 +8,10 @@ import BreadCrumb from "../../../components/base/BreadCrumb";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
 import { NewProductSection } from "../Home/Home";
+import PlusIcon from '@heroicons/react/24/solid/PlusIcon'
+import MinusIcon from '@heroicons/react/24/solid/MinusIcon'
+import ChevronRight from '@heroicons/react/24/solid/ChevronRightIcon'
+import ChevronLeft from '@heroicons/react/24/solid/ChevronLeftIcon'
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -387,27 +391,27 @@ const DetailProduct = () => {
               <div className="flex items-center gap-2">
                 {indexSize === 0 ? (
                   <button className="rounded-full bg-[#D4D4D4] w-[36px] h-[36px] text-[36px] text-[#FFFFFF] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc] hover:cursor-not-allowed">
-                    {"<"}
+                    <ChevronLeft className="w-[24px] h-[24px]" />
                   </button>
                 ) : (
                   <button
                     onClick={handleClickDecreaseSize}
                     className="rounded-full bg-white w-[36px] h-[36px] text-[36px] text-[#222222] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc]"
                   >
-                    {"<"}
+                    <ChevronLeft className="w-[24px] h-[24px]" />
                   </button>
                 )}
                 <p>{sizeList[indexSize].value}</p>
                 {indexSize === sizeList.length - 1 ? (
                   <button className="rounded-full bg-[#D4D4D4] w-[36px] h-[36px] text-[36px] text-[#FFFFFF] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc] hover:cursor-not-allowed">
-                    {">"}
+                    <ChevronRight className="w-[24px] h-[24px]" />
                   </button>
                 ) : (
                   <button
                     onClick={handleClickIncreaseSize}
                     className="rounded-full bg-white w-[36px] h-[36px] text-[36px] text-[#222222] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc]"
                   >
-                    {">"}
+                    <ChevronRight className="w-[24px] h-[24px]" />
                   </button>
                 )}
               </div>
@@ -419,27 +423,27 @@ const DetailProduct = () => {
               <div className="flex items-center gap-2">
                 {amount === 1 ? (
                   <button className="rounded-full bg-[#D4D4D4] w-[36px] h-[36px] text-[50px] text-[#FFFFFF] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc] hover:cursor-not-allowed">
-                    -
+                    <MinusIcon className="w-[24px] h-[24px]" />
                   </button>
                 ) : (
                   <button
                     onClick={handleClickDecreaseAmount}
                     className="rounded-full bg-white w-[36px] h-[36px] text-[50px] text-[#222222] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc]"
                   >
-                    -
+                    <MinusIcon className="w-[24px] h-[24px]" />
                   </button>
                 )}
                 <p>{amount}</p>
                 {amount === quantity ? (
                   <button className="rounded-full bg-[#D4D4D4] w-[36px] h-[36px] text-[36px] text-[#FFFFFF] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc] hover:cursor-not-allowed">
-                    +
+                    <PlusIcon className="w-[24px] h-[24px]" />
                   </button>
                 ) : (
                   <button
                     onClick={handleClickIncreaseAmount}
                     className="rounded-full bg-white w-[36px] h-[36px] text-[36px] text-[#222222] flex justify-center items-center shadow-[0px_0px_20px_#d5d8dc]"
                   >
-                    +
+                    <PlusIcon className="w-[24px] h-[24px]" />
                   </button>
                 )}
               </div>
