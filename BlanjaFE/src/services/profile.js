@@ -60,3 +60,18 @@ export async function updateProfileSeller(token, profile) {
 		throw error;
 	}
 }
+
+const addressUrl = `${BASE_URL}address`;
+export async function addAddress(token, address) {
+	try {
+		const result = await axios.post(addressUrl, address, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return result.data;
+	} catch (error) {
+		console.log('error while adding address');
+		throw error;
+	}
+}

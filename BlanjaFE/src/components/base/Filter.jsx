@@ -64,7 +64,12 @@ export default function Filter() {
 		if (search) {
 			params['search'] = search;
 		}
-		setURLSearchParams(params);
+		setURLSearchParams(prevParams => {
+			return new URLSearchParams({
+				...Object.fromEntries(prevParams.entries()),
+				...params,
+			});
+		});
 		refDialog.current?.close();
 	};
 
@@ -137,7 +142,7 @@ export default function Filter() {
 			</dialog>
 			<button
 				type='button'
-				className='group w-10 h-10 flex items-center justify-center border border-[#8E8E93] rounded-xl'
+				className='group w-10 h-10 p-2 flex items-center justify-center border border-[#8E8E93] rounded-xl'
 				onClick={handleOpenDialog}
 			>
 				<span className='sr-only'>Cari produk dengan filter</span>
