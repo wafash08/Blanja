@@ -4,7 +4,8 @@ import InputField from "../../../components/base/InputField";
 import Button from "../../../components/base/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import AlertCard from "../../../components/base/AlertCard";
+// import AlertCard from "../../../components/base/AlertCard";
+import Swal from 'sweetalert2'
 
 const RegisterCustomer = () => {
   const navigate = useNavigate();

@@ -5,6 +5,7 @@ import Button from "../../../components/base/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
+import Swal from 'sweetalert2'
 
 const RegisterSeller = () => {
   const navigate = useNavigate();
