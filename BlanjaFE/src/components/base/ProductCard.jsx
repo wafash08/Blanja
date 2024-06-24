@@ -9,13 +9,14 @@ import productDummy from '../../assets/product-dummy.png';
 // rate (number): rating produk
 
 export default function ProductCard({ id, image, name, brand, price, rating }) {
-	  // Rupiah format for price
-	  const rupiah = (price) => {
-		return new Intl.NumberFormat("id-ID", {
-		  style: "currency",
-		  currency: "IDR"
-		}).format(price)
-	  }
+	// Rupiah format for price
+	const rupiah = price => {
+		return new Intl.NumberFormat('id-ID', {
+			style: 'currency',
+			currency: 'IDR',
+		}).format(price);
+	};
+
 	return (
 		<li className='group rounded-lg overflow-hidden shadow-[0_0_14px_0_#ADADAD40]'>
 			<div className='h-52 md:h-48 lg:h-[136px] overflow-hidden'>
@@ -25,6 +26,7 @@ export default function ProductCard({ id, image, name, brand, price, rating }) {
 					height={136}
 					width={208}
 					className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
+					loading='lazy'
 				/>
 			</div>
 
@@ -39,19 +41,29 @@ export default function ProductCard({ id, image, name, brand, price, rating }) {
 				<p className='text-[#DB3022] font-medium'>{rupiah(price)}</p>
 				<p className='text-xs text-[#9B9B9B] mb-2'>{brand}</p>
 				<div className='flex items-center gap-1'>
-					<ul className='flex items-center gap-[2px]'>
-						{Array.from(Array(rating).keys()).map(r => {
-							return <Rate key={r} />;
-						})}
-					</ul>
-					<p className='text-xs text-[#9B9B9B]'>(10)</p>
+					{rating > 0 ? (
+						<>
+							<ul className='flex items-center gap-[2px]'>
+								{Array.from(Array(rating).keys()).map(r => {
+									return <Rate key={r} color='#FFBA49' />;
+								})}
+							</ul>
+							<p className='text-xs text-[#9B9B9B]'>(10)</p>
+						</>
+					) : (
+						<ul className='flex items-center gap-[2px]'>
+							{Array.from(Array(5).keys()).map(r => {
+								return <Rate key={r} color='#D4D4D4' />;
+							})}
+						</ul>
+					)}
 				</div>
 			</div>
 		</li>
 	);
 }
 
-function Rate() {
+function Rate({ color }) {
 	return (
 		<li className='flex items-center'>
 			<svg
@@ -66,7 +78,7 @@ function Rate() {
 					fillRule='evenodd'
 					clipRule='evenodd'
 					d='M6 9.95016L2.87713 11.5436C2.50946 11.7313 2.08567 11.4177 2.1575 11.0113L2.75 7.65836L0.254009 5.29695C-0.0502481 5.00909 0.113068 4.49713 0.527809 4.43864L3.99139 3.95016L5.55431 0.876499C5.73965 0.512004 6.26035 0.512003 6.44569 0.876499L8.00861 3.95016L11.4722 4.43864C11.8869 4.49713 12.0502 5.00909 11.746 5.29695L9.25 7.65836L9.8425 11.0113C9.91433 11.4177 9.49054 11.7313 9.12287 11.5436L6 9.95016Z'
-					fill='#FFBA49'
+					fill={color}
 				/>
 			</svg>
 		</li>
