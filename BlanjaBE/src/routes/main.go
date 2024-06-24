@@ -40,8 +40,9 @@ func Router(app *fiber.App) {
 	// User/Auth Routes
 	app.Post("/register", controllers.RegisterUser)
 	app.Post("/login", controllers.LoginUser)
+	app.Get("/verify", controllers.VerificationAccount)
 	app.Post("/requestResetPassword", controllers.RequestResetPassword)
-	app.Put("/resetPassword", middlewares.JWTMiddleware(), controllers.ResetPassword)
+	app.Put("/resetPassword", controllers.ResetPassword)
 	app.Post("/refreshToken", controllers.CreateRefreshToken)
 
 	// Address Routes
@@ -62,14 +63,17 @@ func Router(app *fiber.App) {
 
 	// Cart Routes
 	app.Get("/carts", middlewares.JWTMiddleware(), controllers.GetCart)
+	app.Get("/cart/user", middlewares.JWTMiddleware(), controllers.GetCartByUserID)
 	app.Post("/cart/add", middlewares.JWTMiddleware(), controllers.CreateCart)
 	app.Post("/cart/addProduct", middlewares.JWTMiddleware(), controllers.AddProductToCart)
 	app.Post("/cart/removeProduct", middlewares.JWTMiddleware(), controllers.RemoveProductFromCart)
 	app.Post("/cart/deleteAllProduct", middlewares.JWTMiddleware(), controllers.DeleteProductFromCart)
-	// app.Get("/cart/userID", middlewares.JWTMiddleware(), controllers.GetUserID)
-	app.Get("/cart/user", middlewares.JWTMiddleware(), controllers.GetCartByUserID)
 
 	//Checkout Routes
 	app.Post("/checkout", middlewares.JWTMiddleware(), controllers.CreateCheckout)
 	app.Get("/checkout/user", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
+
+	// Transaction Routes
+
+	// Order Routes
 }
