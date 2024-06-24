@@ -21,11 +21,29 @@ func SelectAllOrders() []*Order {
 	return orders
 }
 
-func SelectOrdersbyId(id int) *Order {
+func SelectOrderbyId(id int) *Order {
 	var order Order
 	configs.DB.Preload("User").First(&order, "id = ?", id)
 	return &order
 }
+
+func SelectOrdersbyUserId(userID int) []*Order {
+	var orders []*Order
+	configs.DB.Preload("User").Find(&orders, "user_id = ?", userID)
+	return orders
+}
+
+// func SelectOrderbyStatus(status string) *Order {
+// 	var order Order
+// 	configs.DB.Preload("User").First(&order, "status = ?", status)
+// 	return &order
+// }
+
+// func SelectOrdersbyStatus(status string) []*Order {
+// 	var orders []*Order
+// 	configs.DB.Preload("User").Find(&orders, "status = ?", status)
+// 	return orders
+// }
 
 func CreateOrder(order *Order) error {
 	result := configs.DB.Create(&order)
@@ -33,6 +51,11 @@ func CreateOrder(order *Order) error {
 }
 
 func UpdateOrder(id int, updatedOrder *Order) error {
+	result := configs.DB.Model(&Order{}).Where("id = ?", id).Updates(updatedOrder)
+	return result.Error
+}
+
+func UpdateStatusOrder(id int, updatedOrder *Order) error {
 	result := configs.DB.Model(&Order{}).Where("id = ?", id).Updates(updatedOrder)
 	return result.Error
 }
