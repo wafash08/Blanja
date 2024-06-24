@@ -12,9 +12,9 @@ const RegisterCustomer = () => {
   const pathnameArray = pathname.split("/");
   const role = pathnameArray[2];
   const [validation, setValidation] = useState([]);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [isSent, setIsSent] = useState(false);
+  // const [alertMessage, setAlertMessage] = useState("");
+  // const [alertType, setAlertType] = useState("");
+  // const [isSent, setIsSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -41,15 +41,25 @@ const RegisterCustomer = () => {
       })
       .then((res) => {
         console.log(res);
-        setAlertMessage(res.data.message);
-        setAlertType("SUCCESS");
-        setIsSent(true);
+        Swal.fire("Register Succeed").then(() => {
+          navigate(`/login`)
+        })
+        // setAlertMessage(res.data.message);
+        // setAlertType("SUCCESS");
+        // setIsSent(true);
       })
       .catch((err) => {
         console.log(err.response);
         setValidation(err.response.data.errors);
-        setAlertMessage(err.response.data.message);
-        setAlertType("ERROR");
+        Swal.fire({
+          title: err.response.data.message,
+          showConfirmButton: false,
+          showDenyButton: true,
+          denyButtonText: 'OK',
+          showCloseButton: true
+        })
+        // setAlertMessage(err.response.data.message);
+        // setAlertType("ERROR");
       });
   };
 
@@ -57,23 +67,23 @@ const RegisterCustomer = () => {
     e.preventDefault();
   };
 
-  const handleClickAlert = () => {
-    setAlertMessage("");
-    setAlertType("");
-    if (isSent === true) {
-      navigate(`/login`);
-    }
-  };
+  // const handleClickAlert = () => {
+  //   setAlertMessage("");
+  //   setAlertType("");
+  //   if (isSent === true) {
+  //     navigate(`/login`);
+  //   }
+  // };
 
   return (
     <form onSubmit={afterSubmission} className="w-full max-w-md mx-auto p-4 sm:p-6 md:p-8">
-      {alertMessage && (
+      {/* {alertMessage && (
         <AlertCard
           alertMessage={alertMessage}
           alertType={alertType}
           onClick={handleClickAlert}
         />
-      )}
+      )} */}
 
       <div className="w-full flex flex-col justify-start my-5 gap-6">
         <InputField
