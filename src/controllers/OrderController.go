@@ -4,6 +4,7 @@ import (
 	"gofiber-marketplace/src/helpers"
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -128,6 +129,84 @@ func CreateOrder(c *fiber.Ctx) error {
 			"status":     "server error",
 			"statusCode": 500,
 			"message":    "Failed to create order",
+		})
+	} else {
+		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+			"status":     "success",
+			"statusCode": 200,
+			"message":    "Order created successfully",
+		})
+	}
+}
+
+func UpdateOrder(c *fiber.Ctx) error {
+	userId, err := middlewares.JWTAuthorize(c, "")
+	if err != nil {
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(fiber.Map{
+				"status":     fiberErr.Message,
+				"statusCode": fiberErr.Code,
+				"message":    fiberErr.Message,
+			})
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "Internal Server Error",
+			"statusCode": fiber.StatusInternalServerError,
+			"message":    err.Error(),
+		})
+	}
+
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Invalid ID format",
+		})
+	}
+
+	if order := models.SelectOrderbyId(id); order.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Order not found",
+		})
+	} else if order.UserID != uint(userId) {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "This order is not same user",
+		})
+	}
+
+	var updatedOrder models.Order
+
+	if err := c.BodyParser(&updatedOrder); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Invalid request body",
+		})
+	}
+	updatedOrder.UserID = uint(userId)
+
+	order := middlewares.XSSMiddleware(&updatedOrder).(*models.Order)
+
+	if errors := helpers.StructValidation(order); len(errors) > 0 {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":     "unprocessable entity",
+			"statusCode": 422,
+			"message":    "Validation failed",
+			"errors":     errors,
+		})
+	}
+
+	if err := models.UpdateOrder(id, order); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to update order",
 		})
 	} else {
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
