@@ -4,8 +4,9 @@ import InputField from "../../../components/base/InputField";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../../../components/base/Button";
-import AlertCard from "../../../components/base/AlertCard";
+// import AlertCard from "../../../components/base/AlertCard";
 import BlanjaLogo from "../../../assets/blanja-logo.png"
+import Swal from 'sweetalert2'
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -35,18 +36,35 @@ const Login = () => {
         localStorage.setItem("refresh_token", refresh_token);
         localStorage.setItem("role", role)
         localStorage.setItem("id", id)
-        setAlertMessage(res.data.message);
-        setAlertType("SUCCESS");
-        setIsSent(true);
+        Swal.fire("Login Succeed").then(() => {
+          navigate(`/`)
+        })
+        // setAlertMessage(res.data.message);
+        // setAlertType("SUCCESS");
+        // setIsSent(true);
       })
       .catch((err) => {
         console.log(err.response);
         if (err.response.data.message == "Validation failed") {
-          setAlertMessage("Invalid password");
-          setAlertType("ERROR");
+          // setAlertMessage("Invalid password");
+          // setAlertType("ERROR");
+          Swal.fire({
+            title: "Invalid email or password",
+            showConfirmButton: false,
+            showDenyButton: true,
+            denyButtonText: 'OK',
+            showCloseButton: true
+          })
         } else {
-          setAlertMessage(err.response.data.message);
-          setAlertType("ERROR");
+          // setAlertMessage(err.response.data.message);
+          // setAlertType("ERROR");
+          Swal.fire({
+            title: err.response.data.message,
+            showConfirmButton: false,
+            showDenyButton: true,
+            denyButtonText: 'OK',
+            showCloseButton: true
+          })
         }
       });
   };
@@ -54,13 +72,13 @@ const Login = () => {
   const afterSubmission = (e) => {
     e.preventDefault();
   };
-  const handleClickAlert = () => {
-    setAlertMessage("");
-    setAlertType("");
-    if (isSent === true) {
-      navigate(`/`);
-    }
-  };
+  // const handleClickAlert = () => {
+  //   setAlertMessage("");
+  //   setAlertType("");
+  //   if (isSent === true) {
+  //     navigate(`/`);
+  //   }
+  // };
 
   return (
     <Container
@@ -69,13 +87,13 @@ const Login = () => {
         sm:max-w-[1156px] sm:flex sm:flex-col sm:justify-center sm:items-center sm:mt-20 sm:font-metropolis
         "
     >
-      {alertMessage && (
+      {/* {alertMessage && (
         <AlertCard
           alertMessage={alertMessage}
           alertType={alertType}
           onClick={handleClickAlert}
         />
-      )}
+      )} */}
       <div className="
       max-sm:w-full max-sm:flex max-sm:justify-center max-sm:mb-10
       sm:w-full sm:flex sm:justify-center sm:mb-10

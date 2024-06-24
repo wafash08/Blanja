@@ -6,7 +6,7 @@ const InputField = ({type="text", name, onChange, placeholder, value, label, cla
   useEffect(()=>{
     if (validation.length !== 0) {
       for (const key in validation) {
-        if (validation[key].error_message.split(" ")[0] === name) {
+        if (validation[key].error_message.split(" ")[0].toLowerCase() === name || validation[key].error_message.split(/[.\s]+/)[1].toLowerCase() === name) {
           setValidate(validation[key].error_message)
         }
       } 
