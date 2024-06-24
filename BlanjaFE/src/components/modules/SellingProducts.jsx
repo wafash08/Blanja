@@ -128,6 +128,7 @@ const SellingProducts = () => {
             name: formProduct.name,
             price: parseInt(formProduct.price),
             stock: parseInt(formProduct.stock),
+            rating: formProduct.rating,
             description: formProduct.description,
             condition: formProduct.condition,
             category_id: formProduct.category_id,
