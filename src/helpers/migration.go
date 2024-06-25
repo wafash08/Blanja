@@ -22,6 +22,7 @@ func Migration() {
 		&models.Cart{},
 		&models.CartProduct{},
 		&models.Checkout{},
+		&models.Order{},
 	)
 
 	if err != nil {
