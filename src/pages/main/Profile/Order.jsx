@@ -82,7 +82,7 @@ export default function OrderPage() {
 									className={clsx(
 										'absolute bottom-0 left-0 h-1 w-full transition-transform origin-left bg-[#DB3022]',
 										'group-hover:scale-100',
-										activeCategory ? 'scale-100' : 'scale-0'
+										activeCategory ? 'scale-x-100' : 'scale-x-0'
 									)}
 								/>
 							</li>
