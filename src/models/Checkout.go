@@ -7,19 +7,19 @@ import (
 )
 
 type Checkout struct {
-    gorm.Model
-    AddressID uint     `json:"address_id"`
-    Address   Address  `gorm:"foreignKey:AddressID" validate:"-"`
-    Carts     []Cart   `gorm:"many2many:checkout_carts;" validate:"-"`
-    Delivery  uint     `json:"delivery" validate:"required"`
-    Summary   uint     `json:"summary" validate:"required"`
-    UserID    uint     `json:"user_id" validate:"required"`
-    User      User     `gorm:"foreignKey:UserID" validate:"-"`
+	gorm.Model
+	// AddressID uint     `json:"address_id"`
+	// Address   Address  `gorm:"foreignKey:AddressID" validate:"-"`
+	Carts    []Cart `json:"carts" validate:"-"`
+	Delivery uint   `json:"delivery" validate:"required"`
+	Summary  uint   `json:"summary" validate:"required"`
+	UserID   uint   `json:"user_id" validate:"required"`
+	User     User   `gorm:"foreignKey:UserID" validate:"-"`
 }
 
 type CheckoutCart struct {
-    CheckoutID uint
-    CartID     uint
+	CheckoutID uint
+	CartID     uint
 }
 
 func CreateCheckout(checkout *Checkout) error {

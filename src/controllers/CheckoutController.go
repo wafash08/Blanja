@@ -7,41 +7,31 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	"gorm.io/gorm"
 )
 
 func CreateCheckout(c *fiber.Ctx) error {
-	var user = c.Locals("user").(jwt.MapClaims)
 	var input struct {
-		AddressID uint `json:"address_id"`
-		Carts     []struct {
-			ID uint `json:"ID"`
+		Carts []struct {
+			ID uint `json:"id"`
 		} `json:"carts"`
 		Delivery uint `json:"delivery"`
 		Summary  uint `json:"summary"`
+		UserID   uint `json:"user_id"`
 	}
 	if err := c.BodyParser(&input); err != nil {
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":     "bad request",
 			"statusCode": 400,
 			"message":    "Invalid request body",
 		})
 	}
-	userID := user["id"].(float64)
+
 	newCheckout := models.Checkout{
-		AddressID: input.AddressID,
-		Delivery:  input.Delivery,
-		Summary:   input.Summary,
-		UserID:    uint(userID),
+		Delivery: input.Delivery,
+		Summary:  input.Summary,
+		UserID:   input.UserID,
 	}
-	address := models.SelectAddressbyId(int(newCheckout.AddressID))
-	if address.Primary != "on" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Address primary field must be 'on'",
-		})
-	}
+
 	tx := configs.DB.Begin()
 	if err := tx.Create(&newCheckout).Error; err != nil {
 		tx.Rollback()
@@ -52,33 +42,24 @@ func CreateCheckout(c *fiber.Ctx) error {
 		})
 	}
 
-	// Simpan relasi many-to-many ke tabel perantara
+	// Update carts with the new checkout ID
 	for _, cart := range input.Carts {
-		checkoutCart := models.CheckoutCart{
-			CheckoutID: newCheckout.ID,
-			CartID:     cart.ID,
-		}
-		var existing models.CheckoutCart
-		if err := tx.Where("checkout_id = ? AND cart_id = ?", checkoutCart.CheckoutID, checkoutCart.CartID).First(&existing).Error; err == nil {
-			// Entri sudah ada, lanjut ke entri berikutnya
-			continue
-		} else if err != gorm.ErrRecordNotFound {
-			// Error selain "record not found"
+		var existingCart models.Cart
+		if err := tx.First(&existingCart, cart.ID).Error; err != nil {
 			tx.Rollback()
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"status":     "server error",
-				"statusCode": 500,
-				"message":    "Failed to check existing checkout-cart relationship",
-				"error":      err.Error(),
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status":     "not found",
+				"statusCode": 404,
+				"message":    "Cart not found",
 			})
 		}
-		if err := tx.Create(&checkoutCart).Error; err != nil {
+		existingCart.CheckoutID = newCheckout.ID
+		if err := tx.Save(&existingCart).Error; err != nil {
 			tx.Rollback()
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"status":     "server error",
 				"statusCode": 500,
-				"message":    "Failed to create checkout-cart relationship",
-				"error":      err.Error(),
+				"message":    "Failed to update cart",
 			})
 		}
 	}
@@ -87,10 +68,10 @@ func CreateCheckout(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"status":     "success",
 		"statusCode": 201,
-		"message":    "Checkout created successfully",
+		"message":    newCheckout,
 	})
-
 }
+
 func GetCheckoutByUserId(c *fiber.Ctx) error {
 	var user = c.Locals("user").(jwt.MapClaims)
 	userID := user["id"].(float64)
@@ -142,7 +123,6 @@ func GetCheckoutByUserId(c *fiber.Ctx) error {
 		"created_at": checkout.CreatedAt,
 		"updated_at": checkout.UpdatedAt,
 		"carts":      checkout.Carts,
-		"address":    checkout.Address,
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status":     "success",
