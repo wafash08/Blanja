@@ -53,25 +53,25 @@ func CreateCheckout(c *fiber.Ctx) error {
 	checkoutID := newCheckout.ID
 	// Update carts with the new checkout ID
 	for _, cartInput := range input.Carts {
-        var existingCart models.Cart
-        if err := tx.First(&existingCart, "id = ? AND user_id = ?", cartInput.ID, uint(userID)).Error; err != nil {
-            tx.Rollback()
-            return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-                "status":     "not found",
-                "statusCode": 404,
-                "message":    "Cart not found or does not belong to the user",
-            })
-        }
-        existingCart.CheckoutID = &checkoutID
-        if err := tx.Save(&existingCart).Error; err != nil {
-            tx.Rollback()
-            return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-                "status":     "server error",
-                "statusCode": 500,
-                "message":    "Failed to update cart",
-            })
-        }
-    }
+		var existingCart models.Cart
+		if err := tx.First(&existingCart, "id = ? AND user_id = ?", cartInput.ID, uint(userID)).Error; err != nil {
+			tx.Rollback()
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status":     "not found",
+				"statusCode": 404,
+				"message":    "Cart not found or does not belong to the user",
+			})
+		}
+		existingCart.CheckoutID = &checkoutID
+		if err := tx.Save(&existingCart).Error; err != nil {
+			tx.Rollback()
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to update cart",
+			})
+		}
+	}
 
 	tx.Commit()
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{

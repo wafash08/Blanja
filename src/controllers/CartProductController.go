@@ -108,7 +108,7 @@ func DeleteProductFromCart(c *fiber.Ctx) error {
 		CartID    []uint `json:"cart_id" binding:"required"`
 		ProductID []uint `json:"product_id" binding:"required"`
 	}
-	
+
 	if err := c.BodyParser(&request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":     "bad request",
@@ -116,15 +116,15 @@ func DeleteProductFromCart(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
-	
+
 	tx := configs.DB.Begin()
-	
+
 	// Menghapus produk dari keranjang
 	if err := tx.Where("cart_id IN ? AND product_id IN ?", request.CartID, request.ProductID).Delete(&models.CartProduct{}).Error; err != nil {
 		tx.Rollback()
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to remove product from cart"})
 	}
-	
+
 	// Memeriksa apakah keranjang sekarang kosong
 	for _, cartID := range request.CartID {
 		var remainingProducts int64
@@ -132,12 +132,12 @@ func DeleteProductFromCart(c *fiber.Ctx) error {
 			tx.Rollback()
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to check remaining products in cart"})
 		}
-		
+
 		if remainingProducts == 0 {
 			// if err := tx.Where("cart_id = ?", cartID).Delete(&models.Checkout{}).Error; err != nil {
-            //     tx.Rollback()
-            //     return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to remove associated checkout"})
-            // }
+			//     tx.Rollback()
+			//     return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to remove associated checkout"})
+			// }
 			// Menghapus data keranjang karena kosong
 			if err := tx.Delete(&models.Cart{}, cartID).Error; err != nil {
 				tx.Rollback()
@@ -145,8 +145,7 @@ func DeleteProductFromCart(c *fiber.Ctx) error {
 			}
 		}
 	}
-	
+
 	tx.Commit()
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Products removed from cart"})
 }
-

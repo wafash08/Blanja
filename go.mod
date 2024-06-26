@@ -11,6 +11,12 @@ require (
 )
 
 require (
+	github.com/veritrans/go-midtrans v0.0.0-20210616100512-16326c5eeb00 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
+)
+
+require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/cloudinary/cloudinary-go v1.7.0
