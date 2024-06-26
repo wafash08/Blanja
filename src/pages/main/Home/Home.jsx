@@ -134,6 +134,7 @@ export function NewProductSection({ title, description }) {
 			</>
 		);
 	}
+	console.log('products >> \n', data);
 	return (
 		<ProductSection title={title} description={description}>
 			{productList}

@@ -12,6 +12,7 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon'
 import MinusIcon from '@heroicons/react/24/solid/MinusIcon'
 import ChevronRight from '@heroicons/react/24/solid/ChevronRightIcon'
 import ChevronLeft from '@heroicons/react/24/solid/ChevronLeftIcon'
+import Swal from "sweetalert2";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -258,25 +259,31 @@ const DetailProduct = () => {
     })
     .then((res) => {
       console.log(res.data.message);
-      setAlertMessage(res.data.message)
-      setAlertType("SUCCESS")
+      Swal.fire("Add Cart Succeed")
     })
     .catch((err) => {
       console.log(err.response);
-      setAlertMessage("Failed adding to cart")
-      setAlertType("ERROR")
+      Swal.fire({
+        title: "Add Cart Failed",
+        showConfirmButton: false,
+        showDenyButton: true,
+        denyButtonText: 'OK',
+        showCloseButton: true
+      })
     })
   }
 
-  const [alertMessage, setAlertMessage] = useState("")
-  const [alertType, setAlertType] = useState("")
-  const handleClickAlert = () => {
-    setAlertMessage("");
-    setAlertType("")
-  }
+  // const [alertMessage, setAlertMessage] = useState("")
+  // const [alertType, setAlertType] = useState("")
+  // const handleClickAlert = () => {
+  //   setAlertMessage("");
+  //   setAlertType("")
+  // }
   return (
-    <Container className={"w-[1156px] mx-auto px-0 mb-40"}>
-      {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)}
+    <Container className={
+      "lg:max-w-[1156px] lg:min-w-[1024px] mx-auto px-0 mb-40 max-lg:max-w-[1024px]"
+      }>
+      {/* {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)} */}
       <div>
         <Container>
           <BreadCrumb
@@ -290,18 +297,19 @@ const DetailProduct = () => {
           />
         </Container>
       </div>
-      <div className="w-full h-auto flex mt-12">
+      <div className="w-full h-auto lg:flex mt-12">
         {/* Image Section */}
-        <div className="h-[482px] w-auto">
-          <div className="w-[367px] h-[460px]">
-            <div className="w-[367px] h-[378px]">
+        <div className="h-[482px] w-auto max-lg:mx-auto max-lg:w-[90%]">
+          <div className="lg:w-[367px] max-lg:w-[90%] h-[460px]">
+            <div className="lg:w-[367px] max-lg:w-[100%] h-[378px]">
               <img
                 src={imageURL}
                 alt="product-image"
-                className="w-[367px] h-[378px] rounded-xl object-cover"
+                className="lg:w-[367px] max-lg:w-[100%] max-lg:object-contain h-[378px] rounded-xl object-cover"
               />
             </div>
-            <div className="flex gap-[10.5px] overflow-x-auto mt-4">
+            <div className="flex overflow-x-auto max-lg:w-[100%] max-lg:justify-center">
+              <div className="flex gap-[10.5px] mt-4 max-lg:w-auto">
               {imageList.map((value, index) => (
                 <img
                   className="w-[65px] h-[65px] rounded-md hover:cursor-pointer object-cover"
@@ -311,6 +319,7 @@ const DetailProduct = () => {
                   onClick={handleClickListImage}
                 />
               ))}
+              </div>
             </div>
           </div>
         </div>
@@ -515,7 +524,7 @@ const DetailProduct = () => {
             </div>
           </div>
 
-          <div className="flex-col ml-10 mt-4">
+          <div className="max-lg:w-[90%] flex-col ml-10 mt-4">
             {/* Rating 5 */}
             <div className="flex items-center">
               <svg
@@ -527,7 +536,7 @@ const DetailProduct = () => {
               <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
                 5
               </p>
-              <div className="w-[120px] h-auto ml-7">
+              <div className="w-[120px] max-lg:w-[35%] h-auto ml-7">
                 <div
                   style={{
                     width: `calc(100% * ${
@@ -554,7 +563,7 @@ const DetailProduct = () => {
               <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
                 4
               </p>
-              <div className="w-[120px] h-auto ml-7">
+              <div className="w-[120px] max-lg:w-[35%] h-auto ml-7">
                 <div
                   style={{
                     width: `calc(100% * ${
@@ -581,7 +590,7 @@ const DetailProduct = () => {
               <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
                 3
               </p>
-              <div className="w-[120px] h-auto ml-7">
+              <div className="w-[120px] max-lg:w-[35%] h-auto ml-7">
                 <div
                   style={{
                     width: `calc(100% * ${
@@ -608,7 +617,7 @@ const DetailProduct = () => {
               <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
                 2
               </p>
-              <div className="w-[120px] h-auto ml-7">
+              <div className="w-[120px] max-lg:w-[35%] h-auto ml-7">
                 <div
                   style={{
                     width: `calc(100% * ${
@@ -635,7 +644,7 @@ const DetailProduct = () => {
               <p className="font-medium text-[14px] text-[#9B9B9B] ml-3 w-[9px]">
                 1
               </p>
-              <div className="w-[120px] h-auto ml-7">
+              <div className="w-[120px] max-lg:w-[35%] h-auto ml-7">
                 <div
                   style={{
                     width: `calc(100% * ${
