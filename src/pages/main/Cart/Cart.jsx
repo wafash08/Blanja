@@ -53,6 +53,7 @@ const Cart = () => {
         console.log(error);
       });
   }, [cartsProduct, status]);
+  console.log("data cartproduct", products);
 
   const handleSelectAll = (isSelected) => {
     const updatedProducts = products.map((product) => ({
@@ -153,8 +154,32 @@ const Cart = () => {
     }
   };
   const handleClick = () => {
-    navigate("/checkout")
+    // Define the data to be sent in the request
+    const checkoutCart = products
+      .filter((product) => product.isSelected)
+      .map((product) => ({ id: product.cartId }));
+    const data = {
+      carts: checkoutCart,
+      delivery: 20000,
+      summary: 120000,
+      user_id: 25,
+    };
+
+    // Make the POST request to the /checkout endpoint
+    axios
+      .post(`${import.meta.env.VITE_BE_URL}checkout`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log("Success:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
+
   const total =
     products && products.length > 0
       ? products.reduce(
