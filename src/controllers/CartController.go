@@ -86,7 +86,71 @@ func CreateCart(c *fiber.Ctx) error {
 		})
 	}
 
-	err := models.CreateCart(cart)
+	// Use a transaction to ensure atomicity
+	err := configs.DB.Transaction(func(tx *gorm.DB) error {
+		var existingCart models.Cart
+		if err := tx.Where("user_id = ? AND product_id = ?", newCart.UserID, newCart.ProductID).First(&existingCart).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				// Cart with the same user and product not found, create a new cart
+				if err := tx.Create(cart).Error; err != nil {
+					return err
+				}
+				// Assign new cart ID for the next step
+				newCart.ID = cart.ID
+			} else {
+				return err
+			}
+		} else {
+			// Cart with the same user and product found, update the quantity
+			existingCart.Quantity += newCart.Quantity
+			if err := tx.Save(&existingCart).Error; err != nil {
+				return err
+			}
+			// Update request struct for existing cart
+			newCart.ID = existingCart.ID
+			newCart.Quantity = existingCart.Quantity
+		}
+
+		var request struct {
+			CartID    uint `json:"cart_id" binding:"required"`
+			ProductID uint `json:"product_id" binding:"required"`
+			Quantity  uint `json:"quantity" binding:"required,min=1"`
+		}
+
+		// Use the existing cart if it exists, otherwise use the new cart
+		request.CartID = newCart.ID
+		request.Quantity = newCart.Quantity
+		request.ProductID = newCart.ProductID
+
+		var newCartProduct models.CartProduct
+		cartProduct := middlewares.XSSMiddleware(&newCartProduct).(*models.CartProduct)
+
+		errCP := tx.Where("cart_id = ? AND product_id = ?", request.CartID, request.ProductID).First(&cartProduct).Error
+
+		if errCP != nil {
+			if errCP == gorm.ErrRecordNotFound {
+				// Create new entry
+				cartProduct = &models.CartProduct{
+					CartID:    request.CartID,
+					ProductID: request.ProductID,
+					Quantity:  request.Quantity,
+				}
+				if err := tx.Create(&cartProduct).Error; err != nil {
+					return err
+				}
+			} else {
+				return errCP
+			}
+		} else {
+			// Update existing entry
+			cartProduct.Quantity = newCart.Quantity
+			if err := tx.Save(&cartProduct).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
@@ -94,54 +158,16 @@ func CreateCart(c *fiber.Ctx) error {
 			"message":    "Failed to create cart",
 		})
 	}
-	// else {
-	// 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-	// 		"status":     "success",
-	// 		"statusCode": 200,
-	// 		"message":    "Cart created successfully",
-	// 	})
-	// }
-	var request struct {
-		CartID    uint `json:"cart_id" binding:"required"`
-		ProductID uint `json:"product_id" binding:"required"`
-		Quantity  uint `json:"quantity" binding:"required,min=1"`
-		// ColorID   uint      `json:"color_id" validate:"required"`
-		// SizeID    uint      `json:"size_id" validate:"required"`
-	}
-	request.CartID = cart.ID
-	request.Quantity = cart.Quantity
-	request.ProductID = cart.ProductID
-	// request.ColorID = cart.ColorID
-	// request.SizeID = cart.SizeID
 
-	var newCartProduct models.CartProduct
-	cartProduct := middlewares.XSSMiddleware(&newCartProduct).(*models.CartProduct)
-
-	errCP := configs.DB.Where("cart_id = ? AND product_id = ?", cart.ID, cart.ProductID).First(&cartProduct).Error
-
-	if errCP != nil {
-		if errCP == gorm.ErrRecordNotFound {
-			// Create new entry
-			cartProduct = &models.CartProduct{
-				CartID:    request.CartID,
-				ProductID: request.ProductID,
-				Quantity:  request.Quantity,
-			}
-			configs.DB.Create(&cartProduct)
-		} else {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": errCP.Error()})
-		}
-	} else {
-		// Update existing entry
-		cartProduct.Quantity += request.Quantity
-		configs.DB.Save(&cartProduct)
-	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status":     "success",
 		"statusCode": 200,
 		"message":    "Cart created successfully",
 	})
 }
+
+
+
 
 func GetCartByUserID(c *fiber.Ctx) error {
 	var user = c.Locals("user").(jwt.MapClaims)
