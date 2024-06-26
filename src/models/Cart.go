@@ -12,11 +12,12 @@ type Cart struct {
 	Quantity  uint `json:"quantity"`
 	SellerID  uint `json:"seller_id" validate:"required"`
 	UserID    uint `json:"user_id" validate:"required"`
-	// ColorID   uint      `json:"color_id"`
-	// SizeID    uint      `json:"size_id"`
-	Seller      Seller    `gorm:"foreignKey:SellerID" validate:"-"`
-	Products    []Product `gorm:"many2many:cart_products;" json:"products"`
-	User        User      `gorm:"foreignKey:UserID" validate:"-"`
+	Seller     Seller    `gorm:"foreignKey:SellerID" validate:"-"`
+	Products   []Product `gorm:"many2many:cart_products;" json:"products"`
+	User       User      `gorm:"foreignKey:UserID" validate:"-"`
+	CheckoutID *uint      `json:"checkout_id"`
+	Checkout   Checkout  `gorm:"foreignKey:CheckoutID" validate:"-"`
+
 	// Color     Color		`gorm:"foreignKey:ColorID" validate:"required"`
 	// Size      Size      `gorm:"foreignKey:SizeID" validate:"required"`
 }
