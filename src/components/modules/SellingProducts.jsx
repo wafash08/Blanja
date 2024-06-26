@@ -154,7 +154,7 @@ const SellingProducts = () => {
 
     if (loading === true) {
         return (
-        <div className='w-[850px] h-auto bg-[#F5F5F5]'>
+        <div className='w-[100%] h-auto bg-[#F5F5F5]'>
             <div className='w-[100%] bg-white px-6 py-8 rounded-[4px]'>
                 <div className='w-[40%]'>
                     <Skeleton className='h-[70px]' />
@@ -170,14 +170,14 @@ const SellingProducts = () => {
         )
     }
   return (
-    <div className='w-[850px] h-auto bg-[#F5F5F5]'>
+    <div className='w-[100%] max-lg:w-[100%] h-auto bg-[#F5F5F5]'>
         {/* Inventory */}
         <div className='w-[100%] bg-white px-6 py-8 rounded-[4px]'>
             <p className='font-metropolis font-semibold text-[20px] text-[#222222]'>Inventory</p>
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
-            <div className='w-[348px]'>
+            <div className='w-[348px] max-lg:w-[100%]'>
                 <InputField type='text' name="name" label="Name of goods" onChange={handleChangeInput} />
             </div>
         </div>
@@ -189,13 +189,13 @@ const SellingProducts = () => {
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
-            <div className='w-[348px] mb-8'>
+            <div className='w-[348px] max-lg:w-[100%] mb-8'>
                 <InputField type='text' name="price" label="Unit price" onChange={handleChangeInput} />
             </div>
-            <div className='w-[348px] mb-10'>
+            <div className='w-[348px] max-lg:w-[100%] mb-10'>
                 <InputField type='text' name="stock" label="Stock" placeholder="Ex: 12" onChange={handleChangeInput} />
             </div>
-            <div className='w-[348px] mb-10'>
+            <div className='w-[348px] max-lg:w-[100%] mb-10'>
                 <fieldset className='border-none flex'>
                     <legend className='font-metropolis font-medium text-[14px] text-[#9B9B9B] mb-5'>Condition</legend>
                     <label className='font-normal font-metropolis text-[14px] text-[#9B9B9B] flex gap-3 items-center mr-7'>
@@ -208,7 +208,7 @@ const SellingProducts = () => {
                     </label>
                 </fieldset>
             </div>
-            <div className='w-[348px] mb-10'>
+            <div className='w-[348px] max-lg:w-[100%] mb-10'>
                 <p className='font-metropolis font-medium text-[14px] text-[#9B9B9B] mb-5'>Category</p>
                 <div className='w-full flex flex-wrap justify-start gap-4'>
                     {listCategories.map((category, index) => (
@@ -218,8 +218,8 @@ const SellingProducts = () => {
                     ))}
                 </div>
             </div>
-            <div className='w-[348px] mb-10'>
-                <div className='flex gap-5 justify-start items-end'>
+            <div className='w-[348px] max-lg:w-[100%] mb-10'>
+                <div className='flex max-lg:w-[100%] gap-5 justify-start items-end'>
                     <div className='w-[70%]'>
                         <InputField type='text' name="color" label="Add Color" placeholder="Input Hex Color. Ex: #DB3022" onChange={(e) => setInputColor(e.target.value)} />
                     </div>
@@ -233,7 +233,7 @@ const SellingProducts = () => {
                     ))}
                 </div>
             </div>
-            <div className='w-[348px] mb-10'>
+            <div className='w-[348px] max-lg:w-[100%] mb-10'>
                 <div className='flex gap-5 justify-start items-end'>
                     <div className='w-[70%]'>
                         <InputField type='text' name="size" label="Add Size" placeholder="Input Size. Ex: XL or Ex: 42" onChange={(e) => setInputSize(e.target.value)} />
@@ -257,7 +257,7 @@ const SellingProducts = () => {
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
-            <div className='w-[790px] h-auto px-4 py-8 rounded-[4px] outline-1 outline-dashed outline-[#D4D4D4] flex flex-col items-center'>
+            <div className='w-[100%] max-lg:w-[100%] h-auto px-4 py-8 rounded-[4px] outline-1 outline-dashed outline-[#D4D4D4] flex flex-col items-center'>
                 {formProduct.images.length > 0 ? (
                 <div className='w-full h-auto flex justify-start overflow-x-auto pb-4'>
                 <ul className='flex items-center gap-5 whitespace-nowrap'>

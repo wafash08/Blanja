@@ -92,7 +92,7 @@ const ChooseAddressModal = ({ onClickX }) => {
   if (loading === true) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
-      <div className="w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
+      <div className="w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative max-lg:w-[90%] max-lg:min-h-[675px]">
         <div className="w-[100%] h-auto flex justify-center mt-10">
           <div className="w-[50%] h-auto mt-5 hover:cursor-pointer mb-10">
             <Skeleton
@@ -118,7 +118,7 @@ const ChooseAddressModal = ({ onClickX }) => {
   }
   return (
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
-      <div className="w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
+      <div className="w-[810px] max-lg:w-[80%] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
         <CloseMark className="text-[#9B9B9B] w-6 h-6 absolute top-3 right-3 hover:cursor-pointer" onClick={onClickX} />
         <p className="font-metropolis font-semibold text-[28px] text-[#222222] text-center mt-14">
           Choose another address

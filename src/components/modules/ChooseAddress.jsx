@@ -106,7 +106,7 @@ const ChooseAddress = () => {
 
 	if (loading === true) {
 		return (
-			<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
+			<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative max-lg:w-[90%] max-lg:min-h-[675px]'>
 				<Skeleton className='w-[90%] h-[300px]' containerClassName='flex-1' />
 				<div className='w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10'>
 					<Skeleton
@@ -119,7 +119,7 @@ const ChooseAddress = () => {
 		);
 	}
 	return (
-		<div className='w-[810px] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
+	<div className='w-[810px] max-lg:w-[100%] min-h-[675px] h-auto flex flex-col items-center bg-white relative'>
       <div className='w-[90%] flex flex-col items-start mt-14'>
         <p className='font-metropolis font-semibold text-[28px] text-[#222222] text-center'>
           Choose another address

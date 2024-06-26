@@ -14,9 +14,9 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [isSent, setIsSent] = useState(false);
+  // const [alertMessage, setAlertMessage] = useState("");
+  // const [alertType, setAlertType] = useState("");
+  // const [isSent, setIsSent] = useState(false);
   const handleChange = (e) => {
     setForm({
       ...form,
