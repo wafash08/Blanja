@@ -132,6 +132,8 @@ func GetCheckoutByUserId(c *fiber.Ctx) error {
 			"id":         checkout.ID,
 			"user_id":    checkout.UserID,
 			"carts":      carts,
+			"delivery":   checkout.Delivery,
+			"summary":    checkout.Summary,
 			"created_at": checkout.CreatedAt,
 			"updated_at": checkout.UpdatedAt,
 		}
