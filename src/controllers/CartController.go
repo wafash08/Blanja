@@ -89,7 +89,7 @@ func CreateCart(c *fiber.Ctx) error {
 	// Use a transaction to ensure atomicity
 	err := configs.DB.Transaction(func(tx *gorm.DB) error {
 		var existingCart models.Cart
-		if err := tx.Where("user_id = ? AND product_id = ? AND checkout_id IS NULL", newCart.UserID, newCart.ProductID).First(&existingCart).Error; err != nil {
+		if err := tx.Where("user_id = ? AND product_id = ?", newCart.UserID, newCart.ProductID).First(&existingCart).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
 				// Cart with the same user and product not found, create a new cart
 				if err := tx.Create(cart).Error; err != nil {
