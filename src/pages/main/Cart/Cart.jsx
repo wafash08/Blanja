@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CartSummary from "../../../components/base/ShoppingSummary";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const BASE_URL = import.meta.env.VITE_BE_URL;
@@ -153,8 +154,44 @@ const Cart = () => {
     }
   };
   const handleClick = () => {
-    navigate("/checkout")
+    // Define the data to be sent in the request
+    const selectedProducts = products.filter(product => product.isSelected);
+    const totalPrice = selectedProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
+    
+    // Calculate the delivery fee as 10% of the total price
+    const deliveryFee = totalPrice * 0.1;
+    
+    // Calculate the summary as the total price plus the delivery fee
+    const summary = totalPrice + deliveryFee;
+    
+    // Get the cart IDs from the selected products
+    const carts = selectedProducts.map(product => ({ id: product.cartId }));
+
+    // Define the data to be sent in the request
+    const data = {
+        carts: carts,
+        delivery: deliveryFee,
+        summary: summary,
+        user_id: 25
+    };
+
+    // Make the POST request to the /checkout endpoint
+    axios
+      .post(`${import.meta.env.VITE_BE_URL}checkout`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log("Success:", response.data);
+        navigate("/checkout")
+      })
+      .catch((error) => {
+        Swal.fire("Checkout Failed")
+        console.error("Error:", error);
+      });
   };
+
   const total =
     products && products.length > 0
       ? products.reduce(
