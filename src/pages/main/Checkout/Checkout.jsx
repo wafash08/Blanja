@@ -12,33 +12,31 @@ import axios from "axios";
 import ChooseAddressModal from "../../../components/modules/ChooseAddressModal";
 
 const Checkout = () => {
-  // //   const { id } = useParams();
-  // const { data: cartsProduct, status } = useCarts();
-  // const [checkouts, setCheckouts] = useState("");
-  // const [address, setAddress] = useState("");
-  // const [carts, setCarts] = useState([]);
+  const { data: cartsProduct, status } = useCarts();
+  const [checkouts, setCheckouts] = useState("");
+  const [address, setAddress] = useState("");
+  // const [AllCheckout, setAllCheckout] = useState([]);
   // const [loading, setLoading] = useState(true);
-  // let cartList = null;
+  let cartList = null;
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_BE_URL}checkout/user`, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log("data checkout", res.data.data);
-  //       setCheckouts(res.data.data);
-  //       setAddress(res.data.data.address);
-  //       setCarts(res.data.data.carts);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.response);
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BE_URL}checkout/user`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const filteredCheckouts = res.data.data.filter(item => item.carts && item.carts.length > 0);
+        console.log("checkout", filteredCheckouts);
+        setCheckouts(filteredCheckouts);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setLoading(false);
+      });
+  }, []);
   const [loading, setLoading] = useState(true)
   const [defaultAddress, setDefaultAddress] = useState({}) 
   const getProfile = () => {
@@ -133,11 +131,11 @@ const Checkout = () => {
         <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
           <div className=" w-3/5 max-md:w-full">
             <CheckoutAdress address={defaultAddress} onClick={handleChangeAddress} />
-            <CheckoutProductList  />
+            <CheckoutProductList checkouts={checkouts}  />
           </div>
 
           <div className=" w-2/5 max-md:w-full">
-            <ShoppingSummary />
+            <ShoppingSummary checkouts={checkouts} />
           </div>
         </div>
       </section>

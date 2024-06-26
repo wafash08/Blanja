@@ -53,7 +53,6 @@ const Cart = () => {
         console.log(error);
       });
   }, [cartsProduct, status]);
-  console.log("data cartproduct", products);
 
   const handleSelectAll = (isSelected) => {
     const updatedProducts = products.map((product) => ({
@@ -155,14 +154,24 @@ const Cart = () => {
   };
   const handleClick = () => {
     // Define the data to be sent in the request
-    const checkoutCart = products
-      .filter((product) => product.isSelected)
-      .map((product) => ({ id: product.cartId }));
+    const selectedProducts = products.filter(product => product.isSelected);
+    const totalPrice = selectedProducts.reduce((total, product) => total + product.price, 0);
+    
+    // Calculate the delivery fee as 10% of the total price
+    const deliveryFee = totalPrice * 0.1;
+    
+    // Calculate the summary as the total price plus the delivery fee
+    const summary = totalPrice + deliveryFee;
+    
+    // Get the cart IDs from the selected products
+    const carts = selectedProducts.map(product => ({ id: product.cartId }));
+
+    // Define the data to be sent in the request
     const data = {
-      carts: checkoutCart,
-      delivery: 20000,
-      summary: 120000,
-      user_id: 25,
+        carts: carts,
+        delivery: deliveryFee,
+        summary: summary,
+        user_id: 25
     };
 
     // Make the POST request to the /checkout endpoint
