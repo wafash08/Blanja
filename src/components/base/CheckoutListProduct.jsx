@@ -1,7 +1,7 @@
 import React from "react";
 import ProductDummy from "../../assets/product-dummy.png"
 
-const CheckoutProductList = () => {
+const CheckoutProductList = (products) => {
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -10,6 +10,7 @@ const CheckoutProductList = () => {
       maximumFractionDigits: 0,
     }).format(price);
   };
+  console.log("receive checkout data",products);
   return (
     <div className="w-full">
         <div

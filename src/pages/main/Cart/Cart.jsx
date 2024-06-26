@@ -174,6 +174,7 @@ const Cart = () => {
       })
       .then((response) => {
         console.log("Success:", response.data);
+        navigate("/checkout")
       })
       .catch((error) => {
         console.error("Error:", error);
