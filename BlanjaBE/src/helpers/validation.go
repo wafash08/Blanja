@@ -48,9 +48,9 @@ func StructValidation(param any) []*ErrorResponse {
 			// fieldName, _ := field.Tag.Lookup("json")
 			var message string
 			if err.Param() == "" {
-				message = fmt.Sprintf("%s must contain %s", err.StructNamespace(), err.ActualTag())
+				message = fmt.Sprintf("%s must contain %s", err.Field(), err.ActualTag())
 			} else {
-				message = fmt.Sprintf("%s must contain %s=%s", err.StructNamespace(), err.ActualTag(), err.Param())
+				message = fmt.Sprintf("%s must contain %s=%s", err.Field(), err.ActualTag(), err.Param())
 			}
 
 			errors = append(errors, &ErrorResponse{
