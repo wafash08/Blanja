@@ -7,14 +7,14 @@ import (
 )
 
 type Checkout struct {
-    gorm.Model
-    // AddressID uint     `json:"address_id"`
-    // Address   Address  `gorm:"foreignKey:AddressID" validate:"-"`
-    Carts     []Cart   `json:"carts"`
-    Delivery  uint     `json:"delivery" validate:"required"`
-    Summary   uint     `json:"summary" validate:"required"`
-    UserID    uint     `json:"user_id" validate:"required"`
-    User      User     `gorm:"foreignKey:UserID" validate:"-"`
+	gorm.Model
+	// AddressID uint     `json:"address_id"`
+	// Address   Address  `gorm:"foreignKey:AddressID" validate:"-"`
+	Carts    []Cart `json:"carts"`
+	Delivery uint   `json:"delivery" validate:"required"`
+	Summary  uint   `json:"summary" validate:"required"`
+	UserID   uint   `json:"user_id" validate:"required"`
+	User     User   `gorm:"foreignKey:UserID" validate:"-"`
 }
 
 func CreateCheckout(checkout *Checkout) error {
@@ -24,5 +24,10 @@ func CreateCheckout(checkout *Checkout) error {
 func SelectCheckoutById(id int) *Checkout {
 	var checkout *Checkout
 	configs.DB.Preload("Carts.Products").First(&checkout, "user_id = ?", id)
+	return checkout
+}
+func SelectCheckoutByIdAndUserId(id, user_id int) *Checkout {
+	var checkout *Checkout
+	configs.DB.Preload("Carts.Products").First(&checkout, "id = ? AND user_id = ?", id, user_id)
 	return checkout
 }

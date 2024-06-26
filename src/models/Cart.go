@@ -37,6 +37,11 @@ func SelectCartById(id int) []*Cart {
 	configs.DB.Preload("Seller").Preload("Products").Find(&cart, "user_id = ?", id)
 	return cart
 }
+func SelectCartbyCheckoutID(checkout_id int) []*Cart {
+	var carts []*Cart
+	configs.DB.Preload("Seller").Preload("Products").Find(&carts, "checkout_id = ?", checkout_id)
+	return carts
+}
 func DeleteCart(id []int) error {
 	result := configs.DB.Delete(&Cart{}, "id = ?", id)
 	return result.Error
