@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import CloseMark from "@heroicons/react/24/solid/XMarkIcon";
 import Button from "../base/Button";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { getTokenFromLocalStorage } from "../../utils";
+import { useNavigate } from "react-router-dom";
+import { CloseIcon } from "../base/Icons";
 
 const ChooseAddressModal = ({ onClickX }) => {
   // const listAddresses = [
@@ -46,6 +49,15 @@ const ChooseAddressModal = ({ onClickX }) => {
   const [addresses, setAddresses] = useState("")
 	const [defaultAddress, setDefaultAddress] = useState("")
 	const [loading, setLoading] = useState(true)
+  const newAddressRef = useRef();
+
+	const handleOpenNewAddress = () => {
+		newAddressRef.current.showModal();
+	};
+
+	const handleCloseNewAddress = () => {
+		newAddressRef.current.close();
+	};
 
 	useEffect(() => {
 		setLoading(true)
@@ -117,17 +129,18 @@ const ChooseAddressModal = ({ onClickX }) => {
     );
   }
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-50 overflow-y-auto">
       <div className="w-[810px] max-lg:w-[80%] min-h-[675px] h-auto flex flex-col items-center bg-white relative">
         <CloseMark className="text-[#9B9B9B] w-6 h-6 absolute top-3 right-3 hover:cursor-pointer" onClick={onClickX} />
         <p className="font-metropolis font-semibold text-[28px] text-[#222222] text-center mt-14">
           Choose another address
         </p>
-        <div className="w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10">
+        <div onClick={handleOpenNewAddress} className="w-[90%] h-[86px] flex justify-center items-center border border-dashed rounded-[8px] border-[#9B9B9B] mt-5 hover:cursor-pointer mb-10">
           <p className="font-metropolis font-semibold text-[18px] text-[#9B9B9B]">
             Add new address
           </p>
         </div>
+        <NewAddress ref={newAddressRef} onClose={handleCloseNewAddress} />
         {changeAddress === true ? (
           <ChangeDefaultAddress addresses={addresses} defaultAddress={defaultAddress} setDefaultAddress={setDefaultAddress} onClickOk={onClickOk} />
         ) : (
@@ -198,4 +211,172 @@ const ChangeDefaultAddress = ({addresses, defaultAddress, setDefaultAddress, onC
       </div>
     </div>
   )
+}
+
+const NewAddress = forwardRef(({ onClose }, ref) => {
+	const token = getTokenFromLocalStorage();
+	const navigate = useNavigate();
+	const handleAddAddress = async e => {
+		try {
+			e.preventDefault();
+			const formData = new FormData(e.target);
+			const main_address = formData.get('main_address');
+			const detail_address = formData.get('detail_address');
+			const name = formData.get('name');
+			const phone = formData.get('phone');
+			const postal_code = formData.get('postal_code');
+			const city = formData.get('city');
+			const primary = formData.get('primary') ?? 'off';
+			const address = {
+				main_address,
+				detail_address,
+				name,
+				phone,
+				postal_code,
+				city,
+				primary,
+			};
+			const response = await addAddress(token, address);
+			console.log('response > ', response);
+			navigate(0);
+		} catch (error) {
+			console.log('error while submitting new address', error);
+		}
+	};
+	return (
+		<dialog
+			ref={ref}
+			className='font-metropolis backdrop:bg-black/40 w-[90%] max-w-3xl border border-[#9B9B9B] bg-white rounded-lg relative p-5 lg:p-10'
+		>
+			<div className='mb-10'>
+				<h2 className='text-[#222222] text-[28px] text-center'>
+					Add new address
+				</h2>
+			</div>
+			<form className='space-y-12' onSubmit={handleAddAddress}>
+				<div className='space-y-4'>
+					<FormControl>
+						<Label id='detail_address'>Save address as</Label>
+						<Input
+							type='text'
+							name='detail_address'
+							id='detail_address'
+							placeholder='Ex: Rumah'
+						/>
+					</FormControl>
+					<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
+						<div className='flex-1'>
+							<FormControl>
+								<Label id='name'>Recipient’s name</Label>
+								<Input
+									type='text'
+									name='name'
+									id='name'
+									placeholder='Ex: Andri'
+								/>
+							</FormControl>
+						</div>
+						<div className='flex-1'>
+							<FormControl>
+								<Label id='phone'>Recipient's telephone number</Label>
+								<Input
+									type='tel'
+									name='phone'
+									id='phone'
+									placeholder='Ex: 0812xxxxxxxx'
+								/>
+							</FormControl>
+						</div>
+					</div>
+					<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
+						<div className='flex-1'>
+							<FormControl>
+								<Label id='main_address'>Address</Label>
+								<Input
+									type='text'
+									name='main_address'
+									id='main_address'
+									placeholder='Ex: Jl. Imam Bonjol'
+								/>
+							</FormControl>
+						</div>
+						<div className='flex-1'>
+							<FormControl>
+								<Label id='postal_code'>Postal Code</Label>
+								<Input
+									type='text'
+									name='postal_code'
+									id='postal_code'
+									placeholder='Ex: 15890'
+								/>
+							</FormControl>
+						</div>
+					</div>
+					<div className='flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8'>
+						<div className='flex-1'>
+							<FormControl>
+								<Label id='city'>City or Subdistrict</Label>
+								<Input
+									type='text'
+									name='city'
+									id='city'
+									placeholder='Ex: Jakarta'
+								/>
+							</FormControl>
+						</div>
+						<div className='flex-1' />
+					</div>
+					<div className='flex items-center gap-3'>
+						<input type='checkbox' name='primary' id='primary' />
+						<Label id='primary'>Make it the primary address</Label>
+					</div>
+				</div>
+
+				<div className='flex justify-end gap-5'>
+					<button
+						type='button'
+						className='text-[#9B9B9B] bg-white border border-[#9B9B9B] py-2 px-4 w-full max-w-40 rounded-full'
+						onClick={onClose}
+					>
+						Cancel
+					</button>
+					<button
+						type='submit'
+						className='text-white bg-[#DB3022] border border-[#DB3022] py-2 px-4 w-full max-w-40 rounded-full'
+					>
+						Save
+					</button>
+				</div>
+			</form>
+			<button
+				type='button'
+				className='absolute top-5 right-5'
+				onClick={onClose}
+			>
+				<span className='sr-only'>Tutup</span>
+				<CloseIcon />
+			</button>
+		</dialog>
+	);
+});
+
+function FormControl({ children }) {
+	return <div className='flex flex-col gap-3'>{children}</div>;
+}
+
+function Label({ children, id }) {
+	return (
+		<label htmlFor={id} className='text-[#9B9B9B] text-sm font-medium'>
+			{children}
+		</label>
+	);
+}
+
+function Input({ ...props }) {
+	return (
+		<input
+			{...props}
+			className='py-3 px-5 w-full border border-[#9B9B9B] shadow-[0_1px_8px_0px_#0000000D] rounded'
+		/>
+	);
 }
