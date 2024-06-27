@@ -8,6 +8,14 @@ import (
 )
 
 func Router(app *fiber.App) {
+	// Landing Route
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"info":    "Hello, This is API Back-End for Blanja from Codecraft.",
+			"message": "Server is running.",
+		})
+	})
+
 	// Product Routes
 	app.Get("/products", controllers.GetAllProduct)
 	app.Get("/product/:id", controllers.GetDetailProduct)
