@@ -77,4 +77,5 @@ func Router(app *fiber.App) {
 	app.Get("/order/profile", middlewares.JWTMiddleware(), controllers.GetOrdersUser)
 	app.Post("/order", middlewares.JWTMiddleware(), controllers.CreateOrder)
 	app.Post("/payment/check", controllers.HandlePaymentCallback)
+	app.Put("/order/status", middlewares.JWTMiddleware(), controllers.UpdateStatusOrder)
 }

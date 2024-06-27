@@ -168,15 +168,14 @@ func CreateOrder(c *fiber.Ctx) error {
 		totalPrice += itemTotalPrice
 	}
 
-	totalPrice += int64(existCheckout.Delivery)
-
-	if totalPrice != int64(existCheckout.Summary) {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status":     "bad request",
-			"statusCode": 400,
-			"message":    "Total price mismatch",
-		})
-	}
+	// Menambahkan biaya pajak sebagai item
+	taxAmount := int64(existCheckout.Delivery) // Biaya pajak disimpan dalam field Delivery
+	items = append(items, midtrans.ItemDetail{
+		Price: taxAmount,
+		Qty:   1,
+		Name:  "Tax",
+	})
+	totalPrice += taxAmount
 
 	newOrder.TotalPrice = float64(totalPrice)
 
@@ -188,6 +187,14 @@ func CreateOrder(c *fiber.Ctx) error {
 			"statusCode": 422,
 			"message":    "Validation failed",
 			"errors":     errors,
+		})
+	}
+
+	if err := models.CreateOrder(order); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to create order",
 		})
 	}
 
@@ -245,11 +252,19 @@ func CreateOrder(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.CreateOrder(order); err != nil {
+	if err := models.DeleteCartsByCheckoutID(int(newOrder.CheckoutID)); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
-			"message":    "Failed to create order",
+			"message":    "Failed to delete carts",
+		})
+	}
+
+	if err := models.DeleteCheckout(int(newOrder.CheckoutID)); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to delete checkout",
 		})
 	}
 

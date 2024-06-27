@@ -46,3 +46,6 @@ func DeleteCart(id []int) error {
 	result := configs.DB.Delete(&Cart{}, "id = ?", id)
 	return result.Error
 }
+func DeleteCartsByCheckoutID(checkoutID int) error {
+	return configs.DB.Where("checkout_id = ?", checkoutID).Delete(&Cart{}).Error
+}

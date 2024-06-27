@@ -31,3 +31,6 @@ func SelectCheckoutByIdAndUserId(id, user_id int) *Checkout {
 	configs.DB.Preload("Carts.Products").First(&checkout, "id = ? AND user_id = ?", id, user_id)
 	return checkout
 }
+func DeleteCheckout(id int) error {
+	return configs.DB.Where("id = ?", id).Delete(&Checkout{}).Error
+}
