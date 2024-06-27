@@ -186,13 +186,91 @@ func GetOrdersUser(c *fiber.Ctx) error {
 
 	resultOrders := make([]*map[string]interface{}, len(orders))
 	for i, order := range orders {
+		var checkout models.Checkout
+		if err := configs.DB.Unscoped().Where("id = ?", order.CheckoutID).First(&checkout).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get checkout.",
+				"error":      err.Error(),
+			})
+		}
+
+		var carts []models.Cart
+		if err := configs.DB.Unscoped().Where("checkout_id = ?", checkout.ID).Find(&carts).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get carts.",
+				"error":      err.Error(),
+			})
+		}
+
+		cartProducts := []map[string]interface{}{}
+		for _, cart := range carts {
+			var products []models.Product
+			if err := configs.DB.Unscoped().Model(&cart).Association("Products").Find(&products); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"status":     "error",
+					"statusCode": 500,
+					"message":    "Failed to get products.",
+					"error":      err.Error(),
+				})
+			}
+
+			for _, product := range products {
+				var images []models.Image
+				if err := configs.DB.Unscoped().Model(&product).Association("Images").Find(&images); err != nil {
+					return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+						"status":     "error",
+						"statusCode": 500,
+						"message":    "Failed to get images.",
+						"error":      err.Error(),
+					})
+				}
+
+				var imageURL string
+				if len(images) > 0 {
+					imageURL = images[0].URL
+				}
+
+				seller := models.SelectSellerById(int(product.SellerID))
+
+				cartProducts = append(cartProducts, map[string]interface{}{
+					"id":          product.ID,
+					"name":        product.Name,
+					"price":       product.Price,
+					"stock":       product.Stock,
+					"description": product.Description,
+					"seller_id":   product.SellerID,
+					"seller_name": seller.Name,
+					"image":       imageURL,
+				})
+			}
+		}
+
+		address := map[string]interface{}{
+			"id":             order.Address.ID,
+			"name":           order.Address.Name,
+			"main_address":   order.Address.MainAddress,
+			"detail_address": order.Address.DetailAddress,
+			"phone":          order.Address.Phone,
+			"postal_code":    order.Address.PostalCode,
+			"city":           order.Address.City,
+		}
+
 		resultOrders[i] = &map[string]interface{}{
-			"id":          order.ID,
-			"created_at":  order.CreatedAt,
-			"updated_at":  order.UpdatedAt,
-			"user_id":     order.UserID,
-			"checkout_id": order.CheckoutID,
-			"status":      order.Status,
+			"id":                 order.ID,
+			"created_at":         order.CreatedAt,
+			"updated_at":         order.UpdatedAt,
+			"user_id":            order.UserID,
+			"address_id":         order.AddressID,
+			"address":            address,
+			"transaction_number": order.TransactionNumber,
+			"payment_method":     order.PaymentMethod,
+			"total_amount":       order.TotalPrice,
+			"status":             order.Status,
+			"products":           cartProducts,
 		}
 	}
 
