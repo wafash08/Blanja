@@ -8,6 +8,14 @@ import (
 )
 
 func Router(app *fiber.App) {
+	// Landing Route
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"info":    "Hello, This is API Back-End for Blanja from Codecraft.",
+			"message": "Server is running.",
+		})
+	})
+
 	// Product Routes
 	app.Get("/products", controllers.GetAllProduct)
 	app.Get("/product/:id", controllers.GetDetailProduct)
@@ -70,7 +78,7 @@ func Router(app *fiber.App) {
 	app.Post("/cart/deleteAllProduct", middlewares.JWTMiddleware(), controllers.DeleteProductFromCart)
 
 	//Checkout Routes
-	app.Post("/checkout",middlewares.JWTMiddleware(), controllers.CreateCheckout)
+	app.Post("/checkout", middlewares.JWTMiddleware(), controllers.CreateCheckout)
 	app.Get("/checkout/:id", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
 
 	// Order Routes
