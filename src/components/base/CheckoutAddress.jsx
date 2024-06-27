@@ -12,7 +12,7 @@ const CheckoutAdress = ({address, onClick}) => {
           {address.main_address}
           </p>
         </div>
-        <button onClick={onClick} className="w-1/2 border-2 border-gray-400 border-solid hover:border-none text-gray-400 px-4 py-2 rounded-full max-md:mt-0 max-md:h-full hover:bg-red-500 hover:text-white">
+        <button onClick={onClick} className="w-1/2 border-2 border-gray-400 border-solid hover:border-transparent text-gray-400 px-4 py-2 rounded-full max-md:mt-0 max-md:h-full hover:bg-red-500 hover:text-white">
             Change Address
           </button>
       </div>

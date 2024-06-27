@@ -174,6 +174,7 @@ const Cart = () => {
         summary: summary,
         user_id: 25
     };
+    console.log("post checkout", data);
 
     // Make the POST request to the /checkout endpoint
     axios
@@ -183,8 +184,8 @@ const Cart = () => {
         },
       })
       .then((response) => {
-        console.log("Success:", response.data);
-        navigate("/checkout")
+        console.log("Success:", response.data.checkoutID);
+        navigate(`/checkout/${response.data.checkoutID}`)
       })
       .catch((error) => {
         Swal.fire("Checkout Failed")
@@ -195,7 +196,7 @@ const Cart = () => {
   const total =
     products && products.length > 0
       ? products.reduce(
-          (acc, product) => acc + product.price * product.quantity,
+          (acc, product) => product.isSelected ? acc + product.price * product.quantity : acc,
           0
         )
       : 0;
