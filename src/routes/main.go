@@ -71,7 +71,7 @@ func Router(app *fiber.App) {
 
 	//Checkout Routes
 	app.Post("/checkout", middlewares.JWTMiddleware(), controllers.CreateCheckout)
-	app.Get("/checkout/user", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
+	app.Get("/checkout/:id", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
 
 	// Order Routes
 	app.Get("/order/profile", middlewares.JWTMiddleware(), controllers.GetOrdersUser)
