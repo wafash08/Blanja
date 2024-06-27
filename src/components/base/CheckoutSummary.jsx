@@ -1,6 +1,6 @@
 import React from "react";
 
-const ShoppingSummary = ({ checkouts }) => {
+const ShoppingSummary = ({ checkouts, onClick }) => {
   console.log("checkout summary", checkouts);
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
@@ -47,7 +47,7 @@ const ShoppingSummary = ({ checkouts }) => {
           </div>
           <div>
             <div className="max-md:h-1/2 ">
-              <button className="w-full bg-red-500 text-white px-4 py-2 rounded-full max-md:mt-0 max-md:h-full">
+              <button onClick={onClick} className="w-full bg-red-500 text-white px-4 py-2 rounded-full max-md:mt-0 max-md:h-full">
                 Select Payment
               </button>
             </div>

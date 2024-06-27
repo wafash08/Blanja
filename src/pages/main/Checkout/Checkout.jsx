@@ -10,6 +10,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import axios from "axios";
 import ChooseAddressModal from "../../../components/modules/ChooseAddressModal";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
   const { id } = useParams();
@@ -96,6 +97,29 @@ const Checkout = () => {
     setShowChooseAddress(false);
     getProfile();
   };
+  const handlePayment = () => {
+    const checkoutID = checkouts.map((item) => item.id);
+    const addressID = defaultAddress.id;
+    const data = {
+      address_id: addressID,
+      checkout_id: checkoutID[0],
+    };
+    console.log("data payment", data);
+    axios
+      .post("https://e922-182-2-164-245.ngrok-free.app/order", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log("result payment", res.data);
+        Swal.fire("Checkout Success");
+      })
+      .catch((err) => {
+        Swal.fire("Checkout Failed");
+        console.log("error payment", err);
+      });
+  };
 
   if (loading == true) {
     return (
@@ -143,7 +167,7 @@ const Checkout = () => {
             </div>
 
             <div className=" w-2/5 max-lg:w-full">
-              <ShoppingSummary checkouts={checkouts} />
+              <ShoppingSummary checkouts={checkouts} onClick={handlePayment} />
             </div>
           </div>
         </section>
