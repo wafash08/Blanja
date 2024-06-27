@@ -174,6 +174,7 @@ const Cart = () => {
         summary: summary,
         user_id: 25
     };
+    console.log("post checkout", data);
 
     // Make the POST request to the /checkout endpoint
     axios
@@ -183,8 +184,8 @@ const Cart = () => {
         },
       })
       .then((response) => {
-        console.log("Success:", response.data);
-        navigate("/checkout")
+        console.log("Success:", response.data.checkoutID);
+        navigate(`/checkout/${response.data.checkoutID}`)
       })
       .catch((error) => {
         Swal.fire("Checkout Failed")
@@ -195,7 +196,7 @@ const Cart = () => {
   const total =
     products && products.length > 0
       ? products.reduce(
-          (acc, product) => acc + product.price * product.quantity,
+          (acc, product) => product.isSelected ? acc + product.price * product.quantity : acc,
           0
         )
       : 0;
@@ -219,13 +220,13 @@ const Cart = () => {
   return (
     <Container>
       <section className="mt-32">
-        <div>
-          <h2 className="text-[34px] font-extrabold text-[#222222] leading-8">
+        <div className="mb-2">
+          <h2 className="text-[34px] max-lg:text-3xl font-extrabold text-[#222222] leading-8">
             My Bag
           </h2>
         </div>
-        <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
-          <div className=" w-3/5 max-md:w-full">
+        <div className="p-4 flex justify-between gap-3 max-lg:flex-col max-lg:p-0 max-md:py-4">
+          <div className=" w-3/5 max-lg:w-full">
             <SelectAllItems
               products={products}
               onSelectAll={handleSelectAll}
@@ -234,7 +235,7 @@ const Cart = () => {
             {cartList}
           </div>
 
-          <div className=" w-2/5 max-md:w-full">
+          <div className=" w-2/5 max-lg:w-full">
             <CartSummary total={total} handleClick={handleClick} />
           </div>
         </div>

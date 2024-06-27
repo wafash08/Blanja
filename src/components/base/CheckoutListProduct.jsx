@@ -2,8 +2,6 @@ import React from "react";
 import ProductDummy from "../../assets/product-dummy.png"
 
 const CheckoutProductList = ({ checkouts }) => {
-  console.log("checkout", checkouts);
-
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -31,6 +29,9 @@ const CheckoutProductList = ({ checkouts }) => {
               </div>
               <div>
                 <p className="max-md:text-sm font-semibold">{product.name}</p>
+              </div>
+              <div>
+                <p className="max-md:text-sm font-semibold">{product.quantity}x</p>
               </div>
               <div className="ml-auto">
                 <p className="max-md:text-sm font-semibold">{formatRupiah(product.price)}</p>
