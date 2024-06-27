@@ -154,29 +154,17 @@ const Cart = () => {
     }
   };
   const handleClick = () => {
-    // Define the data to be sent in the request
     const selectedProducts = products.filter(product => product.isSelected);
     const totalPrice = selectedProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
-    
-    // Calculate the delivery fee as 10% of the total price
     const deliveryFee = totalPrice * 0.1;
-    
-    // Calculate the summary as the total price plus the delivery fee
     const summary = totalPrice + deliveryFee;
-    
-    // Get the cart IDs from the selected products
     const carts = selectedProducts.map(product => ({ id: product.cartId }));
-
-    // Define the data to be sent in the request
     const data = {
         carts: carts,
         delivery: deliveryFee,
         summary: summary,
-        user_id: 25
     };
-    console.log("post checkout", data);
 
-    // Make the POST request to the /checkout endpoint
     axios
       .post(`${import.meta.env.VITE_BE_URL}checkout`, data, {
         headers: {
@@ -200,9 +188,7 @@ const Cart = () => {
           0
         )
       : 0;
-  // const total =  products.reduce(
-  //   (acc, product) => acc + product.price * product.quantity,0
-  // )
+
   if (status === "loading") {
     cartList = <CartListSkeleton />;
   } else if (status === "success") {
@@ -216,7 +202,6 @@ const Cart = () => {
   } else if (status === "error") {
     cartList = <p>error</p>;
   }
-  // console.log("list", products);
   return (
     <Container>
       <section className="mt-32">

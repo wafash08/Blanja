@@ -3,21 +3,21 @@ import Container from "../../../components/base/Container";
 import StoreImage from "../../../assets/store-image.svg";
 import clsx from "clsx";
 import Button from "../../../components/base/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../../components/base/BreadCrumb";
 import axios from "axios";
 import AlertCard from "../../../components/base/AlertCard";
 import { NewProductSection } from "../Home/Home";
-import PlusIcon from '@heroicons/react/24/solid/PlusIcon'
-import MinusIcon from '@heroicons/react/24/solid/MinusIcon'
-import ChevronRight from '@heroicons/react/24/solid/ChevronRightIcon'
-import ChevronLeft from '@heroicons/react/24/solid/ChevronLeftIcon'
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import MinusIcon from "@heroicons/react/24/solid/MinusIcon";
+import ChevronRight from "@heroicons/react/24/solid/ChevronRightIcon";
+import ChevronLeft from "@heroicons/react/24/solid/ChevronLeftIcon";
 import Swal from "sweetalert2";
 
 const DetailProduct = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("Title")
-  const [sellerName, setSellerName] = useState("")
+  const [title, setTitle] = useState("Title");
+  const [sellerName, setSellerName] = useState("");
   const [imageList, setImageList] = useState([]);
   let isImage = false;
   const [imageURL, setImageURL] = useState(StoreImage);
@@ -124,24 +124,20 @@ const DetailProduct = () => {
   const [ratings, setRatings] = useState(Math.floor(meanRatings));
 
   const [price, setPrice] = useState(0);
-  const [colorList, setColorList] = useState([{
-
-  }]);
-  const [sizeList, setSizeList] = useState([{
-
-  }]);
+  const [colorList, setColorList] = useState([{}]);
+  const [sizeList, setSizeList] = useState([{}]);
   const [quantity, setQuantity] = useState(1);
   const [condition, setCondition] = useState("");
-  const [description, setDescription] = useState("")
+  const [description, setDescription] = useState("");
   const [indexSize, setIndexSize] = useState(0);
   const [amount, setAmount] = useState(1);
 
   const [addCart, setAddCart] = useState({
     product_id: null,
     seller_id: null,
-    quantity: 1
-  })
-  
+    quantity: 1,
+  });
+
   for (let index = 5; index >= 1; index--) {
     if (index <= ratings) {
       starColors.push("yellow");
@@ -179,42 +175,41 @@ const DetailProduct = () => {
   const rupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
-      currency: "IDR"
-    }).format(price)
-  }
+      currency: "IDR",
+    }).format(price);
+  };
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BE_URL}product/${id}`)
       .then(async (res) => {
         console.log(res);
-        const imageURLS = []
+        const imageURLS = [];
         for (const index in res.data.data.images) {
-          isImage = await outputCheckImage(res.data.data.images[index].url)
+          isImage = await outputCheckImage(res.data.data.images[index].url);
           if (isImage === true) {
-             imageURLS.push(res.data.data.images[index].url)
+            imageURLS.push(res.data.data.images[index].url);
           }
         }
 
-        setImageList(imageURLS)
-        setTitle(res.data.data.name)
-        setSellerName(res.data.data.seller_name)
-        setRatings(res.data.data.rating)
-        setPrice(res.data.data.price)
-        setColorList(res.data.data.colors)
-        setSizeList(res.data.data.sizes)
-        setCondition(res.data.data.condition)
-        setDescription(res.data.data.desc)
-        setQuantity(res.data.data.stock)
-        await outputCheckImage(res.data.data.images[0].url) === true && setImageURL(res.data.data.images[0].url)
+        setImageList(imageURLS);
+        setTitle(res.data.data.name);
+        setSellerName(res.data.data.seller_name);
+        setRatings(res.data.data.rating);
+        setPrice(res.data.data.price);
+        setColorList(res.data.data.colors);
+        setSizeList(res.data.data.sizes);
+        setCondition(res.data.data.condition);
+        setDescription(res.data.data.desc);
+        setQuantity(res.data.data.stock);
+        (await outputCheckImage(res.data.data.images[0].url)) === true &&
+          setImageURL(res.data.data.images[0].url);
 
         setAddCart({
           ...addCart,
           product_id: res.data.data.id,
-          seller_id: res.data.data.seller_id
-        })
-
-
+          seller_id: res.data.data.seller_id,
+        });
 
         setLoading(false);
       })
@@ -237,41 +232,99 @@ const DetailProduct = () => {
     setAmount(amount + 1);
     setAddCart({
       ...addCart,
-      quantity: addCart.quantity + 1
-    })
+      quantity: addCart.quantity + 1,
+    });
   };
   const handleClickDecreaseAmount = () => {
     setAmount(amount - 1);
     setAddCart({
       ...addCart,
-      quantity: addCart.quantity - 1
-    })
+      quantity: addCart.quantity - 1,
+    });
   };
   const handleClickAddBag = () => {
-    axios.post(`${import.meta.env.VITE_BE_URL}cart/add`, {
-      product_id: addCart.product_id,
-      seller_id: addCart.seller_id,
-      quantity: addCart.quantity
-    }, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then((res) => {
-      console.log(res.data.message);
-      Swal.fire("Add Cart Succeed")
-    })
-    .catch((err) => {
-      console.log(err.response);
-      Swal.fire({
-        title: "Add Cart Failed",
-        showConfirmButton: false,
-        showDenyButton: true,
-        denyButtonText: 'OK',
-        showCloseButton: true
+    axios
+      .post(
+        `${import.meta.env.VITE_BE_URL}cart/add`,
+        {
+          product_id: addCart.product_id,
+          seller_id: addCart.seller_id,
+          quantity: addCart.quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data.message);
+        Swal.fire("Add Cart Succeed");
       })
-    })
-  }
+      .catch((err) => {
+        console.log(err.response);
+        Swal.fire({
+          title: "Add Cart Failed",
+          showConfirmButton: false,
+          showDenyButton: true,
+          denyButtonText: "OK",
+          showCloseButton: true,
+        });
+      });
+  };
+  const navigate = useNavigate()
+  const handleBuyNow = () => {
+    const total_price = price * amount
+    const deliveryFee = price * 0.1;
+    const summary = total_price + deliveryFee;
+
+    axios
+      .post(
+        `${import.meta.env.VITE_BE_URL}cart/add`,
+        {
+          product_id: addCart.product_id,
+          seller_id: addCart.seller_id,
+          quantity: addCart.quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data.cart_id);
+        const data = {
+          carts: [{ id: res.data.cart_id }],
+          delivery: deliveryFee,
+          summary: summary,
+        };
+        axios
+          .post(`${import.meta.env.VITE_BE_URL}checkout`, data, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((response) => {
+            console.log("Success:", response.data.checkoutID);
+            navigate(`/checkout/${response.data.checkoutID}`)
+          })
+          .catch((error) => {
+            Swal.fire("Checkout Failed");
+            console.error("Error:", error);
+          });
+      })
+      .catch((err) => {
+        console.log(err.response);
+        Swal.fire({
+          title: "Add Cart Failed",
+          showConfirmButton: false,
+          showDenyButton: true,
+          denyButtonText: "OK",
+          showCloseButton: true,
+        });
+      });
+  };
 
   // const [alertMessage, setAlertMessage] = useState("")
   // const [alertType, setAlertType] = useState("")
@@ -280,9 +333,11 @@ const DetailProduct = () => {
   //   setAlertType("")
   // }
   return (
-    <Container className={
-      "lg:max-w-[1156px] lg:min-w-[1024px] mx-auto px-0 mb-40 max-lg:max-w-[1024px]"
-      }>
+    <Container
+      className={
+        "lg:max-w-[1156px] lg:min-w-[1024px] mx-auto px-0 mb-40 max-lg:max-w-[1024px]"
+      }
+    >
       {/* {alertMessage && (<AlertCard alertMessage={alertMessage} alertType={alertType} onClick={handleClickAlert} />)} */}
       <div>
         <Container>
@@ -310,15 +365,15 @@ const DetailProduct = () => {
             </div>
             <div className="flex overflow-x-auto max-lg:w-[100%] max-lg:justify-center">
               <div className="flex gap-[10.5px] mt-4 max-lg:w-auto">
-              {imageList.map((value, index) => (
-                <img
-                  className="w-[65px] h-[65px] rounded-md hover:cursor-pointer object-cover"
-                  key={index}
-                  src={value}
-                  alt="product-image"
-                  onClick={handleClickListImage}
-                />
-              ))}
+                {imageList.map((value, index) => (
+                  <img
+                    className="w-[65px] h-[65px] rounded-md hover:cursor-pointer object-cover"
+                    key={index}
+                    src={value}
+                    alt="product-image"
+                    onClick={handleClickListImage}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -327,9 +382,7 @@ const DetailProduct = () => {
 
         {/*Detail Product Section*/}
         <div className="h-[482px] w-auto ml-7">
-          <p className="text-[#222222] font-semibold text-[28px]">
-            {title}
-          </p>
+          <p className="text-[#222222] font-semibold text-[28px]">{title}</p>
           <p className="text-[#9B9B9B] text-[16px] font-medium">{sellerName}</p>
           {/* Ratings */}
           <div className="flex mt-4">
@@ -362,7 +415,9 @@ const DetailProduct = () => {
 
           {/* Price */}
           <p className="text-[16px] font-medium text-[#9B9B9B] mt-4">Price</p>
-          <p className="font-bold text-[33px] text-[#222222]">{rupiah(price)}</p>
+          <p className="font-bold text-[33px] text-[#222222]">
+            {rupiah(price)}
+          </p>
           {/* Price */}
 
           {/* Colors */}
@@ -383,7 +438,10 @@ const DetailProduct = () => {
                     className={clsx(
                       "w-9 h-9 rounded-full outline outline-1 outline-transparent peer-checked:outline-[#DB3022] outline-offset-4"
                     )}
-                    style={{ backgroundColor: color.value, boxShadow: `0px 0px 8px grey` }}
+                    style={{
+                      backgroundColor: color.value,
+                      boxShadow: `0px 0px 8px grey`,
+                    }}
                   />
                 </label>
               </li>
@@ -464,11 +522,14 @@ const DetailProduct = () => {
             <button className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
               Chat
             </button>
-            <button onClick={handleClickAddBag} className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer">
+            <button
+              onClick={handleClickAddBag}
+              className="w-[160px] h-[50px] rounded-r-[25px] rounded-l-[25px] bg-white font-[500] text-[14px] text-[#222222] border-2 border-[#222222] hover:cursor-pointer"
+            >
               Add Bag
             </button>
             <div className="w-[343px]">
-              <Button>Buy Now</Button>
+              <Button onClick={handleBuyNow}>Buy Now</Button>
             </div>
           </div>
         </div>
@@ -667,7 +728,10 @@ const DetailProduct = () => {
 
       <div className="w-full h-0 border-t border-[#D4D4D4] mt-20"></div>
 
-      <NewProductSection title="You can also like this" description='You’ve never seen it before!' />
+      <NewProductSection
+        title="You can also like this"
+        description="You’ve never seen it before!"
+      />
     </Container>
   );
 };
