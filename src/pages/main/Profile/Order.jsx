@@ -117,6 +117,7 @@ function OrderListWrapper({ orders, status }) {
 									product={product}
 									status={status}
 									url={order.url || ''}
+									orderStatus={order.status}
 								/>
 							);
 						})}
@@ -131,7 +132,7 @@ function OrderList({ children }) {
 	return <ul className='grid gap-5 mt-5'>{children}</ul>;
 }
 
-function OrderItem({ product, status, url }) {
+function OrderItem({ product, status, url, orderStatus }) {
 	const { image, name, seller_name } = product;
 	return (
 		<li className='py-6 px-5 flex items-center gap-[14px] shadow-[0_0_8px_0_#73737340] rounded'>
@@ -145,7 +146,7 @@ function OrderItem({ product, status, url }) {
 				/>
 			</div>
 			<div className='space-y-1'>
-				{status === 'not_yet_paid' ? (
+				{status === 'not_yet_paid' || orderStatus === 'not_yet_paid' ? (
 					<Link
 						to={url}
 						className='text-[#222] text-base font-medium hover:underline'
