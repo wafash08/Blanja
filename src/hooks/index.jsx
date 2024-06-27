@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getCustomerProfile, getSellerProfile } from '../services/profile';
+import {
+	getCustomerProfile,
+	getOrder,
+	getSellerProfile,
+} from '../services/profile';
 import { getAllProducts, getProductsByCondition } from '../services/products';
 import { getAllColors } from '../services/colors';
 import {
@@ -219,4 +223,28 @@ export function useProductsByCondition(condition) {
 	}, [condition]);
 
 	return { data, pagination, status, error };
+}
+
+export function useOrderList() {
+	const [data, setData] = useState([]);
+	const [status, setStatus] = useState('idle');
+	const token = getTokenFromLocalStorage();
+
+	useEffect(() => {
+		async function getOrderList() {
+			try {
+				setStatus('loading');
+				const orders = await getOrder(token);
+				setData(orders);
+				setStatus('success');
+			} catch (error) {
+				setStatus('failed');
+				setError(error);
+			}
+		}
+
+		getOrderList();
+	}, []);
+
+	return { data, status };
 }
