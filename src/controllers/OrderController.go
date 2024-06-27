@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"gofiber-marketplace/src/configs"
 	"gofiber-marketplace/src/helpers"
 	"gofiber-marketplace/src/middlewares"
 	"gofiber-marketplace/src/models"
@@ -10,6 +11,44 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/veritrans/go-midtrans"
 )
+
+// func GetAllOrders(c *fiber.Ctx) error {
+// 	orders := models.SelectAllOrders()
+// 	if len(orders) == 0 {
+// 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+// 			"status":     "no content",
+// 			"statusCode": 202,
+// 			"message":    "Order is empty.",
+// 		})
+// 	}
+
+// 	resultOrders := make([]*map[string]interface{}, len(orders))
+// 	for i, order := range orders {
+// 		address := map[string]interface{}{
+// 			"id": order.Address.ID,
+// 			"name": order.Address.ID,
+
+// 		}
+// 		resultOrders[i] = &map[string]interface{}{
+// 			"id":           order.ID,
+// 			"created_at":   order.CreatedAt,
+// 			"updated_at":   order.UpdatedAt,
+// 			"user_id":      order.UserID,
+// 			"user":         order.User,
+// 			"address_id":   order.AddressID,
+// 			"address":      order.Address,
+// 			"payment":      order.PaymentMethod,
+// 			"total_amount": order.TotalPrice,
+// 			"status":       order.Status,
+// 		}
+// 	}
+
+// 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+// 		"status":     "success",
+// 		"statusCode": 200,
+// 		"data":       resultOrders,
+// 	})
+// }
 
 func GetAllOrders(c *fiber.Ctx) error {
 	orders := models.SelectAllOrders()
@@ -23,13 +62,92 @@ func GetAllOrders(c *fiber.Ctx) error {
 
 	resultOrders := make([]*map[string]interface{}, len(orders))
 	for i, order := range orders {
+		var checkout models.Checkout
+		if err := configs.DB.Unscoped().Where("id = ?", order.CheckoutID).First(&checkout).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get checkout.",
+				"error":      err.Error(),
+			})
+		}
+
+		var carts []models.Cart
+		if err := configs.DB.Unscoped().Where("checkout_id = ?", checkout.ID).Find(&carts).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get carts.",
+				"error":      err.Error(),
+			})
+		}
+
+		cartProducts := []map[string]interface{}{}
+		for _, cart := range carts {
+			var products []models.Product
+			if err := configs.DB.Unscoped().Model(&cart).Association("Products").Find(&products); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"status":     "error",
+					"statusCode": 500,
+					"message":    "Failed to get products.",
+					"error":      err.Error(),
+				})
+			}
+
+			for _, product := range products {
+				var images []models.Image
+				if err := configs.DB.Unscoped().Model(&product).Association("Images").Find(&images); err != nil {
+					return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+						"status":     "error",
+						"statusCode": 500,
+						"message":    "Failed to get images.",
+						"error":      err.Error(),
+					})
+				}
+
+				var imageURL string
+				if len(images) > 0 {
+					imageURL = images[0].URL
+				}
+
+				seller := models.SelectSellerById(int(product.SellerID))
+
+				cartProducts = append(cartProducts, map[string]interface{}{
+					"id":          product.ID,
+					"name":        product.Name,
+					"price":       product.Price,
+					"stock":       product.Stock,
+					"description": product.Description,
+					"seller_id":   product.SellerID,
+					"seller_name": seller.Name,
+					"image":       imageURL,
+				})
+			}
+		}
+
+		address := map[string]interface{}{
+			"id":             order.Address.ID,
+			"name":           order.Address.Name,
+			"main_address":   order.Address.MainAddress,
+			"detail_address": order.Address.DetailAddress,
+			"phone":          order.Address.Phone,
+			"postal_code":    order.Address.PostalCode,
+			"city":           order.Address.City,
+		}
+
 		resultOrders[i] = &map[string]interface{}{
-			"id":          order.ID,
-			"created_at":  order.CreatedAt,
-			"updated_at":  order.UpdatedAt,
-			"user_id":     order.UserID,
-			"checkout_id": order.CheckoutID,
-			"status":      order.Status,
+			"id":                 order.ID,
+			"created_at":         order.CreatedAt,
+			"updated_at":         order.UpdatedAt,
+			"user_id":            order.UserID,
+			"address_id":         order.AddressID,
+			"address":            address,
+			"transaction_number": order.TransactionNumber,
+			"payment_method":     order.PaymentMethod,
+			"total_amount":       order.TotalPrice,
+			"status":             order.Status,
+			"url":                order.TransactionURL,
+			"products":           cartProducts,
 		}
 	}
 
@@ -69,13 +187,92 @@ func GetOrdersUser(c *fiber.Ctx) error {
 
 	resultOrders := make([]*map[string]interface{}, len(orders))
 	for i, order := range orders {
+		var checkout models.Checkout
+		if err := configs.DB.Unscoped().Where("id = ?", order.CheckoutID).First(&checkout).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get checkout.",
+				"error":      err.Error(),
+			})
+		}
+
+		var carts []models.Cart
+		if err := configs.DB.Unscoped().Where("checkout_id = ?", checkout.ID).Find(&carts).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "error",
+				"statusCode": 500,
+				"message":    "Failed to get carts.",
+				"error":      err.Error(),
+			})
+		}
+
+		cartProducts := []map[string]interface{}{}
+		for _, cart := range carts {
+			var products []models.Product
+			if err := configs.DB.Unscoped().Model(&cart).Association("Products").Find(&products); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"status":     "error",
+					"statusCode": 500,
+					"message":    "Failed to get products.",
+					"error":      err.Error(),
+				})
+			}
+
+			for _, product := range products {
+				var images []models.Image
+				if err := configs.DB.Unscoped().Model(&product).Association("Images").Find(&images); err != nil {
+					return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+						"status":     "error",
+						"statusCode": 500,
+						"message":    "Failed to get images.",
+						"error":      err.Error(),
+					})
+				}
+
+				var imageURL string
+				if len(images) > 0 {
+					imageURL = images[0].URL
+				}
+
+				seller := models.SelectSellerById(int(product.SellerID))
+
+				cartProducts = append(cartProducts, map[string]interface{}{
+					"id":          product.ID,
+					"name":        product.Name,
+					"price":       product.Price,
+					"stock":       product.Stock,
+					"description": product.Description,
+					"seller_id":   product.SellerID,
+					"seller_name": seller.Name,
+					"image":       imageURL,
+				})
+			}
+		}
+
+		address := map[string]interface{}{
+			"id":             order.Address.ID,
+			"name":           order.Address.Name,
+			"main_address":   order.Address.MainAddress,
+			"detail_address": order.Address.DetailAddress,
+			"phone":          order.Address.Phone,
+			"postal_code":    order.Address.PostalCode,
+			"city":           order.Address.City,
+		}
+
 		resultOrders[i] = &map[string]interface{}{
-			"id":          order.ID,
-			"created_at":  order.CreatedAt,
-			"updated_at":  order.UpdatedAt,
-			"user_id":     order.UserID,
-			"checkout_id": order.CheckoutID,
-			"status":      order.Status,
+			"id":                 order.ID,
+			"created_at":         order.CreatedAt,
+			"updated_at":         order.UpdatedAt,
+			"user_id":            order.UserID,
+			"address_id":         order.AddressID,
+			"address":            address,
+			"transaction_number": order.TransactionNumber,
+			"payment_method":     order.PaymentMethod,
+			"total_amount":       order.TotalPrice,
+			"status":             order.Status,
+			"url":                order.TransactionURL,
+			"products":           cartProducts,
 		}
 	}
 
@@ -104,7 +301,14 @@ func CreateOrder(c *fiber.Ctx) error {
 		})
 	}
 
-	transactionNumber := helpers.GenerateTransactionNumber()
+	existUser := models.SelectUserById(int(userId))
+	if existUser.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "User not found",
+		})
+	}
 
 	var newOrder models.Order
 
@@ -115,9 +319,61 @@ func CreateOrder(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
-	newOrder.UserID = uint(userId)
+	transactionNumber := helpers.GenerateTransactionNumber()
+
+	existCheckout := models.SelectCheckoutByIdAndUserId(int(newOrder.CheckoutID), int(existUser.ID))
+	if existCheckout.ID == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":     "not found",
+			"statusCode": 404,
+			"message":    "Checkout not found",
+		})
+	}
+
+	newOrder.UserID = existUser.ID
 	newOrder.Status = "not_yet_paid"
 	newOrder.TransactionNumber = transactionNumber
+
+	carts := models.SelectCartbyCheckoutID(int(newOrder.CheckoutID))
+	if len(carts) == 0 {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status":     "no content",
+			"statusCode": 202,
+			"message":    "Order is empty.",
+		})
+	}
+
+	var items []midtrans.ItemDetail
+	var totalPrice int64
+
+	for _, cart := range carts {
+		product := models.SelectProductById(int(cart.ProductID))
+		if product.ID == 0 {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status":     "not found",
+				"statusCode": 404,
+				"message":    "Product not found",
+			})
+		}
+
+		itemTotalPrice := int64(product.Price) * int64(cart.Quantity)
+		items = append(items, midtrans.ItemDetail{
+			Price: int64(product.Price),
+			Qty:   int32(cart.Quantity),
+			Name:  product.Name,
+		})
+		totalPrice += itemTotalPrice
+	}
+
+	taxAmount := int64(existCheckout.Delivery)
+	items = append(items, midtrans.ItemDetail{
+		Price: taxAmount,
+		Qty:   1,
+		Name:  "Tax",
+	})
+	totalPrice += taxAmount
+
+	newOrder.TotalPrice = float64(totalPrice)
 
 	order := middlewares.XSSMiddleware(&newOrder).(*models.Order)
 
@@ -135,15 +391,6 @@ func CreateOrder(c *fiber.Ctx) error {
 			"status":     "server error",
 			"statusCode": 500,
 			"message":    "Failed to create order",
-		})
-	}
-
-	existUser := models.SelectUserById(int(userId))
-	if existUser.ID == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
-			"message":    "User not found",
 		})
 	}
 
@@ -179,7 +426,7 @@ func CreateOrder(c *fiber.Ctx) error {
 	snapReq := &midtrans.SnapReq{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  transactionNumber,
-			GrossAmt: int64(order.TotalPrice),
+			GrossAmt: totalPrice,
 		},
 		CustomerDetail: &midtrans.CustDetail{
 			FName:    userInfo.Name,
@@ -188,6 +435,7 @@ func CreateOrder(c *fiber.Ctx) error {
 			BillAddr: CustomerAddress,
 			ShipAddr: CustomerAddress,
 		},
+		Items: &items,
 	}
 
 	snapResp, err := snapGateway.GetToken(snapReq)
@@ -197,6 +445,30 @@ func CreateOrder(c *fiber.Ctx) error {
 			"statusCode": 404,
 			"message":    "Failed to create transaction with Midtrans",
 			"error":      err.Error(),
+		})
+	}
+
+	if err := models.DeleteCartsByCheckoutID(int(order.CheckoutID)); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to delete carts",
+		})
+	}
+
+	if err := models.DeleteCheckout(int(order.CheckoutID)); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to delete checkout",
+		})
+	}
+
+	if err := models.UpdateURLOrder(int(order.ID), snapResp.RedirectURL); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to input URL to order",
 		})
 	}
 
@@ -250,6 +522,13 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 				"message":    "Failed to update status order",
 			})
 		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
+			})
+		}
 	}
 
 	if notificationPayload.TransactionStatus == "cancel" {
@@ -260,14 +539,28 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 				"message":    "Failed to update status order",
 			})
 		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
+			})
+		}
 	}
 
-	if notificationPayload.TransactionStatus == "expired" {
+	if notificationPayload.TransactionStatus == "expire" {
 		if err := models.UpdateStatusOrder(int(existOrder.ID), "expired"); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"status":     "server error",
 				"statusCode": 500,
 				"message":    "Failed to update status order",
+			})
+		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
 			})
 		}
 	}
@@ -287,8 +580,8 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 	})
 }
 
-func UpdateOrder(c *fiber.Ctx) error {
-	userId, err := middlewares.JWTAuthorize(c, "")
+func UpdateStatusOrder(c *fiber.Ctx) error {
+	userId, err := middlewares.JWTAuthorize(c, "seller")
 	if err != nil {
 		if fiberErr, ok := err.(*fiber.Error); ok {
 			return c.Status(fiberErr.Code).JSON(fiber.Map{
@@ -314,17 +607,28 @@ func UpdateOrder(c *fiber.Ctx) error {
 		})
 	}
 
-	if order := models.SelectOrderbyId(id); order.ID == 0 {
+	existorder := models.SelectOrderbyId(id)
+	if existorder.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":     "not found",
 			"statusCode": 404,
 			"message":    "Order not found",
 		})
-	} else if order.UserID != uint(userId) {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"status":     "not found",
-			"statusCode": 404,
+	}
+
+	if existorder.UserID != uint(userId) {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"status":     "forbidden",
+			"statusCode": 403,
 			"message":    "This order is not same user",
+		})
+	}
+
+	if existorder.Status == "not_yet_paid" || existorder.Status == "expired" || existorder.Status == "canceled" {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"status":     "forbidden",
+			"statusCode": 403,
+			"message":    "This order should already paid",
 		})
 	}
 
@@ -337,30 +641,29 @@ func UpdateOrder(c *fiber.Ctx) error {
 			"message":    "Invalid request body",
 		})
 	}
-	updatedOrder.UserID = uint(userId)
 
 	order := middlewares.XSSMiddleware(&updatedOrder).(*models.Order)
 
-	if errors := helpers.StructValidation(order); len(errors) > 0 {
+	if authErrors := helpers.FieldRequiredValidation(order.Status, "required,oneof=not_yet_paid expired get_paid processed sent completed canceled"); authErrors != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":     "unprocessable entity",
 			"statusCode": 422,
 			"message":    "Validation failed",
-			"errors":     errors,
+			"errors":     authErrors,
 		})
 	}
 
-	if err := models.UpdateOrder(id, order); err != nil {
+	if err := models.UpdateStatusOrder(id, order.Status); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
-			"message":    "Failed to update order",
+			"message":    "Failed to update status order",
 		})
 	} else {
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 			"status":     "success",
 			"statusCode": 200,
-			"message":    "Order created successfully",
+			"message":    "Status order updated successfully",
 		})
 	}
 }
