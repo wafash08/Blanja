@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getTokenFromLocalStorage } from "../../utils";
+import { Link } from "react-router-dom";
 
-const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
+const ProductList = ({ cart, onProductChange, onIndividualSelect }) => {
   const formatRupiah = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -21,24 +22,28 @@ const ProductList = ({cart, onProductChange, onIndividualSelect}) => {
           <input
             type="checkbox"
             checked={product.isSelected}
-            onChange={(e) =>
-              onIndividualSelect(product.id, e.target.checked)
-            }
+            onChange={(e) => onIndividualSelect(product.id, e.target.checked)}
             className="checkbox mr-2 w-5 h-5 max-lg:w-4 max-lg:h-4 rounded-md appearance-none checked:bg-[#DB3022]  bg-white border border-gray-300"
           />
           <div>
-            <img className="w-24 h-24 max-lg:w-16 max-lg:h-16" src={product.photo} />
+            <img
+              className="w-24 h-24 max-lg:w-16 max-lg:h-16"
+              src={product.photo}
+            />
           </div>
           <div>
-            <p className="max-lg:text-sm">{product.name}</p>
-            {/* <p className="max-lg:text-sm">{product.colors}</p> */}
+            <Link
+              to={`/products/${product.id}`}
+              reloadDocument
+              className="text-xl md:text-lg font-medium hover:underline"
+            >
+              <p className="max-lg:text-sm">{product.name}</p>
+            </Link>
             <p className="max-lg:text-sm">{formatRupiah(product.price)}</p>
           </div>
           <div className="flex items-center">
             <button
-              onClick={() =>
-                onProductChange(product.id, -1)
-              }
+              onClick={() => onProductChange(product.id, -1)}
               className="bg-gray-200 px-2 rounded-full"
             >
               -
