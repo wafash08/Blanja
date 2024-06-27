@@ -146,6 +146,7 @@ func GetAllOrders(c *fiber.Ctx) error {
 			"payment_method":     order.PaymentMethod,
 			"total_amount":       order.TotalPrice,
 			"status":             order.Status,
+			"url":                order.TransactionURL,
 			"products":           cartProducts,
 		}
 	}
@@ -270,6 +271,7 @@ func GetOrdersUser(c *fiber.Ctx) error {
 			"payment_method":     order.PaymentMethod,
 			"total_amount":       order.TotalPrice,
 			"status":             order.Status,
+			"url":                order.TransactionURL,
 			"products":           cartProducts,
 		}
 	}
@@ -446,7 +448,7 @@ func CreateOrder(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.DeleteCartsByCheckoutID(int(newOrder.CheckoutID)); err != nil {
+	if err := models.DeleteCartsByCheckoutID(int(order.CheckoutID)); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
@@ -454,11 +456,19 @@ func CreateOrder(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.DeleteCheckout(int(newOrder.CheckoutID)); err != nil {
+	if err := models.DeleteCheckout(int(order.CheckoutID)); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
 			"message":    "Failed to delete checkout",
+		})
+	}
+
+	if err := models.UpdateURLOrder(int(order.ID), snapResp.RedirectURL); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":     "server error",
+			"statusCode": 500,
+			"message":    "Failed to input URL to order",
 		})
 	}
 
@@ -512,6 +522,13 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 				"message":    "Failed to update status order",
 			})
 		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
+			})
+		}
 	}
 
 	if notificationPayload.TransactionStatus == "cancel" {
@@ -522,6 +539,13 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 				"message":    "Failed to update status order",
 			})
 		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
+			})
+		}
 	}
 
 	if notificationPayload.TransactionStatus == "expire" {
@@ -530,6 +554,13 @@ func HandlePaymentCallback(c *fiber.Ctx) error {
 				"status":     "server error",
 				"statusCode": 500,
 				"message":    "Failed to update status order",
+			})
+		}
+		if err := models.UpdateURLOrder(int(existOrder.ID), ""); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":     "server error",
+				"statusCode": 500,
+				"message":    "Failed to input URL to order",
 			})
 		}
 	}
