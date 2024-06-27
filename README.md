@@ -2,7 +2,7 @@
 
 <div align="center">
   <a href="https://github.com/harbanery/be-blanja-marketplace-app">
-    <img src="./public/brandicon.png" alt="Logo Blanja" width="80">
+    <img src="./public/brandicon.png" alt="Logo Blanja" width="250">
   </a>
 
   <h1 align="center">Blanja</h1>
