@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"strconv"
 )
 
 func CreateCheckout(c *fiber.Ctx) error {
@@ -77,6 +78,7 @@ func CreateCheckout(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"status":     "success",
 		"statusCode": 201,
+		"checkoutID": checkoutID,
 		"message":    newCheckout,
 	})
 
@@ -84,8 +86,16 @@ func CreateCheckout(c *fiber.Ctx) error {
 func GetCheckoutByUserId(c *fiber.Ctx) error {
 	var user = c.Locals("user").(jwt.MapClaims)
 	userID := user["id"].(float64)
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":     "bad request",
+			"statusCode": 400,
+			"message":    "Invalid ID format",
+		})
+	}
 	var checkouts []models.Checkout
-	if err := configs.DB.Where("user_id = ?", userID).Preload("Carts.Products").Find(&checkouts).Error; err != nil {
+	if err := configs.DB.Where("user_id = ? AND id = ?", uint(userID), id).Preload("Carts.Products").Find(&checkouts).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,
