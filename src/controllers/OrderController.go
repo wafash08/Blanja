@@ -168,8 +168,7 @@ func CreateOrder(c *fiber.Ctx) error {
 		totalPrice += itemTotalPrice
 	}
 
-	// Menambahkan biaya pajak sebagai item
-	taxAmount := int64(existCheckout.Delivery) // Biaya pajak disimpan dalam field Delivery
+	taxAmount := int64(existCheckout.Delivery)
 	items = append(items, midtrans.ItemDetail{
 		Price: taxAmount,
 		Qty:   1,
