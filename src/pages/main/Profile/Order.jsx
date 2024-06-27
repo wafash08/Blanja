@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import emptyOrderState from '../../../assets/empty-order-state.png';
+import { useOrderList } from '../../../hooks';
+import { OrderSkeleton } from '../../../components/base/Skeleton';
 
 const ORDER_CATEGORIES = [
 	{
@@ -10,48 +11,55 @@ const ORDER_CATEGORIES = [
 	},
 	{
 		label: 'Not Yet Paid',
-		to: 'not-yet-paid',
+		to: 'not_yet_paid',
 	},
 	{
-		label: 'Packed',
-		to: 'packed',
+		label: 'Get Paid',
+		to: 'get_paid',
 	},
-	{
-		label: 'Sent',
-		to: 'sent',
-	},
-	{
-		label: 'Completed',
-		to: 'completed',
-	},
+	// {
+	// 	label: 'Sent',
+	// 	to: 'sent',
+	// },
+	// {
+	// 	label: 'Completed',
+	// 	to: 'completed',
+	// },
 	{
 		label: 'Order Cancel',
 		to: 'canceled',
+	},
+	{
+		label: 'Expired',
+		to: 'expired',
 	},
 ];
 
 export default function OrderPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const category = searchParams.get('category') || 'all';
-	const [orders, setOrders] = useState([]);
-	const [status, setStatus] = useState('idle');
-
-	useEffect(() => {
-		setStatus('loading');
-		setTimeout(() => {
-			setStatus('succeed');
-		}, 500);
-	}, []);
+	const { data: orders, status } = useOrderList();
 
 	let orderList = null;
 
 	if (status === 'loading') {
-		// todo: membuat loading skeleton
-		orderList = <p>Loading...</p>;
-	} else if (status === 'succeed') {
+		orderList = <OrderSkeleton />;
+	} else if (status === 'success') {
 		if (orders.length > 0) {
-			// todo: membuat komponen order item berdasarkan respon server
-			orderList = <OrderList orders={orders} />;
+			const ordersByStatus = orders.filter(order => {
+				if (category === 'all') {
+					return order;
+				} else if (order.status === category) {
+					return order;
+				}
+			});
+			if (ordersByStatus.length === 0) {
+				orderList = <EmptyOrderState />;
+			} else {
+				orderList = (
+					<OrderListWrapper orders={ordersByStatus} status={category} />
+				);
+			}
 		} else {
 			orderList = <EmptyOrderState />;
 		}
@@ -67,7 +75,7 @@ export default function OrderPage() {
 					{ORDER_CATEGORIES.map(({ label, to }) => {
 						const activeCategory = to === category;
 						return (
-							<li key={to} className='group relative shrink-0'>
+							<li key={to} className='group relative shrink-0 last:mr-5'>
 								<Link
 									to={`?category=${to}`}
 									className={clsx(
@@ -96,18 +104,65 @@ export default function OrderPage() {
 	);
 }
 
-function OrderList({ orders }) {
+function OrderListWrapper({ orders, status }) {
 	return (
-		<ul className=''>
-			{orders.map((order, index) => {
-				return <OrderItem key={index} />;
+		<div>
+			{orders.map(order => {
+				return (
+					<OrderList key={order.key}>
+						{order.products.map(product => {
+							return (
+								<OrderItem
+									key={product.id}
+									product={product}
+									status={status}
+									url={order.url || ''}
+								/>
+							);
+						})}
+					</OrderList>
+				);
 			})}
-		</ul>
+		</div>
 	);
 }
 
-function OrderItem() {
-	return <li>Item 1</li>;
+function OrderList({ children }) {
+	return <ul className='grid gap-5 mt-5'>{children}</ul>;
+}
+
+function OrderItem({ product, status, url }) {
+	const { image, name, seller_name } = product;
+	return (
+		<li className='py-6 px-5 flex items-center gap-[14px] shadow-[0_0_8px_0_#73737340] rounded'>
+			<div className='w-[70px] aspect-square rounded-lg overflow-hidden'>
+				<img
+					src={image}
+					alt={name}
+					width={70}
+					height={70}
+					className='w-full h-full object-cover'
+				/>
+			</div>
+			<div className='space-y-1'>
+				{status === 'not_yet_paid' ? (
+					<Link
+						to={url}
+						className='text-[#222] text-base font-medium hover:underline'
+						rel='noopener noreferrer'
+						target='_blank'
+					>
+						{name}
+					</Link>
+				) : (
+					<p className='text-[#222] text-base font-medium'>{name}</p>
+				)}
+				<p className='text-[#9B9B9B] text-xs font-medium capitalize'>
+					{seller_name}
+				</p>
+			</div>
+		</li>
+	);
 }
 
 function EmptyOrderState() {
