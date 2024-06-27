@@ -75,3 +75,18 @@ export async function addAddress(token, address) {
 		throw error;
 	}
 }
+
+const orderUrl = `${BASE_URL}order/profile`;
+export async function getOrder(token) {
+	try {
+		const result = await axios.get(orderUrl, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return result.data.data;
+	} catch (error) {
+		console.log('error while getting order');
+		throw error;
+	}
+}
