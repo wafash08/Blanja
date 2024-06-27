@@ -84,7 +84,11 @@ export async function getOrder(token) {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		return result.data.data;
+		const data = result.data.data;
+		if (!data) {
+			return [];
+		}
+		return data;
 	} catch (error) {
 		console.log('error while getting order');
 		throw error;
