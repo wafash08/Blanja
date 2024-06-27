@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 
 const Checkout = () => {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [checkouts, setCheckouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const getCheckout = () => {
@@ -114,7 +114,10 @@ const Checkout = () => {
       })
       .then((res) => {
         Swal.fire("Checkout Success");
-        navigate(res.data.data.redirect_url)
+        const timeout = setTimeout(() => {
+          window.location.replace(res.data.redirect_url);
+        }, 1000);
+        return () => clearTimeout(timeout);
       })
       .catch((err) => {
         Swal.fire("Checkout Failed");
