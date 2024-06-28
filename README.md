@@ -2,7 +2,7 @@
 <div align="center">
     <img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/main/BlanjaFE/src/assets/blanja-logo.png" width="500px"/>
   <br />
-  <h1>Peworld</h1>
+  <h1>Blanja</h1>
     <a href="https://blanja-website-project.netlify.app/">View Demo</a>
     .
     <a href="https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end">Api Demo</a>
