@@ -19,7 +19,26 @@
   </p>
 </div>
 
-<details>
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [About The Project](#about-the-project)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Setup Environment Variables](#setup-environment-variables)
+  - [Running the Application](#running-the-application)
+  - [Test Account](#test-account)
+- [Usage](#usage)
+  - [Features](#features)
+  - [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#Contact)
+- [Acknowledgements](#acknowledgements)
+
+<!-- <details>
   <summary>Table of Contents</summary>
   <ul>
     <li>
@@ -38,7 +57,6 @@
     </li>
     <li><a href="#usage">Usage</a>
     <ul>
-        <!-- <li><a href="#features">Features</a></li> -->
         <li><a href="#project-structure">Project Structure</a></li>
         <li><a href="#documentation">Documentation</a></li>
       </ul>
@@ -47,15 +65,20 @@
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ul>
-</details>
+</details> -->
 
 ## About The Project
 
-<!-- Description about Backend for Blanja -->
+**Blanja** is a web-based marketplace application that provides a platform for sellers and buyers to conduct online transactions for various products. This API allows developers to access and manage the various features and functions available on **Blanja**, including users, products, categories, carts, and orders.
 
 ### Built With
 
+[![Go][Go]][Go-url]
+[![Fiber][Fiber]][Fiber-url]
+[![GORM][GORM]][GORM-url]
 [![Postgre][Postgre]][Postgre-url]
+[![Cloudinary][Cloudinary]][Cloudinary-url]
+[![Midtrans][Midtrans]][Midtrans-url]
 
 ## Getting Started
 
@@ -74,19 +97,13 @@ Ensure you have the following installed on your local machine:
 1. Clone Repo
 
    ```sh
-     git clone https://github.com/harbanery/be-mama-food-recipe-app.git
+     git clone https://github.com/harbanery/blanja-marketplace-app.git
    ```
 
 2. Install NPM packages
 
    ```sh
      npm install
-   ```
-
-3. Set up your database
-
-   ```sh
-     npx prisma migrate dev --name init
    ```
 
 ### Start Development Server
@@ -106,39 +123,70 @@ To use this project, follow the instructions below for understanding the project
 ### Project Structure
 
 ```
-be-mama-food-recipe-app/
-├── prisma/
-│   └── schema.prisma
+be-blanja-marketplace-app/
 ├── public/
-│   └── index.html
+│   └── brandicon.png
 ├── src/
+│   ├── configs/
+│   │   └── db.go
 │   ├── controllers/
-│   │   ├── auth.js
-│   │   ├── recipes.js
-│   │   ├── upload.js
-│   │   └── users.js
-│   ├── herlpers/
-│   │   ├── auth.js
-│   │   └── common.js
+│   │   ├── AddressController.go
+│   │   ├── CartController.go
+│   │   ├── CartProductController.go
+│   │   ├── CategoryController.go
+│   │   ├── CheckoutController.go
+│   │   ├── ColorController.go
+│   │   ├── CustomerController.go
+│   │   ├── OrderController.go
+│   │   ├── ProductController.go
+│   │   ├── SellerController.go
+│   │   ├── SizeController.go
+│   │   ├── UploadController.go
+│   │   └── UserController.go
+│   ├── helpers/
+│   │   ├── jwt.go
+│   │   ├── migration.go
+│   │   ├── params.go
+│   │   ├── transaction.go
+│   │   ├── upload.go
+│   │   ├── url.go
+│   │   └── validation.go
 │   ├── middlewares/
-│   │   ├── auth.js
-│   │   └── upload.js
+│   │   ├── jwt.go
+│   │   └── xssClean.go
+│   ├── models/
+│   │   ├── Address.go
+│   │   ├── Cart.go
+│   │   ├── CartProduct.go
+│   │   ├── Category.go
+│   │   ├── Checkout.go
+│   │   ├── Color.go
+│   │   ├── Customer.go
+│   │   ├── Image.go
+│   │   ├── Order.go
+│   │   ├── Product.go
+│   │   ├── Seller.go
+│   │   ├── Size.go
+│   │   └── User.go
 │   ├── routes/
-│   │   ├── auth.js
-│   │   ├── index.js
-│   │   ├── recipes.js
-│   │   ├── upload.js
-│   │   └── users.js
-│   ├── utils/
-│   │   └── cloudinary.js
-│   └── app.js
+│   │   └── main.go
+│   └── utils/
+│       ├── cloudinary.go
+│       ├── midtrans.go
+│       └── cloudinary.go
+├── tmp/
+│   ├── build-errors.log
+│   ├── main.exe
+│   └── ngrok.exe
+├── .air.toml
+├── .env
 ├── .gitignore
-├── README.md
-├── index.js
-├── package-lock.json
-├── package.json
-├── vercel.json
-└── yarn.lock
+├── .golangci.yml
+├── go.mod
+├── go.sum
+├── LICENSE
+├── main.go
+└── README.md
 ```
 
 ### Documentation
@@ -169,3 +217,19 @@ Feel free to check it out:
 
 [Postgre]: https://img.shields.io/badge/postgresql-336791?style=for-the-badge&logo=postgresql&logoColor=white
 [Postgre-url]: https://www.postgresql.org/
+[Go]: https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white
+[Go-url]: https://golang.org/
+[Fiber]: (https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white
+[Fiber-url]: https://gofiber.io/
+[GORM]: https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white
+[GORM-url]: https://gorm.io/
+[Cloudinary]: https://img.shields.io/badge/cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white
+[Cloudinary-url]: https://cloudinary.com/
+[Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=midtrans&logoColor=white
+[Midtrans-url]: https://github.com/veritrans/go-midtrans
+
+<!-- ![Go](https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![Fiber](https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white)
+![GORM](https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
+![Midtrans](https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=midtrans&logoColor=white) -->
