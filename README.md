@@ -75,7 +75,6 @@
 
 [![Go][Go]][Go-url]
 [![Fiber][Fiber]][Fiber-url]
-[![GORM][GORM]][GORM-url]
 [![PostgreSQL][Postgre]][Postgre-url]
 [![Cloudinary][Cloudinary]][Cloudinary-url]
 
