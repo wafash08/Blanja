@@ -127,14 +127,14 @@ npm run lint
   </tr>
   <tr>
     <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/ChooseAddressPage.png"/></td>
-    <td><img src="https://github.com/echestratus/peworld-project/blob/main/public/ProfileRecruiterPage.png"/></td>
+    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/MyOrderPage.png"/></td>
   </tr>
   <tr>
-    <td>Edit Profile Worker</td>
-    <td>Hire Page</td>
+    <td>Store Profile</td>
+    <td>My Product</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/peworld-project/blob/main/public/EditProfileRecruiter.png"/></td>
+    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/StoreProfilePage.png"/></td>
     <td><img src="https://github.com/echestratus/peworld-project/blob/main/public/HirePage.png"/></td>
   </tr>   
   </table>
