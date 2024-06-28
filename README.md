@@ -29,13 +29,15 @@
   - [Installation](#installation)
   - [Setup Environment Variables](#setup-environment-variables)
   - [Running the Application](#running-the-application)
-  - [Test Account](#test-account)
 - [Usage](#usage)
   - [Features](#features)
-  - [Screenshots](#screenshots)
+  - [Project Structure](#project-structure)
+  - [Documentation](#documentation)
 - [Contributing](#contributing)
+  - [Meet the Contributors](#meet-the-contributors)
+  - [How to Contribute](#how-to-contribute)
 - [License](#license)
-- [Contact](#Contact)
+- [Contacts](#contacts)
 - [Acknowledgements](#acknowledgements)
 
 <!-- <details>
@@ -132,7 +134,7 @@ Ensure you have the following installed on your local machine:
       SERVER_KEY=YOUR_MIDTRANS_CLIENT_KEY
    ```
 
-### Running Application
+### Running the Application
 
 1. To start the development server, you can start with this:
 
@@ -298,9 +300,9 @@ Contributing project to github is pretty straight forward.
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## Contact
+## Contacts
 
-If you have any questions or inquiries regarding this back-end project, feel free to contact me at ryusuf05@gmail.com and syaifullohismail123@gmail.com
+If you have any questions or inquiries regarding this back-end project, feel free to contact at ryusuf05@gmail.com and syaifullohismail123@gmail.com
 
 ## Acknowledgements
 
