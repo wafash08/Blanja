@@ -13,8 +13,8 @@
     <br />
     <a href="https://be-blanja-marketplace-app-develop.up.railway.app/" target="_blank">View Demo</a>
     ·
-    <!-- <a href="https://mama-recipe-food.vercel.app/" target="_blank">View Front-End Demo</a>
-    · -->
+    <a href="https://blanja-website-project.netlify.app/" target="_blank">View Front-End Demo</a>
+    ·
     <a href="https://github.com/harbanery/blanja-marketplace-app" target="_blank">View Front-End Repo</a>
   </p>
 </div>
@@ -78,7 +78,8 @@
 [![GORM][GORM]][GORM-url]
 [![Postgre][Postgre]][Postgre-url]
 [![Cloudinary][Cloudinary]][Cloudinary-url]
-[![Midtrans][Midtrans]][Midtrans-url]
+
+<!-- [![Midtrans][Midtrans]][Midtrans-url] -->
 
 ## Getting Started
 
@@ -88,7 +89,10 @@ To get a local copy up and running follow these simple steps.
 
 Ensure you have the following installed on your local machine:
 
-- go
+- [Golang][Go-url]
+- [Cloudinary][Cloudinary-url]
+- [Midtrans](https://github.com/veritrans/go-midtrans)
+- [Ngrok for Midtrans Support](https://ngrok.com/)
 
 ### Installation
 
@@ -121,7 +125,7 @@ Ensure you have the following installed on your local machine:
       CLOUDINARY_URL=YOUR_CLOUDINARY_LINK_ACCESS
 
       # SMTP
-      BASE_URL=YOUR_LOCAL_HOST
+      BASE_URL=YOUR_HOST_URL
       SMTP_EMAIL_PASS=YOUR_EMAIL_TOKEN
       SMTP_EMAIL_USER=YOUR_EMAIL_SENDER
 
@@ -150,13 +154,21 @@ Ensure you have the following installed on your local machine:
      http://localhost:3000
    ```
 
-The server always start on port 3000 by default local.
+> The local server always start on port `3000` by default.
 
 _If you want to interact with the endpoints, go to [Documentation](#documentation)._
 
 ## Usage
 
-To use this project, follow the instructions below for understanding the project structure and how to use the provided API documentation.
+### Features
+
+- Registration (and Reset Password) Authentication with [SMTP](https://github.com/go-gomail/gomail)
+- Upload more than one image in Cloudinary
+- More images, colors, and sizes for products and also filtering
+- XSS Middleware and HTML Sanitizer using [bluemonday](https://github.com/microcosm-cc/bluemonday)
+- Validation using [Validator](https://github.com/go-playground/validator)
+- Payment getaway using [Midtrans](https://github.com/veritrans/go-midtrans)
+- Token authentication and authorization using [JWT](https://github.com/golang-jwt/jwt)
 
 ### Project Structure
 
@@ -186,7 +198,6 @@ be-blanja-marketplace-app/
 │   │   ├── migration.go
 │   │   ├── params.go
 │   │   ├── transaction.go
-│   │   ├── upload.go
 │   │   ├── url.go
 │   │   └── validation.go
 │   ├── middlewares/
@@ -211,7 +222,7 @@ be-blanja-marketplace-app/
 │   └── utils/
 │       ├── cloudinary.go
 │       ├── midtrans.go
-│       └── cloudinary.go
+│       └── smtp.go
 ├── tmp/
 │   ├── build-errors.log
 │   ├── main.exe
@@ -239,10 +250,10 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 
 <table align="center">
   <tr align="center">
-    <td><b>Project Manager/Front-End</b></td>
-    <td><b>Front-End</b></td>
-    <td><b>Full-Stack</b></td>
-    <td><b>Back-End</b></td>
+    <td><b>Project Manager / Front-End Developer</b></td>
+    <td><b>Front-End Developer</b></td>
+    <td><b>Fullstack Developer</b></td>
+    <td><b>Back-End Developer</b></td>
   </tr>
   <tr align="center">
     <td><img width="200" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
@@ -252,7 +263,7 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
   </tr>
   <tr align="center">
     <td><a href="https://github.com/echestratus" target="_blank"><b>Farhan Nur Hakim</b></a></td>
-    <td><a href="https://github.com/wafash08" target="_blank"><b>Wafa Saefulhaq</b></a></td>
+    <td><a href="https://github.com/wafash08" target="_blank"><b>M. Wafa Saeful Haq</b></a></td>
     <td><a href="https://github.com/nizuma666" target="_blank"><b>Syaifulloh Ismail</b></a></td>
     <td><a href="https://github.com/harbanery" target="_blank"><b>Raihan Yusuf</b></a></td>
   </tr>
@@ -284,6 +295,14 @@ Contributing project to github is pretty straight forward.
    - Select the base repository and branch you want to merge into.
    - Provide a detailed description of your changes and click "Create Pull Request".
 
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+If you have any questions or inquiries regarding this back-end project, feel free to contact me at ryusuf05@gmail.com and syaifullohismail123@gmail.com
+
 ## Acknowledgements
 
 Feel free to check it out:
@@ -304,9 +323,9 @@ Feel free to check it out:
 [GORM-url]: https://gorm.io/
 [Cloudinary]: https://img.shields.io/badge/cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white
 [Cloudinary-url]: https://cloudinary.com/
-[Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=go&logoColor=white
-[Midtrans-url]: https://github.com/veritrans/go-midtrans
 
+<!-- [Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=go&logoColor=white
+[Midtrans-url]: https://github.com/veritrans/go-midtrans -->
 <!-- ![Go](https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![Fiber](https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white)
 ![GORM](https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white)
