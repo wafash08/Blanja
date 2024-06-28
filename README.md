@@ -76,7 +76,7 @@
 [![Go][Go]][Go-url]
 [![Fiber][Fiber]][Fiber-url]
 [![GORM][GORM]][GORM-url]
-[![Postgre][Postgre]][Postgre-url]
+[![PostgreSQL][Postgre]][Postgre-url]
 [![Cloudinary][Cloudinary]][Cloudinary-url]
 
 <!-- [![Midtrans][Midtrans]][Midtrans-url] -->
@@ -90,8 +90,7 @@ To get a local copy up and running follow these simple steps.
 Ensure you have the following installed on your local machine:
 
 - [Golang][Go-url]
-- [Cloudinary][Cloudinary-url]
-- [Midtrans](https://github.com/veritrans/go-midtrans)
+- [PostgreSQL for Local Database][Postgre-url]
 - [Ngrok for Midtrans Support](https://ngrok.com/)
 
 ### Installation
@@ -163,10 +162,11 @@ _If you want to interact with the endpoints, go to [Documentation](#documentatio
 ### Features
 
 - Registration (and Reset Password) Authentication with [SMTP](https://github.com/go-gomail/gomail)
-- Upload more than one image in Cloudinary
+- Upload more than one image with Cloudinary
 - More images, colors, and sizes for products and also filtering
+- ORM support for PostgreSQL using [GORM](https://gorm.io/)
 - XSS Middleware and HTML Sanitizer using [bluemonday](https://github.com/microcosm-cc/bluemonday)
-- Validation using [Validator](https://github.com/go-playground/validator)
+- Model Struct Validation using [Validator](https://github.com/go-playground/validator)
 - Payment getaway using [Midtrans](https://github.com/veritrans/go-midtrans)
 - Token authentication and authorization using [JWT](https://github.com/golang-jwt/jwt)
 
@@ -240,7 +240,7 @@ be-blanja-marketplace-app/
 
 ### Documentation
 
-Access the API documentation for the **Blanja** project, created by [Raihan Yusuf](https://github.com/harbanery). Use this documentation to test endpoints and understand the structure and functionality of the available APIs in this project.
+Access the API documentation for the **Blanja** project, created by [Raihan Yusuf](https://github.com/harbanery). Use this documentation to test endpoints and understand the structure and functionality of the available API`s in this project.
 
 [![Blanja API Postman Documentation](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/34109484/2sA3XLFjmu#c0c52664-b3dc-4d2f-9309-93fc04212fdf)
 
@@ -319,11 +319,11 @@ Feel free to check it out:
 [Go-url]: https://golang.org/
 [Fiber]: https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=go&logoColor=white
 [Fiber-url]: https://gofiber.io/
-[GORM]: https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white
-[GORM-url]: https://gorm.io/
 [Cloudinary]: https://img.shields.io/badge/cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white
 [Cloudinary-url]: https://cloudinary.com/
 
+<!-- [GORM]: https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white
+[GORM-url]: https://gorm.io/ -->
 <!-- [Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=go&logoColor=white
 [Midtrans-url]: https://github.com/veritrans/go-midtrans -->
 <!-- ![Go](https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
