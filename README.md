@@ -78,8 +78,7 @@
 [![GORM][GORM]][GORM-url]
 [![Postgre][Postgre]][Postgre-url]
 [![Cloudinary][Cloudinary]][Cloudinary-url]
-
-<!-- [![Midtrans][Midtrans]][Midtrans-url] -->
+[![Midtrans][Midtrans]][Midtrans-url]
 
 ## Getting Started
 
@@ -89,33 +88,71 @@ To get a local copy up and running follow these simple steps.
 
 Ensure you have the following installed on your local machine:
 
-- Node.js
-- npm
-- PostgreSQL
+- go
 
 ### Installation
 
 1. Clone Repo
 
    ```sh
-     git clone https://github.com/harbanery/blanja-marketplace-app.git
+     git clone https://github.com/harbanery/be-blanja-marketplace-app.git
    ```
 
-2. Install NPM packages
+2. Install Go packages
 
    ```sh
-     npm install
+     go mod tidy
    ```
 
-### Start Development Server
+### Setup Environment Variables
 
-To start the development server:
+1. Create a `.env` or `.env.local` file in your local root directory.
 
-```sh
-     npm run dev
-```
+2. Add the following variables to the `.env` or `.env.local` file:
 
-The server will start on port 3000 by default. You can use Postman to interact with the endpoints in [Documentation](#documentation).
+   ```sh
+      # DATABASE
+      URL=YOUR_POSTGRESQL_CONNECTION_STRING_URL
+
+      # JWT
+      SECRETKEY=YOUR_SECRETKEY
+
+      # CLOUDINARY
+      CLOUDINARY_URL=YOUR_CLOUDINARY_LINK_ACCESS
+
+      # SMTP
+      BASE_URL=YOUR_LOCAL_HOST
+      SMTP_EMAIL_PASS=YOUR_EMAIL_TOKEN
+      SMTP_EMAIL_USER=YOUR_EMAIL_SENDER
+
+      # MIDTRANS
+      CLIENT_KEY=YOUR_MIDTRANS_CLIENT_KEY
+      SERVER_KEY=YOUR_MIDTRANS_CLIENT_KEY
+   ```
+
+### Running Application
+
+1. To start the development server, you can start with this:
+
+   ```sh
+     go run main.go
+   ```
+
+   Or this:
+
+   ```sh
+     air
+   ```
+
+2. After that, you can run browser with this url:
+
+   ```sh
+     http://localhost:3000
+   ```
+
+The server always start on port 3000 by default local.
+
+_If you want to interact with the endpoints, go to [Documentation](#documentation)._
 
 ## Usage
 
@@ -198,6 +235,31 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 
 ## Contributing
 
+### Meat The Contributors
+
+<p align="center" display=flex>
+  <table>
+  <tr>
+    <td><a href="https://github.com/echestratus" target="_blank">Farhan Nur Hakim</a></td>
+    <td><a href="https://github.com/wafash08" target="_blank">Wafa Saefulhaq</a></td>
+    <td><a href="https://github.com/nizuma666" target="_blank">Syaifulloh Ismail</a></td>
+    <td><a href="https://github.com/harbanery" target="_blank">Raihan Yusuf</a></td>
+  </tr>
+  <tr>
+    <td><img src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
+    <td><img src="https://avatars.githubusercontent.com/u/74017000?v=4"/></td>
+    <td><img src="https://avatars.githubusercontent.com/u/137192782?v=4"/></td>
+    <td><img src="https://avatars.githubusercontent.com/u/89146375?v=4"/></td>
+  </tr>
+  <tr>
+    <td>Front-End</td>
+    <td>Front-End</td>
+    <td>Full-Stack</td>
+    <td>Back-End</td>
+  </tr>
+  </table>
+</p>
+
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
@@ -220,13 +282,13 @@ Feel free to check it out:
 [Postgre-url]: https://www.postgresql.org/
 [Go]: https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white
 [Go-url]: https://golang.org/
-[Fiber]: https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white
+[Fiber]: https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=go&logoColor=white
 [Fiber-url]: https://gofiber.io/
 [GORM]: https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white
 [GORM-url]: https://gorm.io/
 [Cloudinary]: https://img.shields.io/badge/cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white
 [Cloudinary-url]: https://cloudinary.com/
-[Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=midtrans&logoColor=white
+[Midtrans]: https://img.shields.io/badge/midtrans-0C9CB4?style=for-the-badge&logo=go&logoColor=white
 [Midtrans-url]: https://github.com/veritrans/go-midtrans
 
 <!-- ![Go](https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
