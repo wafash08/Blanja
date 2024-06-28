@@ -235,38 +235,54 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 
 ## Contributing
 
-### Meat The Contributors
+### Meet The Contributors
 
-<p align="center" display=flex>
-  <table>
-  <tr>
+<table>
+  <tr align="center">
     <td><a href="https://github.com/echestratus" target="_blank">Farhan Nur Hakim</a></td>
     <td><a href="https://github.com/wafash08" target="_blank">Wafa Saefulhaq</a></td>
     <td><a href="https://github.com/nizuma666" target="_blank">Syaifulloh Ismail</a></td>
     <td><a href="https://github.com/harbanery" target="_blank">Raihan Yusuf</a></td>
   </tr>
-  <tr>
-    <td><img src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
-    <td><img src="https://avatars.githubusercontent.com/u/74017000?v=4"/></td>
-    <td><img src="https://avatars.githubusercontent.com/u/137192782?v=4"/></td>
-    <td><img src="https://avatars.githubusercontent.com/u/89146375?v=4"/></td>
+  <tr align="center">
+    <td><img width="100%" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
+    <td><img width="100%" src="https://avatars.githubusercontent.com/u/74017000?v=4"/></td>
+    <td><img width="100%" src="https://avatars.githubusercontent.com/u/137192782?v=4"/></td>
+    <td><img width="100%" src="https://avatars.githubusercontent.com/u/89146375?v=4"/></td>
   </tr>
-  <tr>
-    <td>Front-End</td>
+  <tr align="center">
+    <td>Front-End/Product Manager</td>
     <td>Front-End</td>
     <td>Full-Stack</td>
     <td>Back-End</td>
   </tr>
-  </table>
-</p>
+</table>
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### How to Contribute
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributing project to github is pretty straight forward.
+
+1. **Fork the Repository**: Click the "Fork" button at the top-right corner of this page to create your own copy of the repository.
+2. **Installation**: Do the installation process right [here](#installation).
+3. **Create a new branch**: Create a new branch to work on your changes.
+   ```sh
+   git branch -M feature/your-feature-name
+   ```
+4. **Make changes**: Implement your changes or new features in your branch.
+5. **Commit your changes**: After making your changes, commit them with a descriptive message.
+   ```sh
+   git add .
+   git commit -m "Add description of your changes"
+   ```
+6. **Push to GitHub**: Push your changes to your forked repository.
+   ```sh
+   git push origin feature/your-feature-name
+   ```
+7. **Create Pull Request**: Go to the original repository and open a pull request to merge your changes.
+   - Navigate to your fork on GitHub.
+   - Click on the "New Pull Request" button.
+   - Select the base repository and branch you want to merge into.
+   - Provide a detailed description of your changes and click "Create Pull Request".
 
 ## Acknowledgements
 
