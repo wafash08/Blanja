@@ -42,7 +42,7 @@ Developers:
   <tr>
     <td>Front-End</td>
     <td>Front-End</td>
-    <td>Fullstack</td>
+    <td>Full-Stack</td>
     <td>Back-End</td>
   </tr>
   </table>
