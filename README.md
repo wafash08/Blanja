@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 <div align="center">
-  <a href="https://github.com/harbanery/be-blanja-marketplace-app/tree/feature/raihan-be">
+  <a href="https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/raihan-be">
     <img src="./public/brandicon.png" alt="Logo Blanja" width="250">
   </a>
 
@@ -99,7 +99,7 @@ Ensure you have the following installed on your local machine:
 1. Clone Repo
 
    ```sh
-     git clone https://github.com/harbanery/be-blanja-marketplace-app/tree/feature/raihan-be.git
+     git clone https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/raihan-be.git
    ```
 
 2. Install Go packages
