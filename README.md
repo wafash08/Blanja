@@ -243,7 +243,7 @@ be-blanja-marketplace-app/
 
 Access the API documentation for the **Blanja** project, created by [Raihan Yusuf](https://github.com/harbanery). Use this documentation to test endpoints and understand the structure and functionality of the available API`s in this project.
 
-[![Blanja API Postman Documentation](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/34109484/2sA3XLFjmu#c0c52664-b3dc-4d2f-9309-93fc04212fdf)
+[![Blanja API Postman Documentation](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/36623326/2sA3duEsiT#e0a6ecab-217d-4075-854e-93131d42d842)
 
 ## Contributing
 
