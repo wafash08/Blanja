@@ -113,11 +113,12 @@ const Checkout = () => {
         },
       })
       .then((res) => {
-        Swal.fire("Checkout Success");
-        const timeout = setTimeout(() => {
-          window.location.replace(res.data.redirect_url);
-        }, 1000);
-        return () => clearTimeout(timeout);
+        Swal.fire("Checkout Success").then(() => {
+          const timeout = setTimeout(() => {
+            window.location.replace(res.data.redirect_url);
+          }, 1000);
+          return () => clearTimeout(timeout);
+        })
       })
       .catch((err) => {
         Swal.fire("Checkout Failed");
