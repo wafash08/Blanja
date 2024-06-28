@@ -78,7 +78,8 @@
 [![GORM][GORM]][GORM-url]
 [![Postgre][Postgre]][Postgre-url]
 [![Cloudinary][Cloudinary]][Cloudinary-url]
-[![Midtrans][Midtrans]][Midtrans-url]
+
+<!-- [![Midtrans][Midtrans]][Midtrans-url] -->
 
 ## Getting Started
 
@@ -219,7 +220,7 @@ Feel free to check it out:
 [Postgre-url]: https://www.postgresql.org/
 [Go]: https://img.shields.io/badge/go-00ADD8?style=for-the-badge&logo=go&logoColor=white
 [Go-url]: https://golang.org/
-[Fiber]: (https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white
+[Fiber]: https://img.shields.io/badge/fiber-057A7A?style=for-the-badge&logo=fiber&logoColor=white
 [Fiber-url]: https://gofiber.io/
 [GORM]: https://img.shields.io/badge/gorm-000000?style=for-the-badge&logo=go&logoColor=white
 [GORM-url]: https://gorm.io/
