@@ -2,7 +2,7 @@
 <div align="center">
     <img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/main/BlanjaFE/src/assets/blanja-logo.png" width="500px"/>
   <br />
-  <h1>Peworld</h1>
+  <h1>Blanja</h1>
     <a href="https://blanja-website-project.netlify.app/">View Demo</a>
     .
     <a href="https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end">Api Demo</a>
@@ -22,7 +22,7 @@
  
 ## About The Project
 
-The Blanja website is an e-commerce platform developed by me and my team during a bootcamp at Pijar Camp. Blanja offers various products from different categories, providing an easy and secure online shopping experience. In this project, I was responsible for developing the Front-End and also part of the Back-End, particularly in creating API requests for the shopping cart feature. By utilizing modern technology and best practices in web development, we successfully created a responsive and user-friendly platform.
+The Blanja website is an e-commerce platform developed by the team during a bootcamp at Pijar Camp. Blanja offers various products from different categories, providing an easy and secure online shopping experience. By utilizing modern technology and best practices in web development, we successfully created a responsive and user-friendly platform.
 
 Developers:
 <p align="center" display=flex>
@@ -42,7 +42,7 @@ Developers:
   <tr>
     <td>Front-End</td>
     <td>Front-End</td>
-    <td>Fullstack</td>
+    <td>Full-Stack</td>
     <td>Back-End</td>
   </tr>
   </table>
@@ -58,7 +58,7 @@ Developers:
 1. Clone this repository
 
 ```sh
-gh repo clone echestratus/peworld-project
+git clone --single-branch --branch feature/front-end https://github.com/echestratus/BlanjaWebsiteProject.git
 ```
 
 2. Install NPM packages
@@ -135,59 +135,82 @@ npm run lint
   </tr>
   <tr>
     <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/StoreProfilePage.png"/></td>
-    <td><img src="https://github.com/echestratus/peworld-project/blob/main/public/HirePage.png"/></td>
-  </tr>   
+    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/MyProductPage.png"/></td>
+  </tr> 
+  <tr>
+    <td>Selling Product</td>
+    <td>Update Product</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/SellinProductPage.png"/></td>
+    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/UpdateProductPage.png"/></td>
+  </tr> 
   </table>
 </p>
 
-## Peworld Project - Feature Overview
+## Blanja Web Application - Feature Overview
 
-Peworld is a dynamic platform designed to connect talented workers with recruiters seeking their skills. Our website offers a seamless experience tailored to the specific needs of both workers and recruiters. Below is a brief overview of the key features available on Peworld:
+Blanja is a comprehensive e-commerce platform designed to connect customers with a diverse array of products from multiple sellers. Our website offers a seamless shopping experience for customers and robust tools for sellers to manage their storefronts. Below is an overview of the key features available on Blanja:
 
 ### Key Features
 
-1. **User Registration and Sign-In**
-   - **Flexible Registration**: Users can register as either a worker or a recruiter.
-   - **Secure Sign-In**: Access your account with a simple and secure sign-in process.
+#### User Authentication
 
-2. **Home Page Worker Listings**
-   - **Comprehensive Directory**: View a curated list of workers directly on the home page.
-   - **Quick Navigation**: Easily browse through profiles to find the right fit for your needs.
+- **Role-Based Login and Registration**: Users can register or log in as either a customer or a seller, with functionalities tailored to each role.
 
-3. **Worker Profile Details**
-   - **Detailed Profiles**: Click on a worker's profile to view their detailed information, including skills, experience, and portfolio.
-   - **User-Friendly Layout**: Profiles are designed to be clear and informative, making it easy to assess potential candidates.
+#### Product Discovery
 
-4. **Role-Specific Profiles**
-   - **Personalized View**: Users can view their own profiles tailored to their registered role.
-     - **Worker View**: Workers can see and manage their professional profile showcasing their abilities.
-     - **Recruiter View**: Recruiters can view their profile focused on their hiring capabilities and company information.
+- **View Products**: Browse products from various registered sellers.
+- **Search and Filter**: Efficiently search and filter products to find exactly what you're looking for.
 
-5. **Profile Editing**
-   - **Customizable Profiles**: Both workers and recruiters can edit their profiles to keep information up-to-date.
-   - **Role-Based Customization**: Editing options are specific to the user's role, ensuring relevant and accurate profile management.
+#### Product Details
 
-6. **Hiring Process**
-   - **Recruiter Tools**: Recruiters can directly hire workers from their profiles.
-   - **Efficient Interaction**: Simplifies the hiring process with straightforward actions and clear communication channels.
+- **Detailed Product View**: Access comprehensive details for each product to make informed purchasing decisions.
 
-7. **Employment Status for Workers**
-   - **Visibility of Hiring History**: Workers can see a list of recruiters who have hired them, providing a transparent employment history.
-   - **Career Management**: Keep track of who has hired you and manage your professional journey effectively.
+#### Shopping Cart and Checkout
 
----
+- **Add to Cart**: Easily add products to your shopping cart.
+- **Checkout Process**: Proceed to checkout to review and purchase your selected products.
 
-Peworld aims to streamline the connection between workers and recruiters, providing tools and features that facilitate easy and effective collaboration. Whether you're seeking a new opportunity or looking to hire top talent, Peworld is designed to meet your needs.
+#### Payment and Shipping
+
+- **Secure Payment**: Complete your purchase with secure payment options.
+- **Address Management**: Add, edit, and set a primary shipping address for your orders.
+
+#### User Profile Management
+
+- **Profile Overview and Editing**: View and update your user profile information.
+- **Order History**: View the status and details of past orders.
+
+#### Seller-Specific Features
+
+- **Store Profile Management**: Sellers can view and edit their store profiles.
+- **Product Management for Sellers**:
+  - **View Seller's Products**: Access a list of products associated with the seller's account.
+  - **Add New Products**: Add new items to the store for sale.
+  - **Edit Existing Products**: Update or edit the details of products in the seller's inventory.
+
+### About Blanja
+
+Blanja provides an efficient and enjoyable shopping experience for customers and a comprehensive suite of tools for sellers. Whether you're looking to buy a product or sell your goods online, Blanja is designed to meet your e-commerce needs.
 
 ## Related Project
-:rocket: [`Backend Peworld`](https://github.com/echestratus/be-peworld-project)
+:rocket: [`Backend Blanja`](https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end)
 
 ## Contact
 
-Feel free to contact me if there is any question you want to ask regarding this project or if you just want to get in touch.
+Feel free to contact us if there is any question you want to ask regarding this project or if you just want to get in touch.
 
-- Email: farhanz.nh.13@gmail.com
-- LinkedIn: https://www.linkedin.com/in/farhan-nur-hakim/
+### Email 
+- Farhan Nur Hakim: farhanz.nh.13@gmail.com
+- Wafa Saefulhaq: saefulhaqwafa@gmail.com
+- Syaifulloh Ismail: syaifullohismail123@gmail.com
+- Raihan Yusuf: ryusuf05@gmail.com
+### LinkedIn 
+- Farhan Nur Hakim: [https://www.linkedin.com/in/farhan-nur-hakim/](https://www.linkedin.com/in/farhan-nur-hakim/)
+- Wafa Saefulhaq: [https://www.linkedin.com/in/mwafasaefulhaq/](https://www.linkedin.com/in/mwafasaefulhaq/)
+- Syaifulloh Ismail: [https://www.linkedin.com/in/syaifulloh-ismail/](https://www.linkedin.com/in/syaifulloh-ismail/)
+- Raihan Yusuf: [www.linkedin.com/in/raihan-yusuf](www.linkedin.com/in/raihan-yusuf)
 
 ## Contribution
 ### How to Contribute
