@@ -29,7 +29,6 @@ const Checkout = () => {
         const filteredCheckouts = res.data.data.filter(
           (item) => item.carts && item.carts.length > 0
         );
-        console.log("checkout", res.data.data);
         setCheckouts(filteredCheckouts);
         setLoading(false);
       })

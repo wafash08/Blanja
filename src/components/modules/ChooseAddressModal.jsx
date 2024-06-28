@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { getTokenFromLocalStorage } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import { CloseIcon } from "../base/Icons";
+import { addAddress } from "../../services/profile";
 
 const ChooseAddressModal = ({ onClickX }) => {
   // const listAddresses = [
