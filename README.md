@@ -237,24 +237,24 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 
 ### Meet The Contributors
 
-<table>
+<table align="center">
   <tr align="center">
-    <td><a href="https://github.com/echestratus" target="_blank">Farhan Nur Hakim</a></td>
-    <td><a href="https://github.com/wafash08" target="_blank">Wafa Saefulhaq</a></td>
-    <td><a href="https://github.com/nizuma666" target="_blank">Syaifulloh Ismail</a></td>
-    <td><a href="https://github.com/harbanery" target="_blank">Raihan Yusuf</a></td>
+    <td><b>Project Manager/Front-End</b></td>
+    <td><b>Front-End</b></td>
+    <td><b>Full-Stack</b></td>
+    <td><b>Back-End</b></td>
   </tr>
   <tr align="center">
-    <td><img width="100%" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
-    <td><img width="100%" src="https://avatars.githubusercontent.com/u/74017000?v=4"/></td>
-    <td><img width="100%" src="https://avatars.githubusercontent.com/u/137192782?v=4"/></td>
-    <td><img width="100%" src="https://avatars.githubusercontent.com/u/89146375?v=4"/></td>
+    <td><img width="200" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
+    <td><img width="200" src="https://avatars.githubusercontent.com/u/74017000?v=4"/></td>
+    <td><img width="200" src="https://avatars.githubusercontent.com/u/137192782?v=4"/></td>
+    <td><img width="200" src="https://avatars.githubusercontent.com/u/89146375?v=4"/></td>
   </tr>
   <tr align="center">
-    <td>Front-End/Product Manager</td>
-    <td>Front-End</td>
-    <td>Full-Stack</td>
-    <td>Back-End</td>
+    <td><a href="https://github.com/echestratus" target="_blank"><b>Farhan Nur Hakim</b></a></td>
+    <td><a href="https://github.com/wafash08" target="_blank"><b>Wafa Saefulhaq</b></a></td>
+    <td><a href="https://github.com/nizuma666" target="_blank"><b>Syaifulloh Ismail</b></a></td>
+    <td><a href="https://github.com/harbanery" target="_blank"><b>Raihan Yusuf</b></a></td>
   </tr>
 </table>
 
