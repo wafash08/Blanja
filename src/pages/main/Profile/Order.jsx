@@ -35,6 +35,16 @@ const ORDER_CATEGORIES = [
 	},
 ];
 
+function getOrderByCategory(orders, category) {
+	return orders.filter(order => {
+		if (category === 'all') {
+			return order;
+		} else if (order.status === category) {
+			return order;
+		}
+	});
+}
+
 export default function OrderPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const category = searchParams.get('category') || 'all';
@@ -46,19 +56,13 @@ export default function OrderPage() {
 		orderList = <OrderSkeleton />;
 	} else if (status === 'success') {
 		if (orders.length > 0) {
-			const ordersByStatus = orders.filter(order => {
-				if (category === 'all') {
-					return order;
-				} else if (order.status === category) {
-					return order;
-				}
-			});
-			if (ordersByStatus.length === 0) {
-				orderList = <EmptyOrderState />;
-			} else {
+			const ordersByStatus = getOrderByCategory(orders, category);
+			if (ordersByStatus.length > 0) {
 				orderList = (
 					<OrderListWrapper orders={ordersByStatus} status={category} />
 				);
+			} else {
+				orderList = <EmptyOrderState />;
 			}
 		} else {
 			orderList = <EmptyOrderState />;
@@ -109,7 +113,7 @@ function OrderListWrapper({ orders, status }) {
 		<div>
 			{orders.map(order => {
 				return (
-					<OrderList key={order.key}>
+					<OrderList key={order.id}>
 						{order.products.map(product => {
 							return (
 								<OrderItem
@@ -147,14 +151,14 @@ function OrderItem({ product, status, url, orderStatus }) {
 			</div>
 			<div className='space-y-1'>
 				{status === 'not_yet_paid' || orderStatus === 'not_yet_paid' ? (
-					<Link
-						to={url}
+					<a
+						href={url}
 						className='text-[#222] text-base font-medium hover:underline'
 						rel='noopener noreferrer'
 						target='_blank'
 					>
 						{name}
-					</Link>
+					</a>
 				) : (
 					<p className='text-[#222] text-base font-medium'>{name}</p>
 				)}
