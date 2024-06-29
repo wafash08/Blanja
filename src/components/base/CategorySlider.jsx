@@ -65,7 +65,7 @@ function Category({ slug, name, image }) {
 					'group-hover:-translate-y-2 transition-transform'
 				)}
 			>
-				<img src={image} alt={name} />
+				<img src={image} alt={name} width={206} height={220} />
 			</Link>
 		</div>
 	);

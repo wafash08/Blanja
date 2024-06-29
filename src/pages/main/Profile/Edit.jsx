@@ -87,7 +87,7 @@ export default function EditProfile() {
 			}
 			navigate(0);
 		} catch (error) {
-			console.log('Ups, error has occured while updating profile', error);
+			console.log('Ups, error has occured while updating profile >> ', error);
 		}
 	};
 
@@ -277,7 +277,7 @@ const YEARS = createOptionOfYears();
 
 function getDefaultValueSelect(birth, range) {
 	return range.find(({ label, value }) => {
-		return String(value) === String(birth);
+		return value === birth;
 	});
 }
 
@@ -295,6 +295,7 @@ function CustomerForm({ profile }) {
 	const birthDateDefault = birthDate
 		? getDefaultValueSelect(birthDate, DATES)
 		: DATES[0];
+
 	return (
 		<>
 			<FormControl>
