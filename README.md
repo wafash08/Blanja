@@ -132,6 +132,9 @@ Ensure you have the following installed on your local machine:
       # MIDTRANS
       CLIENT_KEY=YOUR_MIDTRANS_CLIENT_KEY
       SERVER_KEY=YOUR_MIDTRANS_CLIENT_KEY
+
+      # REDIRECT_URL
+      REDIRECT_URL=http://localhost:5173/
    ```
 
 ### Running the Application
@@ -250,11 +253,14 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 ### Meet The Contributors
 
 <table align="center">
+  <tr>
+    <th colspan="4">CodeCraft</th>
+  </tr>
   <tr align="center">
-    <td><b>Project Manager / Front-End Developer</b></td>
-    <td><b>Front-End Developer</b></td>
-    <td><b>Fullstack Developer</b></td>
-    <td><b>Back-End Developer</b></td>
+    <th>Project Manager / Front-End Developer</th>
+    <th>Front-End Developer</th>
+    <th>Fullstack Developer</th>
+    <th>Back-End Developer</th>
   </tr>
   <tr align="center">
     <td><img width="200" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
