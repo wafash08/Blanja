@@ -38,9 +38,9 @@ const ORDER_CATEGORIES = [
 function getOrderByCategory(orders, category) {
 	return orders.filter(order => {
 		if (category === 'all') {
-			return order;
+			return order.products.length > 0;
 		} else if (order.status === category) {
-			return order;
+			return order.products.length > 0;
 		}
 	});
 }
