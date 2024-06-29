@@ -30,7 +30,13 @@ const DATES = [
 ];
 
 export function createOptionsOfDates() {
-	return DATES.map(date => ({ label: String(date), value: String(date) }));
+	return DATES.map(date => {
+		if (date < 10) {
+			// if date is less than 10, add 0 before the date
+			return { label: '0' + date, value: '0' + date };
+		}
+		return { label: String(date), value: String(date) };
+	});
 }
 
 const MONTHS = [
@@ -49,7 +55,13 @@ const MONTHS = [
 ];
 
 export function createOptionsOfMonths() {
-	return MONTHS.map((month, idx) => ({ label: month, value: idx + 1 }));
+	return MONTHS.map((month, idx) => {
+		if (idx < 9) {
+			// if idx is less than 10, add 0 before the idx
+			return { label: month, value: '0' + (idx + 1) };
+		}
+		return { label: month, value: String(idx + 1) };
+	});
 }
 
 function generateRangeOfYears() {
