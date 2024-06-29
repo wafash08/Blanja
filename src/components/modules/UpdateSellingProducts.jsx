@@ -321,7 +321,7 @@ const UpdateSellingProducts = ({id}) => {
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px] flex justify-center'>
-            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' onChange={handleChangeInput}></textarea>
+            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' value={formProduct.description} onChange={handleChangeInput}></textarea>
         </div>
         {/* Description */}
 

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Container from "../../../components/base/Container";
 import { useEffect, useState } from "react";
 import { useCarts } from "../../../hooks/CartsHooks";
@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 
 const Checkout = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [checkouts, setCheckouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const getCheckout = () => {
@@ -106,14 +107,18 @@ const Checkout = () => {
     };
     console.log("data payment", data);
     axios
-      .post("https://e922-182-2-164-245.ngrok-free.app/order", data, {
+      .post(`${import.meta.env.VITE_BE_URL}order`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
-        console.log("result payment", res.data);
-        Swal.fire("Checkout Success");
+        Swal.fire("Checkout Success").then(() => {
+          const timeout = setTimeout(() => {
+            window.location.replace(res.data.redirect_url);
+          }, 1000);
+          return () => clearTimeout(timeout);
+        })
       })
       .catch((err) => {
         Swal.fire("Checkout Failed");
