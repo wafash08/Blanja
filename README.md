@@ -125,7 +125,7 @@ Ensure you have the following installed on your local machine:
       CLOUDINARY_URL=YOUR_CLOUDINARY_LINK_ACCESS
 
       # SMTP
-      BASE_URL=YOUR_HOST_URL
+      BASE_URL=YOUR_BACKEND_HOST_URL
       SMTP_EMAIL_PASS=YOUR_EMAIL_TOKEN
       SMTP_EMAIL_USER=YOUR_EMAIL_SENDER
 
@@ -134,7 +134,7 @@ Ensure you have the following installed on your local machine:
       SERVER_KEY=YOUR_MIDTRANS_CLIENT_KEY
 
       # REDIRECT_URL
-      REDIRECT_URL=http://localhost:5173/
+      REDIRECT_URL=YOUR_FRONTEND_HOST_URL
    ```
 
 ### Running the Application
@@ -308,7 +308,13 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contacts
 
-If you have any questions or inquiries regarding this back-end project, feel free to contact at ryusuf05@gmail.com and syaifullohismail123@gmail.com
+If you have any questions or inquiries regarding this back-end project, feel free to contact at:
+
+[![Raihan Yusuf's Email](https://img.shields.io/badge/Raihan%20Yusuf-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ryusuf05@gmail.com)
+[![Raihan Yusuf's LinkedIn](https://img.shields.io/badge/Raihan%20Yusuf-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/raihan-yusuf/)
+
+[![Syaifulloh Ismail's Email](https://img.shields.io/badge/Syaifulloh%20Ismail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:syaifullohismail123@gmail.com)
+[![Syaifulloh Ismail's LinkedIn](https://img.shields.io/badge/Syaifulloh%20Ismail-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/syaifulloh-ismail/)
 
 ## Acknowledgements
 
