@@ -14,7 +14,7 @@ func GenerateToken(secretKey string, payload map[string]interface{}) (string, er
 		claims[key] = value
 	}
 
-	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {

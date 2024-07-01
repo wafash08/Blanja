@@ -18,6 +18,12 @@ func SelectAllSizes() []*Size {
 	return sizes
 }
 
+func SelectSizesByProductId(id int) []*Size {
+	var sizes []*Size
+	configs.DB.Where("product_id = ?", id).Find(&sizes)
+	return sizes
+}
+
 func CreateSizeProduct(size *Size) error {
 	result := configs.DB.Create(&size)
 	return result.Error
@@ -26,6 +32,34 @@ func CreateSizeProduct(size *Size) error {
 func UpdateSizeProduct(id int, updatedSize *Size) error {
 	result := configs.DB.Model(&Size{}).Where("id = ?", id).Updates(updatedSize)
 	return result.Error
+}
+
+func UpdateSizesProduct(productId uint, updatedSizes []Size) error {
+	var existingSizes []Size
+	configs.DB.Where("product_id = ?", productId).Find(&existingSizes)
+
+	existingSizesMap := make(map[string]Size)
+	for _, size := range existingSizes {
+		existingSizesMap[size.Value] = size
+	}
+
+	for _, size := range updatedSizes {
+		if _, exists := existingSizesMap[size.Value]; !exists {
+			size.ProductID = productId
+			if err := configs.DB.Create(&size).Error; err != nil {
+				return err
+			}
+		}
+		delete(existingSizesMap, size.Value)
+	}
+
+	for _, size := range existingSizesMap {
+		if err := configs.DB.Delete(&size).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func DeleteSizeProduct(id int) error {

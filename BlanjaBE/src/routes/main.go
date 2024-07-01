@@ -8,6 +8,14 @@ import (
 )
 
 func Router(app *fiber.App) {
+	// Landing Route
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"info":    "Hello, This is API Back-End for Blanja from Codecraft.",
+			"message": "Server is running.",
+		})
+	})
+
 	// Product Routes
 	app.Get("/products", controllers.GetAllProduct)
 	app.Get("/product/:id", controllers.GetDetailProduct)
@@ -40,12 +48,14 @@ func Router(app *fiber.App) {
 	// User/Auth Routes
 	app.Post("/register", controllers.RegisterUser)
 	app.Post("/login", controllers.LoginUser)
+	app.Get("/verify", controllers.VerificationAccount)
 	app.Post("/requestResetPassword", controllers.RequestResetPassword)
-	app.Put("/resetPassword", middlewares.JWTMiddleware(), controllers.ResetPassword)
+	app.Put("/resetPassword", controllers.ResetPassword)
 	app.Post("/refreshToken", controllers.CreateRefreshToken)
 
 	// Address Routes
 	app.Get("/addresses", middlewares.JWTMiddleware(), controllers.GetAddresses)
+	app.Get("/addresses/profile", middlewares.JWTMiddleware(), controllers.GetAddressesByUserID)
 	app.Post("/address", middlewares.JWTMiddleware(), controllers.CreateAddress)
 	app.Put("/address/:id", middlewares.JWTMiddleware(), controllers.UpdateAddress)
 	app.Delete("/address/:id", middlewares.JWTMiddleware(), controllers.DeleteAddress)
@@ -60,10 +70,20 @@ func Router(app *fiber.App) {
 	app.Get("/categoriesFilter", controllers.GetCategoryFilter)
 
 	// Cart Routes
-	app.Get("/carts",middlewares.JWTMiddleware(), controllers.GetCart)
-	app.Post("/cart/add",middlewares.JWTMiddleware(), controllers.CreateCart)
-	app.Post("/cart/addProduct",middlewares.JWTMiddleware(), controllers.AddProductToCart)
-	app.Post("/cart/removeProduct",middlewares.JWTMiddleware(), controllers.RemoveProductFromCart)
-	// app.Get("/cart/userID", middlewares.JWTMiddleware(), controllers.GetUserID)
+	app.Get("/carts", middlewares.JWTMiddleware(), controllers.GetCart)
 	app.Get("/cart/user", middlewares.JWTMiddleware(), controllers.GetCartByUserID)
+	app.Post("/cart/add", middlewares.JWTMiddleware(), controllers.CreateCart)
+	app.Post("/cart/addProduct", middlewares.JWTMiddleware(), controllers.AddProductToCart)
+	app.Post("/cart/removeProduct", middlewares.JWTMiddleware(), controllers.RemoveProductFromCart)
+	app.Post("/cart/deleteAllProduct", middlewares.JWTMiddleware(), controllers.DeleteProductFromCart)
+
+	//Checkout Routes
+	app.Post("/checkout", middlewares.JWTMiddleware(), controllers.CreateCheckout)
+	app.Get("/checkout/:id", middlewares.JWTMiddleware(), controllers.GetCheckoutByUserId)
+
+	// Order Routes
+	app.Get("/orders", middlewares.JWTMiddleware(), controllers.GetAllOrders)
+	app.Get("/order/profile", middlewares.JWTMiddleware(), controllers.GetOrdersUser)
+	app.Post("/order", middlewares.JWTMiddleware(), controllers.CreateOrder)
+	app.Post("/payment/check", controllers.HandlePaymentCallback)
 }

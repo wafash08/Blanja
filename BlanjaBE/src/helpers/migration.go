@@ -10,6 +10,7 @@ func Migration() {
 	// configs.DB.AutoMigrate(&models.Product{})
 	err := configs.DB.AutoMigrate(
 		&models.User{},
+		&models.UserVerification{},
 		&models.Seller{},
 		&models.Customer{},
 		&models.Product{},
@@ -20,6 +21,8 @@ func Migration() {
 		&models.Address{},
 		&models.Cart{},
 		&models.CartProduct{},
+		&models.Checkout{},
+		&models.Order{},
 	)
 
 	if err != nil {

@@ -246,13 +246,16 @@ func UpdateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	if product := models.SelectProductById(id); product.ID == 0 {
+	currentProduct := models.SelectProductById(id)
+	if currentProduct.ID == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":     "not found",
 			"statusCode": 404,
 			"message":    "Product not found",
 		})
 	}
+
+	// currentSizes := models.SelectSizesByProductId(id)
 
 	var updatedProduct models.Product
 
@@ -285,7 +288,58 @@ func UpdateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := models.UpdateProduct(id, product); err != nil {
+	// currentSizeMap := make(map[string]bool)
+	// productSizeMap := make(map[string]bool)
+
+	// for _, currentSize := range currentSizes {
+	// 	currentSizeMap[currentSize.Value] = true
+	// }
+
+	// for _, size := range product.Sizes {
+	// 	productSizeMap[size.Value] = true
+	// }
+
+	// var resultSizesDeleted []string
+	// var resultSizesAdded []string
+
+	// for _, currentSize := range currentSizes {
+	// 	if !productSizeMap[currentSize.Value] {
+	// 		// resultSizesDeleted = append(resultSizesDeleted, currentSize.Value)
+	// 		if err := models.DeleteSizeProduct(int(currentSize.ID)); err != nil {
+	// 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 				"status":     "server error",
+	// 				"statusCode": 500,
+	// 				"message":    "Failed to delete size product",
+	// 			})
+	// 		}
+	// 	}
+	// }
+
+	// for _, size := range product.Sizes {
+	// 	if !currentSizeMap[size.Value] {
+	// 		// resultSizesAdded = append(resultSizesAdded, size.Value)
+	// 		newSize := models.Size{
+	// 			Value: size.Value,
+	// 			ProductID: uint(id),
+	// 		}
+	// 		if err := models.CreateSizeProduct(&newSize); err != nil {
+	// 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 				"status":     "server error",
+	// 				"statusCode": 500,
+	// 				"message":    "Failed to create product",
+	// 			})
+	// 		}
+	// 	}
+	// }
+
+	// return c.Status(fiber.StatusOK).JSON(fiber.Map{
+	// 	"status":       "success",
+	// 	"statusCode":   200,
+	// 	// "size_added":   resultSizesAdded,
+	// 	// "size_deleted": resultSizesDeleted,
+	// })
+
+	if err := models.UpdateProductWithDetails(currentProduct, product); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":     "server error",
 			"statusCode": 500,

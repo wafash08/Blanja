@@ -183,7 +183,25 @@ func GetSellerProfile(c *fiber.Ctx) error {
 			"name":          product.Name,
 			"price":         product.Price,
 			"rating":        product.Rating,
+			"stock":         product.Stock,
 			"category_name": categoryName,
+		}
+	}
+
+	resultAddresses := models.SelectAddressesbyUserID(int(id))
+	addresses := make([]map[string]interface{}, len(resultAddresses))
+	for i, address := range resultAddresses {
+		addresses[i] = map[string]interface{}{
+			"id":             address.ID,
+			"created_at":     address.CreatedAt,
+			"updated_at":     address.UpdatedAt,
+			"main_address":   address.MainAddress,
+			"detail_address": address.DetailAddress,
+			"postal_code":    address.PostalCode,
+			"name":           address.Name,
+			"phone":          address.Phone,
+			"primary":        address.Primary,
+			"city":           address.City,
 		}
 	}
 
@@ -199,6 +217,7 @@ func GetSellerProfile(c *fiber.Ctx) error {
 		"desc":       seller.Description,
 		"role":       seller.User.Role,
 		"products":   products,
+		"addresses":  addresses,
 	}
 
 	// return c.JSON(product)

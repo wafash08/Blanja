@@ -3,7 +3,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import ProductSection from '../../../components/modules/ProductSection';
 import Container from '../../../components/base/Container';
 import CategorySlider from '../../../components/base/CategorySlider';
-import PromotionSlider from '../../../components/base/PromotionSlider';
 import {
 	useCategories,
 	useProducts,
@@ -84,14 +83,7 @@ const Home = () => {
 
 	return (
 		<>
-			<section className='mt-40'>
-				<Container>
-					<h2 className='sr-only'>Daftar rekomendasi</h2>
-
-					<PromotionSlider />
-				</Container>
-			</section>
-			<section className='mt-20 bg-[#F0F1F9] py-14 font-metropolis'>
+			<section className='-mt-[28px] bg-[#F0F1F9] py-14 font-metropolis'>
 				<Container>
 					<div className='mb-8'>
 						<h2 className='text-[34px] font-bold text-[#222222]'>Category</h2>
@@ -106,7 +98,10 @@ const Home = () => {
 				</Container>
 			</section>
 			<div className='mt-14'>
-				<NewProductSection title="New" description='You’ve never seen it before!' />
+				<NewProductSection
+					title='New'
+					description='You’ve never seen it before!'
+				/>
 				<AllProductsSection
 					data={products}
 					status={productsStatus}
@@ -127,7 +122,7 @@ function CategorySection() {
 	return <CategorySlider categories={categories} />;
 }
 
-export function NewProductSection({title, description}) {
+export function NewProductSection({ title, description }) {
 	const { data, status } = useProductsByCondition('new'); // condition: 'new' and 'used'
 	let productList = null;
 	if (status === 'loading') {
@@ -139,6 +134,7 @@ export function NewProductSection({title, description}) {
 			</>
 		);
 	}
+	console.log('products >> \n', data);
 	return (
 		<ProductSection title={title} description={description}>
 			{productList}

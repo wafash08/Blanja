@@ -10,6 +10,14 @@ import Cart from '../../pages/main/Cart/Cart';
 import CategoryProduct from '../../pages/main/CategoryProduct/CategoryProduct';
 import Layout from '../../components/modules/Layout';
 import ProductsPage from '../../pages/main/Products';
+import ProfilePage from '../../pages/main/Profile';
+import EditProfile from '../../pages/main/Profile/Edit';
+import AddressPage from '../../pages/main/Profile/Address';
+import OrderPage from '../../pages/main/Profile/Order';
+import SellingProductsPage from '../../pages/main/Profile/SellingProductsPage';
+import Checkout from '../../pages/main/Checkout/Checkout';
+import MyProducts from '../../pages/main/Profile/MyProduct';
+import UpdateSellingProductsPage from '../../pages/main/Profile/UpdateSellingProductsPage';
 
 const RouterBlanja = () => {
 	return (
@@ -25,7 +33,17 @@ const RouterBlanja = () => {
 					<Route path='products' element={<ProductsPage />} />
 					<Route path='products/:id' element={<DetailProduct />} />
 					<Route path='cart' element={<Cart />} />
+					<Route path='checkout/:id' element={<Checkout />} />
 					<Route path='categories/:id' element={<CategoryProduct />} />
+					<Route path='profile' element={<ProfilePage />}>
+						<Route index element={<EditProfile />} />
+						<Route path='edit' element={<EditProfile />} />
+						<Route path='address' element={<AddressPage />} />
+						<Route path='order' element={<OrderPage />} />
+						<Route path='products' element={<MyProducts />} />
+						<Route path='selling-products' element={<SellingProductsPage />} />
+						<Route path='editproducts/:id' element={<UpdateSellingProductsPage />} />
+					</Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>
