@@ -52,6 +52,7 @@ func Router(app *fiber.App) {
 	app.Post("/requestResetPassword", controllers.RequestResetPassword)
 	app.Put("/resetPassword", controllers.ResetPassword)
 	app.Post("/refreshToken", controllers.CreateRefreshToken)
+	app.Get("/logout", controllers.LogoutUser)
 
 	// Address Routes
 	app.Get("/addresses", middlewares.JWTMiddleware(), controllers.GetAddresses)
@@ -86,4 +87,5 @@ func Router(app *fiber.App) {
 	app.Get("/order/profile", middlewares.JWTMiddleware(), controllers.GetOrdersUser)
 	app.Post("/order", middlewares.JWTMiddleware(), controllers.CreateOrder)
 	app.Post("/payment/check", controllers.HandlePaymentCallback)
+	app.Get("/redirect", controllers.HandlePaymentRedirectCallback)
 }

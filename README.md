@@ -15,7 +15,7 @@
     ·
     <a href="https://blanja-website-project.netlify.app/" target="_blank">View Front-End Demo</a>
     ·
-    <a href="https://github.com/harbanery/blanja-marketplace-app" target="_blank">View Front-End Repo</a>
+    <a href="https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/front-end" target="_blank">View Front-End Repo</a>
   </p>
 </div>
 
@@ -99,7 +99,7 @@ Ensure you have the following installed on your local machine:
 1. Clone Repo
 
    ```sh
-     git clone https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end.git
+     git clone --single-branch --branch feature/back-end https://github.com/echestratus/BlanjaWebsiteProject.git
    ```
 
 2. Install Go packages
@@ -125,13 +125,16 @@ Ensure you have the following installed on your local machine:
       CLOUDINARY_URL=YOUR_CLOUDINARY_LINK_ACCESS
 
       # SMTP
-      BASE_URL=YOUR_HOST_URL
+      BASE_URL=YOUR_BACKEND_HOST_URL
       SMTP_EMAIL_PASS=YOUR_EMAIL_TOKEN
       SMTP_EMAIL_USER=YOUR_EMAIL_SENDER
 
       # MIDTRANS
       CLIENT_KEY=YOUR_MIDTRANS_CLIENT_KEY
       SERVER_KEY=YOUR_MIDTRANS_CLIENT_KEY
+
+      # REDIRECT_URL
+      REDIRECT_URL=YOUR_FRONTEND_HOST_URL
    ```
 
 ### Running the Application
@@ -162,81 +165,83 @@ _If you want to interact with the endpoints, go to [Documentation](#documentatio
 
 ### Features
 
-- Registration (and Reset Password) Authentication with [SMTP](https://github.com/go-gomail/gomail)
-- Upload more than one image with Cloudinary
-- More images, colors, and sizes for products and also filtering
-- ORM support for PostgreSQL using [GORM](https://gorm.io/)
-- XSS Middleware and HTML Sanitizer using [bluemonday](https://github.com/microcosm-cc/bluemonday)
-- Model Struct Validation using [Validator](https://github.com/go-playground/validator)
-- Payment getaway using [Midtrans](https://github.com/veritrans/go-midtrans)
-- Token authentication and authorization using [JWT](https://github.com/golang-jwt/jwt)
+- **Registration (and Reset Password) Authentication** with [SMTP by Gomail](https://github.com/go-gomail/gomail)
+- **Upload multiple images** with **Cloudinary**
+- **Support for multiple images, colors, and sizes** for products, including **filtering**
+- **ORM support for PostgreSQL** using [GORM](https://gorm.io/)
+- **XSS Middleware and HTML Sanitizer** using [Bluemonday](https://github.com/microcosm-cc/bluemonday)
+- **Model Struct Validation** using [Validator](https://github.com/go-playground/validator)
+- **Payment gateway** using [Midtrans](https://github.com/veritrans/go-midtrans)
+- **Token authentication and authorization** using [JWT](https://github.com/golang-jwt/jwt)
 
 ### Project Structure
 
-```
+Sure, here's the project structure in shell mode with descriptions:
+
+```sh
 be-blanja-marketplace-app/
-├── public/
-│   └── brandicon.png
-├── src/
-│   ├── configs/
-│   │   └── db.go
-│   ├── controllers/
-│   │   ├── AddressController.go
-│   │   ├── CartController.go
-│   │   ├── CartProductController.go
-│   │   ├── CategoryController.go
-│   │   ├── CheckoutController.go
-│   │   ├── ColorController.go
-│   │   ├── CustomerController.go
-│   │   ├── OrderController.go
-│   │   ├── ProductController.go
-│   │   ├── SellerController.go
-│   │   ├── SizeController.go
-│   │   ├── UploadController.go
-│   │   └── UserController.go
-│   ├── helpers/
-│   │   ├── jwt.go
-│   │   ├── migration.go
-│   │   ├── params.go
-│   │   ├── transaction.go
-│   │   ├── url.go
-│   │   └── validation.go
-│   ├── middlewares/
-│   │   ├── jwt.go
-│   │   └── xssClean.go
-│   ├── models/
-│   │   ├── Address.go
-│   │   ├── Cart.go
-│   │   ├── CartProduct.go
-│   │   ├── Category.go
-│   │   ├── Checkout.go
-│   │   ├── Color.go
-│   │   ├── Customer.go
-│   │   ├── Image.go
-│   │   ├── Order.go
-│   │   ├── Product.go
-│   │   ├── Seller.go
-│   │   ├── Size.go
-│   │   └── User.go
-│   ├── routes/
-│   │   └── main.go
-│   └── utils/
-│       ├── cloudinary.go
-│       ├── midtrans.go
-│       └── smtp.go
-├── tmp/
-│   ├── build-errors.log
-│   ├── main.exe
-│   └── ngrok.exe
-├── .air.toml
-├── .env
-├── .gitignore
-├── .golangci.yml
-├── go.mod
-├── go.sum
-├── LICENSE
-├── main.go
-└── README.md
+├── public/                           # Static or public assets
+│   └── brandicon.png                 # Blanja icon (purposely to this README.md)
+├── src/                              # Main application source code
+│   ├── configs/                      # Configuration files
+│   │   └── db.go                     # Database configuration
+│   ├── controllers/                  # Controllers handling HTTP requests
+│   │   ├── AddressController.go      # Address-related operations
+│   │   ├── CartController.go         # Cart-related operations
+│   │   ├── CartProductController.go  # Cart product-related operations
+│   │   ├── CategoryController.go     # Category-related operations
+│   │   ├── CheckoutController.go     # Checkout process
+│   │   ├── ColorController.go        # Color-related operations
+│   │   ├── CustomerController.go     # Customer-related operations
+│   │   ├── OrderController.go        # Order-related operations
+│   │   ├── ProductController.go      # Product-related operations
+│   │   ├── SellerController.go       # Seller-related operations
+│   │   ├── SizeController.go         # Size-related operations
+│   │   ├── UploadController.go       # File upload operations
+│   │   └── UserController.go         # User-related operations
+│   ├── helpers/                      # Helper functions and utilities
+│   │   ├── jwt.go                    # JWT handling
+│   │   ├── migration.go              # Database migrations
+│   │   ├── params.go                 # Query parameter handling
+│   │   ├── transaction.go            # Transaction utilities
+│   │   ├── url.go                    # URL utilities
+│   │   └── validation.go             # Data validation
+│   ├── middlewares/                  # Middleware functions
+│   │   ├── jwt.go                    # JWT middleware
+│   │   └── xssClean.go               # XSS protection middleware
+│   ├── models/                       # Data models
+│   │   ├── Address.go                # Address model
+│   │   ├── Cart.go                   # Cart model
+│   │   ├── CartProduct.go            # Model for Cart to Product
+│   │   ├── Category.go               # Category model
+│   │   ├── Checkout.go               # Checkout model
+│   │   ├── Color.go                  # Color model for Product
+│   │   ├── Customer.go               # Customer model
+│   │   ├── Image.go                  # Image model for Product
+│   │   ├── Order.go                  # Order model
+│   │   ├── Product.go                # Product model
+│   │   ├── Seller.go                 # Seller model
+│   │   ├── Size.go                   # Size model for Product
+│   │   └── User.go                   # User model
+│   ├── routes/                       # Route definitions
+│   │   └── main.go                   # Main routing file
+│   └── utils/                        # Utility functions
+│       ├── cloudinary.go             # Cloudinary integration
+│       ├── midtrans.go               # Midtrans integration
+│       └── smtp.go                   # SMTP integration
+├── tmp/                              # Temporary files
+│   ├── build-errors.log              # Build errors log
+│   ├── main.exe                      # Compiled main executable
+│   └── ngrok.exe                     # Ngrok executable
+├── .air.toml                         # Air live reload configuration
+├── .env                              # Environment variables
+├── .gitignore                        # Git ignore rules
+├── .golangci.yml                     # GolangCI-Lint configuration
+├── go.mod                            # Go module dependencies
+├── go.sum                            # Go module checksums
+├── LICENSE                           # License file
+├── main.go                           # Main application entry point
+└── README.md                         # Project documentation
 ```
 
 ### Documentation
@@ -250,11 +255,14 @@ Access the API documentation for the **Blanja** project, created by [Raihan Yusu
 ### Meet The Contributors
 
 <table align="center">
+  <tr>
+    <th colspan="4">Codecraft</th>
+  </tr>
   <tr align="center">
-    <td><b>Project Manager / Front-End Developer</b></td>
-    <td><b>Front-End Developer</b></td>
-    <td><b>Fullstack Developer</b></td>
-    <td><b>Back-End Developer</b></td>
+    <th>Project Manager / Front-End Developer</th>
+    <th>Front-End Developer</th>
+    <th>Fullstack Developer</th>
+    <th>Back-End Developer</th>
   </tr>
   <tr align="center">
     <td><img width="200" src="https://avatars.githubusercontent.com/u/80629118?v=4"/></td>
@@ -298,11 +306,17 @@ Contributing project to github is pretty straight forward.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [`LICENSE`](https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/back-end/LICENSE) for more information.
 
 ## Contacts
 
-If you have any questions or inquiries regarding this back-end project, feel free to contact at ryusuf05@gmail.com and syaifullohismail123@gmail.com
+If you have any questions or inquiries regarding this back-end project, feel free to contact at:
+
+[![Raihan Yusuf's Email](https://img.shields.io/badge/Raihan%20Yusuf-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ryusuf05@gmail.com)
+[![Raihan Yusuf's LinkedIn](https://img.shields.io/badge/Raihan%20Yusuf-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/raihan-yusuf/)
+
+[![Syaifulloh Ismail's Email](https://img.shields.io/badge/Syaifulloh%20Ismail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:syaifullohismail123@gmail.com)
+[![Syaifulloh Ismail's LinkedIn](https://img.shields.io/badge/Syaifulloh%20Ismail-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/syaifulloh-ismail/)
 
 ## Acknowledgements
 
