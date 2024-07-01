@@ -44,8 +44,6 @@ func StructValidation(param any) []*ErrorResponse {
 
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
-			// field, _ := reflect.TypeOf(param).Elem().FieldByName(err.Field())
-			// fieldName, _ := field.Tag.Lookup("json")
 			var message string
 			if err.Param() == "" {
 				message = fmt.Sprintf("%s must contain %s", err.Field(), err.ActualTag())

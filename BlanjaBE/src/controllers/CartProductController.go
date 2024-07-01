@@ -134,10 +134,10 @@ func DeleteProductFromCart(c *fiber.Ctx) error {
 		}
 
 		if remainingProducts == 0 {
-			if err := tx.Where("cart_id = ?", cartID).Delete(&models.Checkout{}).Error; err != nil {
-				tx.Rollback()
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to remove associated checkout"})
-			}
+			// if err := tx.Where("cart_id = ?", cartID).Delete(&models.Checkout{}).Error; err != nil {
+			//     tx.Rollback()
+			//     return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to remove associated checkout"})
+			// }
 			// Menghapus data keranjang karena kosong
 			if err := tx.Delete(&models.Cart{}, cartID).Error; err != nil {
 				tx.Rollback()

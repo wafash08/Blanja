@@ -33,7 +33,7 @@ const RouterBlanja = () => {
 					<Route path='products' element={<ProductsPage />} />
 					<Route path='products/:id' element={<DetailProduct />} />
 					<Route path='cart' element={<Cart />} />
-					<Route path='checkout' element={<Checkout />} />
+					<Route path='checkout/:id' element={<Checkout />} />
 					<Route path='categories/:id' element={<CategoryProduct />} />
 					<Route path='profile' element={<ProfilePage />}>
 						<Route index element={<EditProfile />} />

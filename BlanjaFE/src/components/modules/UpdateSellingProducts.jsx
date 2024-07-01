@@ -172,7 +172,7 @@ const UpdateSellingProducts = ({id}) => {
  
     if (loading === true) {
         return (
-        <div className='w-[100%] h-auto bg-[#F5F5F5]'>
+        <div className='w-[100%] max-w-[850px] h-auto bg-[#F5F5F5]'>
             <div className='w-[100%] bg-white px-6 py-8 rounded-[4px]'>
                 <div className='w-[40%]'>
                     <Skeleton className='h-[70px]' />
@@ -188,7 +188,7 @@ const UpdateSellingProducts = ({id}) => {
         )
     }
   return (
-    <div className='w-[100%] max-lg:w-[100%] h-auto bg-[#F5F5F5]'>
+    <div className='w-[100%] max-w-[850px] max-lg:w-[100%] h-auto bg-[#F5F5F5]'>
         {/* Inventory */}
         <div className='w-[100%] bg-white px-6 py-8 rounded-[4px]'>
             <p className='font-metropolis font-semibold text-[20px] text-[#222222]'>Inventory</p>
@@ -274,7 +274,9 @@ const UpdateSellingProducts = ({id}) => {
             <p className='font-metropolis font-semibold text-[20px] text-[#222222]'>Photo of goods</p>
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
-        <div className='w-[100%] bg-white px-6 py-8  rounded-[4px]'>
+        <div className='w-[100%] bg-white px-6 pb-8  rounded-[4px]'>
+        <p className='text-[#D4D4D4] text-[12px] pt-4 font-normal'>* image must contain less than 2 MB</p>
+        <p className='text-[#D4D4D4] text-[12px] pb-4 font-normal'>* image must contain .png|.jpg|.jpeg</p>
             <div className='w-[100%] max-lg:w-[100%] h-auto px-4 py-8 rounded-[4px] outline-1 outline-dashed outline-[#D4D4D4] flex flex-col items-center'>
                 {formProduct.images.length > 0 ? (
                 <div className='w-full h-auto flex justify-start overflow-x-auto pb-4'>
@@ -319,7 +321,7 @@ const UpdateSellingProducts = ({id}) => {
         </div>
         <div className='w-full h-0 border-t border-[#D4D4D4]'></div>
         <div className='w-[100%] bg-white px-6 py-8  rounded-[4px] flex justify-center'>
-            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' onChange={handleChangeInput}></textarea>
+            <textarea name="description" id="description" cols="30" rows="100" className='font-metropolis font-normal text-[14px] text-black outline outline-1 outline-[#D4D4D4] w-[85%] max-h-[316px] p-5' value={formProduct.description} onChange={handleChangeInput}></textarea>
         </div>
         {/* Description */}
 

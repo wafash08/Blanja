@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CartSummary from "../../../components/base/ShoppingSummary";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const BASE_URL = import.meta.env.VITE_BE_URL;
@@ -153,18 +154,41 @@ const Cart = () => {
     }
   };
   const handleClick = () => {
-    navigate("/checkout")
+    const selectedProducts = products.filter(product => product.isSelected);
+    const totalPrice = selectedProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
+    const deliveryFee = totalPrice * 0.1;
+    const summary = totalPrice + deliveryFee;
+    const carts = selectedProducts.map(product => ({ id: product.cartId }));
+    const data = {
+        carts: carts,
+        delivery: deliveryFee,
+        summary: summary,
+    };
+
+    axios
+      .post(`${import.meta.env.VITE_BE_URL}checkout`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        console.log("Success:", response.data.checkoutID);
+        navigate(`/checkout/${response.data.checkoutID}`)
+      })
+      .catch((error) => {
+        Swal.fire("Checkout Failed")
+        console.error("Error:", error);
+      });
   };
+
   const total =
     products && products.length > 0
       ? products.reduce(
-          (acc, product) => acc + product.price * product.quantity,
+          (acc, product) => product.isSelected ? acc + product.price * product.quantity : acc,
           0
         )
       : 0;
-  // const total =  products.reduce(
-  //   (acc, product) => acc + product.price * product.quantity,0
-  // )
+
   if (status === "loading") {
     cartList = <CartListSkeleton />;
   } else if (status === "success") {
@@ -178,17 +202,16 @@ const Cart = () => {
   } else if (status === "error") {
     cartList = <p>error</p>;
   }
-  // console.log("list", products);
   return (
     <Container>
       <section className="mt-32">
-        <div>
-          <h2 className="text-[34px] font-extrabold text-[#222222] leading-8">
+        <div className="mb-2">
+          <h2 className="text-[34px] max-lg:text-3xl font-extrabold text-[#222222] leading-8">
             My Bag
           </h2>
         </div>
-        <div className="p-4 flex justify-between gap-6 max-md:flex-col max-md:p-0 max-md:py-4">
-          <div className=" w-3/5 max-md:w-full">
+        <div className="p-4 flex justify-between gap-3 max-lg:flex-col max-lg:p-0 max-md:py-4">
+          <div className=" w-3/5 max-lg:w-full">
             <SelectAllItems
               products={products}
               onSelectAll={handleSelectAll}
@@ -197,7 +220,7 @@ const Cart = () => {
             {cartList}
           </div>
 
-          <div className=" w-2/5 max-md:w-full">
+          <div className=" w-2/5 max-lg:w-full">
             <CartSummary total={total} handleClick={handleClick} />
           </div>
         </div>
