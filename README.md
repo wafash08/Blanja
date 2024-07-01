@@ -17,6 +17,7 @@
 - [Documentation](#documentation)
 - [Feature](#key-features)
 - [Related Project](#related-project)
+- [License](#license)
 - [Contact](#contact)
 - [Contribution](#contribution)
  
@@ -196,6 +197,10 @@ Blanja provides an efficient and enjoyable shopping experience for customers and
 
 ## Related Project
 :rocket: [`Backend Blanja`](https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end)
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/LICENSE) for more information.
 
 ## Contact
 
