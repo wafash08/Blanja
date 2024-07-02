@@ -86,6 +86,14 @@ npm run dev
 npm run lint
 ```
 
+## Trial Account
+### Customer Role
+Email: eot07575@doolk.com
+Password: AdamSmasher_01
+### Seller Role
+Email: yme24733@ilebi.com
+Password: Morgan_01
+
 ## Documentation
 
 <p align="center" display=flex>
