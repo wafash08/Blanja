@@ -5,10 +5,10 @@
   <h1>Blanja</h1>
     <a href="https://blanja-website-project.netlify.app/">View Demo</a>
     .
-    <a href="https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end">Api Demo</a>
+    <a href="https://github.com/wafash08/Blanja/tree/feature/back-end">Api Demo</a>
 </div>
 
-  ## Table of Contents
+## Table of Contents
 
 - [Table of Contents](#table-of-contents)
 - [About The Project](#about-the-project)
@@ -19,12 +19,13 @@
 - [Related Project](#related-project)
 - [Contact](#contact)
 - [Contribution](#contribution)
- 
+
 ## About The Project
 
 The Blanja website is an e-commerce platform developed by the team during a bootcamp at Pijar Camp. Blanja offers various products from different categories, providing an easy and secure online shopping experience. By utilizing modern technology and best practices in web development, we successfully created a responsive and user-friendly platform.
 
 Developers:
+
 <p align="center" display=flex>
   <table>
   <tr>
@@ -55,6 +56,7 @@ Developers:
 - [Tailwind CSS](https://tailwindcss.com/)
 
 ## Installation
+
 1. Clone this repository
 
 ```sh
@@ -195,33 +197,39 @@ Blanja is a comprehensive e-commerce platform designed to connect customers with
 Blanja provides an efficient and enjoyable shopping experience for customers and a comprehensive suite of tools for sellers. Whether you're looking to buy a product or sell your goods online, Blanja is designed to meet your e-commerce needs.
 
 ## Related Project
+
 :rocket: [`Backend Blanja`](https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end)
 
 ## Contact
 
 Feel free to contact us if there is any question you want to ask regarding this project or if you just want to get in touch.
 
-### Email 
+### Email
+
 - Farhan Nur Hakim: farhanz.nh.13@gmail.com
 - Wafa Saefulhaq: saefulhaqwafa@gmail.com
 - Syaifulloh Ismail: syaifullohismail123@gmail.com
 - Raihan Yusuf: ryusuf05@gmail.com
-### LinkedIn 
+
+### LinkedIn
+
 - Farhan Nur Hakim: [https://www.linkedin.com/in/farhan-nur-hakim/](https://www.linkedin.com/in/farhan-nur-hakim/)
 - Wafa Saefulhaq: [https://www.linkedin.com/in/mwafasaefulhaq/](https://www.linkedin.com/in/mwafasaefulhaq/)
 - Syaifulloh Ismail: [https://www.linkedin.com/in/syaifulloh-ismail/](https://www.linkedin.com/in/syaifulloh-ismail/)
 - Raihan Yusuf: [www.linkedin.com/in/raihan-yusuf](www.linkedin.com/in/raihan-yusuf)
 
 ## Contribution
+
 ### How to Contribute
 
 Contributing project to github is pretty straight forward.
+
 1. **Fork the Repository**: Click the "Fork" button at the top-right corner of this page to create your own copy of the repository.
 2. **Installation**: Do the installation process right [here](#installation).
 3. **Create a new branch**: Create a new branch to work on your changes.
-    ```sh
-    git branch -M feature/your-feature-name
-    ```
+   ```sh
+   git branch -M feature/your-feature-name
+   ```
 4. **Make changes**: Implement your changes or new features in your branch.
 5. **Commit your changes**: After making your changes, commit them with a descriptive message.
    ```sh
@@ -233,8 +241,7 @@ Contributing project to github is pretty straight forward.
    git push origin feature/your-feature-name
    ```
 7. **Create Pull Request**: Go to the original repository and open a pull request to merge your changes.
-    - Navigate to your fork on GitHub.
-    - Click on the "New Pull Request" button.
-    - Select the base repository and branch you want to merge into.
-    - Provide a detailed description of your changes and click "Create Pull Request".
-
+   - Navigate to your fork on GitHub.
+   - Click on the "New Pull Request" button.
+   - Select the base repository and branch you want to merge into.
+   - Provide a detailed description of your changes and click "Create Pull Request".
