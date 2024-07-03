@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-    <img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/main/BlanjaFE/src/assets/blanja-logo.png" width="500px"/>
+    <img src="./src/assets/blanja-logo.png" width="500px"/>
   <br />
   <h1>Blanja</h1>
     <a href="https://blanja-website-project.netlify.app/">View Demo</a>
@@ -17,6 +17,7 @@
 - [Documentation](#documentation)
 - [Feature](#key-features)
 - [Related Project](#related-project)
+- [License](#license)
 - [Contact](#contact)
 - [Contribution](#contribution)
 
@@ -96,56 +97,56 @@ npm run lint
     <td>Register Customer</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/LoginPage.png" /></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/RegisterCustomerPage.png"/></td>
+    <td><img src="./public/LoginPage.png" /></td>
+    <td><img src="./public/RegisterCustomerPage.png"/></td>
   </tr>
   <tr>
     <td>Register Seller</td>
     <td>Home</td>
   </tr>
     <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/RegisterSellerPage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/HomePage.png"/></td>
+    <td><img src="./public/RegisterSellerPage.png"/></td>
+    <td><img src="./public/HomePage.png"/></td>
   </tr>
     <tr>
     <td>Detail Product</td>
     <td>Cart</td>
   </tr>
     <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/DetailProductPage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/CartPage.png"/></td>
+    <td><img src="./public/DetailProductPage.png"/></td>
+    <td><img src="./public/CartPage.png"/></td>
   </tr>
   <tr>
     <td>Checkout</td>
     <td>My Profile Customer</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/CheckoutPage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/MyProfileCustomerPage.png"/></td>
+    <td><img src="./public/CheckoutPage.png"/></td>
+    <td><img src="./public/MyProfileCustomerPage.png"/></td>
   </tr>
   <tr>
     <td>Shipping Address</td>
     <td>My Order</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/ChooseAddressPage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/MyOrderPage.png"/></td>
+    <td><img src="./public/ChooseAddressPage.png"/></td>
+    <td><img src="./public/MyOrderPage.png"/></td>
   </tr>
   <tr>
     <td>Store Profile</td>
     <td>My Product</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/StoreProfilePage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/MyProductPage.png"/></td>
+    <td><img src="./public/StoreProfilePage.png"/></td>
+    <td><img src="./public/MyProductPage.png"/></td>
   </tr> 
   <tr>
     <td>Selling Product</td>
     <td>Update Product</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/SellinProductPage.png"/></td>
-    <td><img src="https://github.com/echestratus/BlanjaWebsiteProject/blob/feature/front-end/public/UpdateProductPage.png"/></td>
+    <td><img src="./public/SellinProductPage.png"/></td>
+    <td><img src="./public/UpdateProductPage.png"/></td>
   </tr> 
   </table>
 </p>
@@ -198,7 +199,11 @@ Blanja provides an efficient and enjoyable shopping experience for customers and
 
 ## Related Project
 
-:rocket: [`Backend Blanja`](https://github.com/echestratus/BlanjaWebsiteProject/tree/feature/back-end)
+:rocket: [`Backend Blanja`](https://github.com/wafash08/Blanja/tree/main/BlanjaBE)
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
 
 ## Contact
 
